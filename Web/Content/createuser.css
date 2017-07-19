@@ -1,0 +1,232 @@
+
+
+body
+{
+	font-family: arial;
+	font-size: 12px;
+}
+
+
+
+table.title {
+	width: 890px;
+	height: 18px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none;
+	border-color: white;
+	border-collapse: separate;
+	background-color: white;
+	color: black;
+}
+table.title th {
+	border-width: 1px;
+	padding: 1px;
+	border-style: none;
+	border-color: black;
+	background-color: #BA9BC9 ;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+table.title td {
+	font-weight:bold;
+	border-width: 1px;
+	padding: 1px;
+	border-style: none;
+	border-color: black;
+	background-color: #BA9BC9;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+
+div.personinfo
+{
+	position:absolute; 
+	left:19px; 
+	top:0px; 
+	width:950px; 
+	height:249px; 
+	font:arial; 
+	font-size: 16px; 
+	border-width: 2px;
+	 border-color: #666; 
+	 border-style: solid solid none solid;
+}
+div.careinfo
+{
+	position:absolute; 
+	left:19px; 
+	top:251px; 
+	width:950px; 
+	height:228px; 
+	font:arial; 
+	font-size: 16px; 
+	border-width: 2px; 
+	border-color: #666; 
+	border-style: solid solid none solid;
+}
+div.loginfo
+{
+	position:absolute; 
+	left:19px; 
+	top:475px; 
+	width:950px; 
+	height:125px; 
+	font:arial; 
+	font-size: 12px; 
+	border-width: 2px; 
+	border-color: #666; 
+	border-style: solid solid solid solid; 
+}
+div.loginfou
+{
+	position:absolute; 
+	left:19px; 
+	top:475px; 
+	width:950px; 
+	height:185px; 
+	font:arial; 
+	font-size: 12px; 
+	border-width: 2px; 
+	border-color: #666; 
+	border-style: solid solid solid solid; 
+}
+table.pinfoform
+{
+	position:absolute;
+	left: 12px;
+	top: 25px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none;
+	border-collapse: separate;
+		
+}
+table.pinfoform2
+{
+	position:absolute;
+	left: 535px;
+	top: 65px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none;
+	border-collapse: separate;
+		
+}
+
+.tablemin , .tablemin td
+{
+	font-size:8pt;
+	font-style: italic;	
+}
+
+table.careinfoform
+{
+	position:absolute;
+	left: 12px;
+	top: 25px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none;
+	border-collapse: separate;
+	height: 173px;
+}
+div.loginbox
+{
+	position:absolute; 
+	left: 280px; 
+	top: 30px; 
+	width: 288px; 
+	height:106px; 
+	background-color: #999;
+	border-style: solid solid solid solid;
+	border-color: #333;
+	border-width: thin;
+}
+table.logintab
+{
+	position:absolute;
+	left: 15px;
+	top:3px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none;
+	border-collapse: separate;
+	background-color:#999;
+}
+div.azone
+{
+	position:absolute; 
+	left: 280px; 
+	top: 40px; 
+	height: 150px; 
+	width: 400px;
+}
+table.pageopt
+{
+	position:absolute;
+	height:89px;
+	width: 320px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none none none none;
+	border-color: black;
+	border-collapse: separate;
+	top:778px;
+	left: 270px
+}
+table.pageoptu
+{
+	position:absolute;
+	height:89px;
+	width: 320px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none none none none;
+	border-color: black;
+	border-collapse: separate;
+	top:800px;
+	left: 270px
+}
+table.logininfo
+{
+	position:absolute;
+	height:59px;
+	width: 600px;
+	border-width: 0px;
+	border-spacing: 0px;
+	border-style: none none none none;
+	border-color: black;
+	border-collapse: separate;
+	top:28px;
+	left: 70px;
+	font-size: 18px;
+}
+
+fieldset.search {
+	border: none;
+	width: 140px;
+	margin: 0 auto;
+}
+.search input, .search button {
+	border: none;
+	float: left;
+}
+.search input.box {
+	color: black;
+	font-size: 12px;
+	width: 75px;
+	height: 17px;
+	padding: 8px 5px 0;
+	background: #DBDFDC url(images/searchsmic.png) no-repeat;
+	margin-right: 0px;
+}
+.search input.box:focus {
+	background: #DBDFDC url(images/searchsmic.png) no-repeat left -38px;
+	outline: none;
+}
+.search button.btn {
+	width: 38px;
+	height: 32px;
+	cursor: pointer;
+	text-indent: -9999px;
+	background: white url(images/searchsmic.png) no-repeat top right;
+}

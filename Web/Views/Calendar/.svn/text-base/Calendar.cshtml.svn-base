@@ -1,0 +1,182 @@
+﻿@{
+    Layout = null;
+}
+
+
+<html>
+<head>
+<link href="@Url.Content("~/Content/jquery-ui.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/fullcalendar.css")" rel="stylesheet" type="text/css" />
+<script src="../../Scripts/jquery-1.6.1.min.js" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/fullcalendar.js")" type="text/javascript"></script>
+<link rel="stylesheet" href="../../Content/demo.css" />
+<link rel="stylesheet" href="../../Content/demo1.css" />
+<link rel="stylesheet" href="../../Content/pagination.css" />
+<link href="@Url.Content("~/Content/demo_table_jui.css")" type="text/css" />
+
+<script type="text/javascript" language="javascript">
+    var G = jQuery.noConflict();
+
+    function zeroPad(num) {
+        var numZeropad = num + '';
+        while (numZeropad.length < 2) {
+            numZeropad = "0" + numZeropad;
+        }
+        return numZeropad;
+    }
+    G(document).ready(function () {
+
+        G('#datepicker').datepicker({
+            inline: true,
+            onSelect: function (dateText, inst) {
+                var d = new Date(dateText);
+                $('#calendar').fullCalendar('gotoDate', d);
+                selectedDate = d;
+            }
+        });
+        G('#calendar').dialog({
+            modal: true,
+            height: 420,
+            width: 800,
+            autoOpen: false
+        });
+
+        G('#button').click(function () {
+
+            G('#calendar').dialog('open');
+
+            // prevent the default action, e.g., following a link
+            return false;
+        });
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        G('#calendar').fullCalendar({
+            editable: false,
+            contentHeight: 600,
+            allDaySlot: false,
+            slotMinutes: 75,
+            minTime: '9:00',
+            maxTime: '5:00pm',
+            weekends: false,
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+
+//            dayClick: function (date, allDay, jsEvent, view) {
+//                if (allDay) {
+//                    alert('Clicked on the entire day: ' + date);
+//                } else {
+//                    alert('Clicked on the slot: ' + date.toTimeString());
+//                    $('.fc-slot0').css('border-color', 'blue');
+//                    
+//                }
+//            },
+            eventClick: function (calEvent, jsEvent, view) {
+                calEvent.background = 'red';
+                calEvent.availableSAs = calEvent.availableSAs - 1;
+                calEvent.title = calEvent.availableSAs;
+                calEvent.timeSlotStart = calEvent.start.getFullYear() + '-' + zeroPad(calEvent.start.getMonth() + 1) + '-' + zeroPad(calEvent.start.getDate()) + 'T' + zeroPad(calEvent.start.getHours()) + ':' + zeroPad(calEvent.start.getMinutes()) + ':00';
+                calEvent.timeSlotEnd = calEvent.end.getFullYear() + '-' + zeroPad(calEvent.end.getMonth() + 1) + '-' + zeroPad(calEvent.end.getDate()) + 'T' + zeroPad(calEvent.end.getHours()) + ':' + zeroPad(calEvent.end.getMinutes()) + ':00';
+                //To be modifed due to getHour.Gethours
+                G('#fromHours').val(calEvent.start.getHours());
+                G('#toHours').val(calEvent.end.getHours());
+                G('#fromMinutes').val(calEvent.start.getMinutes());
+                G('#toMinutes').val(calEvent.end.getMinutes());
+                G('#eventTitle').val(zeroPad(calEvent.start.getMonth() + 1) + "-" + zeroPad(calEvent.start.getDate()) + "-" + calEvent.start.getFullYear());
+                G.ajax({
+                    type: "POST",
+                    url: "/Calendar/updateTimeSlot",
+                    data: calEvent
+                });
+                //$('#calendar').dialog('close');
+                return false;
+            },
+            events: "/Calendar/GetEventsPopup/"
+        });
+    }); 
+   
+</script>
+<style type='text/css'>
+
+	body {
+		margin-top: 40px;
+		text-align: center;
+		font-size: 13px;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		}
+
+	#calendar {
+		width: 700px;
+		margin: 0 auto;
+		}
+
+</style>
+    <title>Calendar</title>
+</head>
+<body>
+    <div>
+     <div style="float:left">
+        <div id="calendar"></div>
+            <div id="datepicker"></div><br />
+            <input id="button" type="button" value="Calendar" />
+            <div style="padding-bottom:5px">
+                <div style="width:40px;float:left;">Title:</div><input type="text" style="width:185px" id="eventTitle" />
+            </div>
+            <div>
+                <div style="width:40px;float:left;">Start:</div>
+                <select id="fromHours">
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                </select>:<select id="fromMinutes">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>
+                </select>
+            </div>
+            <div>
+                <div style="width:40px;float:left;">Finish:</div>                                           
+                <select id="toHours">
+                    <option>09</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                    <option>13</option>
+                    <option>14</option>
+                    <option>15</option>
+                    <option>16</option>
+                    <option>17</option>
+                    <option>18</option>
+                    <option>19</option>
+                    <option>20</option>
+                </select>:<select id="toMinutes">
+                    <option>00</option>
+                    <option>15</option>
+                    <option>30</option>
+                    <option>45</option>                
+                </select>
+            </div>
+            <div>
+                <div style="width:40px;float:left;">&nbsp;</div>
+                <input type="button" value="Add" onclick="AddEvent()" />
+            </div>
+        </div>
+        </div>
+</body>
+</html>

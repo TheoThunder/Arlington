@@ -1,0 +1,34 @@
+﻿@*This is the home page for Manager. No one else is supposed to reach this page.*@
+
+@model Web.ViewModel.ErrorViewModel
+@{
+    ViewBag.Title = "Error";
+}
+
+<div class="container">
+<div class="header">
+    <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+            <div class="hometabon"><a href="@Url.Action("Index", "Home", new { id = Model.user})">Home</a></div>
+			<div class="implea"><a href="@Url.Action("Index", "ImportLead", new { id = Model.user.UserId})">Import Leads</a></div>
+         	<div class="leadque"><a href="@Url.Action("Index", "LeadQueue", new { id = Model.user.UserId})">Lead Queue</a></div>
+            <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", new { id = Model.user.UserId})">Appointment Queue</a></div>
+            <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>    
+           <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+    
+</div>
+<div class="content">
+
+<h3 style = "margin-left:auto; margin-right:auto;">
+Sorry, an error occurred while processing your request. You can either click on browser back button or navigate using home tabs.
+<br /><br /><br />
+Details of the error : @Html.Label(Model.Content)
+</h3>
+
+ </div>
+
+</div>

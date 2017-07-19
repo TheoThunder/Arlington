@@ -1,0 +1,598 @@
+﻿@model Web.ViewModel.CalendarEventViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<link rel='stylesheet' type='text/css' href="../../Content/reset.css" />
+<link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css' />
+<link rel='stylesheet' type='text/css' href="../../Content/jquery.weekcalendar.css" />
+<link rel='stylesheet' type='text/css' href="../../Content/demo.css" />
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'></script>
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js'></script>
+<script type='text/javascript' src="../../Scripts/jquery.weekcalendar.js"></script>
+<script type='text/javascript' src="../../Scripts/demo.js"></script>
+
+
+<script type="text/javascript">
+    var randomZone;
+
+    $(document).ready(function () {
+        var $calendar = $('#calendar');
+        var id = 10;
+        var countArray = [];
+        var eventData1;
+        function callcountarray(countArray) {
+            eventData1 = countArray;
+            //alert(eventData1);
+            return false;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/Calendar/GetEvents",
+            datatype: 'json',
+            success: function (myData) {
+                callcountarray(myData);
+            }
+        });
+
+
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth();
+        var day = new Date().getDate();
+
+        function goToProvidedLink() {
+            var request = new XMLHttpRequest();
+            request.open('GET', "/Calendar/GetEvents");
+            request.send();
+            return request;
+        };
+
+        eventData1 = {
+            events: "/Calendar/GetEvents"
+
+        };
+
+        var eventData2 = {
+            events: [
+			   { "id": 1, "start": new Date(year, month, day, 12), "end": new Date(year, month, day, 13, 00), "title": "Thai Lunch" },
+			   { "id": 5, "start": new Date(year, month, day, 14), "end": new Date(year, month, day, 15), "title": "Product showcase" }
+			]
+        };
+
+        /*
+        randomZone = $("#zone_source").val();
+
+        $("#zone_source").change(function () {
+        randomZone = $("#zone_source").val();
+        $calendar.weekCalendar("refresh");
+        updateMessage();
+        alert(randomZone);
+        // window.location.reload(true);
+        });
+
+        function updateMessage() {
+        var dataSource = $("#zone_source").val();
+        $("#message").fadeOut(function () {
+        if (dataSource === "1") {
+        randomZone = dataSource;
+        $("#message").text("Displaying event data set 1 with timeslots per hour of 4 and timeslot height of 20px");
+        } else if (dataSource === "2") {
+        randomZone = dataSource;
+        $("#message").text("Displaying event data set 2 with timeslots per hour of 3 and timeslot height of 30px");
+        } else {
+        randomZone = dataSource;
+        $("#message").text("Displaying no events.");
+        }
+        $(this).fadeIn();
+        });
+        }
+
+        */
+
+        $calendar.weekCalendar({
+            timeslotsPerHour: 1,
+            timeslotHeight: 50,
+            allowCalEventOverlap: false,
+            overlapEventsSeparate: true,
+            firstDayOfWeek: 1,
+            businessHours: { start: 8, end: 17, limitDisplay: true },
+            daysToShow: 5,
+            height: function ($calendar) {
+                return $(window).height() - $("h1").outerHeight() - 1;
+            },
+            eventRender: function (calEvent, $event) {
+                if (calEvent.end.getTime() < new Date().getTime()) {
+                    $event.css("backgroundColor", "#aaa");
+                    $event.find(".wc-time").css({
+                        "backgroundColor": "#999",
+                        "border": "1px solid #888"
+                    });
+                }
+            },
+            draggable: function (calEvent, $event) {
+                //return calEvent.readOnly != true; 
+                //The above has been commented and the following has been added so the user can not drag events    
+                return false;
+            },
+            resizable: function (calEvent, $event) {
+                //return calEvent.readOnly != true; 
+                //The above has been commented and the following has been added so the user can not drag events 
+                return false;
+            },
+            eventNew: function (calEvent, $event) {
+                var $dialogContent = $("#event_edit_container");
+                resetForm($dialogContent);
+                var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
+                var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+                var titleField = $dialogContent.find("input[name='title']");
+                var streetField = $dialogContent.find("input[name='street']");
+                var cityField = $dialogContent.find("input[name='city']");
+                var stateField = $("#statedropdown").val();
+                var zipField = $dialogContent.find("input[name='zip']");
+                var mapField = $dialogContent.find("input[name='map']");
+                var description = $dialogContent.find("input[name = 'description']");
+                //            var bodyField = $dialogContent.find("textarea[name='body']");
+                ;
+
+
+                $dialogContent.dialog({
+                    modal: true,
+                    title: "Create Event  :   Type Personal",
+                    close: function () {
+                        $dialogContent.dialog("destroy");
+                        $dialogContent.hide();
+                        $('#calendar').weekCalendar("removeUnsavedEvents");
+                    },
+                    buttons: {
+                        save: function () {
+                            calEvent.id = id;
+                            id++;
+                            calEvent.start = new Date(startField.val());
+                            calEvent.end = new Date(endField.val());
+                            calEvent.title = titleField.val();
+                            calEvent.street = streetField.val();
+                            calEvent.city = cityField.val();
+                            calEvent.state = $("#statedropdown").val();
+                            calEvent.zipcode = zipField.val();
+                            calEvent.map = mapField.val();
+                            calEvent.description = description.val();
+                            //calEvent.body = bodyField.val();
+                            $calendar.weekCalendar("removeUnsavedEvents");
+                            $calendar.weekCalendar("updateEvent", calEvent);
+                            //This is where I should be updating the database
+                            $.ajax({
+                                type: "POST",
+                                url: "/Calendar/CreateCalendar",
+                                data: calEvent
+                            });
+
+                            $dialogContent.dialog("close");
+                            location.reload(); // refreash the page to load the userid correctly ...
+
+                        },
+                        cancel: function () {
+                            $dialogContent.dialog("close");
+                        }
+                    }
+                }).show();
+
+
+                $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
+                setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
+
+            },
+            eventDrop: function (calEvent, $event) {
+            },
+            eventResize: function (calEvent, $event) {
+            },
+            eventClick: function (calEvent, $event) {
+
+
+                if (calEvent.readOnly) {
+                    return;
+                }
+
+                var cannotsave = 0; // decides whether to save the data or not 
+                var scheduletype = ""; // the schduletype is personal or appointment depending on the type of schdule.
+                var $dialogContent = $("#event_edit_container");
+                resetForm($dialogContent);
+                var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
+                var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+                var titleField = $dialogContent.find("input[name='title']").val(calEvent.title);
+                var streetField = $dialogContent.find("input[name='street']").val(calEvent.street);
+                var cityField = $dialogContent.find("input[name='city']").val(calEvent.city);
+                //var stateField = $dialogContent.find("input[name='state']").val(calEvent.state);
+                var stateField = $("#statedropdown").val(calEvent.state);
+                var zipField = $dialogContent.find("input[name='zip']").val(calEvent.zipcode);
+                var description = $dialogContent.find("input[name = 'description']").val(calEvent.description);
+                var mapField = $dialogContent.find("input[name='map']").val(calEvent.map);
+                // ##
+                // var parent_user_id = $dialogContent.find("input[name='parent_user_id']").val(calEvent.Parent_User_Id);
+
+                //alert(calEvent.Parent_User_Id);
+                //alert(calEvent.Parent_Appointment_Id);
+                //alert(calEvent.creator);
+                //alert(calEvent.assigned);
+
+                if (calEvent.Parent_Appointment_Id > 0) {
+                    scheduletype = " Appointment";
+                }
+                else {
+                    scheduletype = " Personal";
+                }
+
+
+
+                //            var bodyField = $dialogContent.find("textarea[name='body']"); //.val(calEvent.body);
+                //            bodyField.val(calEvent.body);
+                randomZone = $("#zone_source").val();
+
+                $dialogContent.dialog({
+                    modal: true,
+                    title: scheduletype + " : " + calEvent.title ,
+                    close: function () {
+                        $dialogContent.dialog("destroy");
+                        $dialogContent.hide();
+                        $('#calendar').weekCalendar("removeUnsavedEvents");
+                    },
+                    buttons: {
+
+                        "delete": function () {
+
+                            if (calEvent.Parent_Appointment_Id > 0) {
+                                alert("You cannot delete this schedule\n you cannot change a schedule of type Appointment ");
+                                cannotsave = 1;
+                                $dialogContent.dialog("close");
+                            }
+
+                            if (cannotsave == 0) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Calendar/deleteEvent",
+                                    data: calEvent
+                                });
+                                $calendar.weekCalendar("removeEvent", calEvent.id);
+                                $dialogContent.dialog("close");
+                                
+                            }
+                            else {
+                                cannotsave = 0; // reset value
+                            }
+                        },
+                        cancel: function () {
+                            $dialogContent.dialog("close");
+                        }
+                    }
+                }).show();
+
+
+                var startField = $dialogContent.find("select[name='start']").val(calEvent.start);
+                var endField = $dialogContent.find("select[name='end']").val(calEvent.end);
+                $dialogContent.find(".date_holder").text($calendar.weekCalendar("formatDate", calEvent.start));
+                setupStartAndEndTimeFields(startField, endField, calEvent, $calendar.weekCalendar("getTimeslotTimes", calEvent.start));
+                $(window).resize().resize(); //fixes a bug in modal overlay size ??
+
+            },
+            eventMouseover: function (calEvent, $event) {
+            },
+            eventMouseout: function (calEvent, $event) {
+            },
+            noEvents: function () {
+
+            },
+            //            data: function (start, end, callback) {
+
+            //                var dataSource = $("#zone_source").val();
+            //                if (dataSource === "1") {
+            //                    $.ajax({
+            //                        type: "POST",
+            //                        url: "/Calendar/GetEventsPost",
+            //                        data: dataSource
+            //                    });
+
+            //                    alert("selected  source: " + dataSource)
+            //                } else if (dataSource === "2") {
+            //                    alert("selected source: " + dataSource)
+            //                    callback(eventData2);
+            //                } else {
+            //                    alert("Selected something else")
+            //                    callback([]);
+            //                }
+            //            }
+            data: "/Calendar/GetEvents"
+            //data:""+ XMLHttpRequest() function () { var currentZone = "/Calendar/GetEvents" + $("#zone_source").val(); alert(currentZone);  return currentZone; } + ""
+            //            data: function () {
+            //                //                        var selectedZone;
+            //                //                        selectedZone = getSelectedZone();
+            //                //                        selectedZone = "/Calendar/GetEvents" + selectedZone + " ";
+            //                //                        alert(selectedZone);
+            //                var msg;
+            //                $.ajax({
+            //                    type: "GET",
+            //                    url: "/Calendar/GetEvents",
+            //                    datatype:'json',
+            //                    success: function (myData) { alert(myData); }
+            //                });
+            //                return ;
+            //            }
+
+            //            data: function (start, end, callback) {
+            //                callback(getEventData());
+            //}
+        });
+
+
+        function resetForm($dialogContent) {
+            $dialogContent.find("input").val("");
+            $dialogContent.find("textarea").val("");
+        }
+
+        function getEventData() {
+            var year = new Date().getFullYear();
+            var month = new Date().getMonth();
+            var day = new Date().getDate();
+            $.ajax({
+                type: "POST",
+                url: "/Calendar/GetEventsPost",
+                data: dataSource
+            });
+
+            //            return {
+            //        };
+        }
+
+
+        /*
+        * Sets up the start and end time fields in the calendar event
+        * form for editing based on the calendar event being edited
+        */
+        function setupStartAndEndTimeFields($startTimeField, $endTimeField, calEvent, timeslotTimes) {
+
+            for (var i = 0; i < timeslotTimes.length; i++) {
+                var startTime = timeslotTimes[i].start;
+                var endTime = timeslotTimes[i].end;
+                var startSelected = "";
+                if (startTime.getTime() === calEvent.start.getTime()) {
+                    startSelected = "selected=\"selected\"";
+                }
+
+
+
+                var endSelected = "";
+                // if (endTime.getTime() === calEvent.end.getTime()) {
+                if (endTime.getTime() === (calEvent.start.getTime() + 3600000)) {
+                    endSelected = "selected=\"selected\"";
+                }
+                $startTimeField.append("<option value=\"" + startTime + "\" " + startSelected + ">" + timeslotTimes[i].startFormatted + "</option>");
+                $endTimeField.append("<option value=\"" + endTime + "\" " + endSelected + ">" + timeslotTimes[i].endFormatted + "</option>");
+
+            }
+
+            //var st = startTime.getTime();
+            //var end = startTime.getTime() + 3600000;
+            //alert(st);
+            //alert(end);
+            //var hr = (end - st) / (1000 * 60 * 60);
+            //alert(hr);
+
+            $endTimeOptions = $endTimeField.find("option");
+            $startTimeField.trigger("change");
+        }
+
+        var $endTimeField = $("select[name='end']");
+        var $endTimeOptions = $endTimeField.find("option");
+
+        //reduces the end time options to be only after the start time options.
+        $("select[name='start']").change(function () {
+            var startTime = $(this).find(":selected").val();
+            var currentEndTime = $endTimeField.find("option:selected").val();
+            $endTimeField.html(
+            $endTimeOptions.filter(function () {
+                return startTime < $(this).val();
+            })
+            );
+
+            var endTimeSelected = false;
+            $endTimeField.find("option").each(function () {
+                if ($(this).val() === currentEndTime) {
+                    $(this).attr("selected", "selected");
+                    endTimeSelected = true;
+                    return false;
+                }
+            });
+
+            if (!endTimeSelected) {
+                //automatically select an end date 2 slots away.
+                $endTimeField.find("option:eq(1)").attr("selected", "selected");
+            }
+
+        });
+        {
+            //    var $about = $("#about");
+            //    $("#about_button").click(function () {
+            //        $about.dialog({
+            //            title: "About this calendar demo",
+            //            width: 600,
+            //            close: function () {
+            //                $about.dialog("destroy");
+            //                $about.hide();
+            //            },
+            //            buttons: {
+            //                close: function () {
+            //                    $about.dialog("close");
+            //                }
+            //            }
+            //        }).show();
+            //    });
+        }
+    });
+
+</script>
+
+<style type="text/css">
+
+    #about
+    {
+        display: none;
+    }
+    #event_edit_container
+    {
+        display: none;
+    }
+    .ui-widget-header
+    {
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c3aad3), to(#61387D));
+        background: -moz-linear-gradient(bottom, #5536b9, #938ee3);
+        border: 1px solid #b7b4f2;
+    }
+    .ui-widget-content
+    {
+        border: 1px solid #b7b4f2;
+    }
+    .ui-widget-content .ui-state-default
+    {
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c3aad3), to(#61387D));
+        background: -moz-linear-gradient(bottom, #5536b9, #938ee3);
+        border: 1px solid #b7b4f2;
+    }
+    .ui-widget-content .ui-state-hover
+    {
+        background: #b7b4f2;
+        color: Black;
+    }
+</style>
+<div class ="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+            <div class="hometabsa"><a href="/Home/indexsa">Home</a></div>
+            <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+			<div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+            <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+
+        @*   <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>*@  
+             
+            <div class="logout"><a href="#">@(Model.User.FirstName) @(Model.User.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.User.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content" style ="margin-top:-10px; margin-bottom: -10px;">
+
+    <h1>
+             Sales Agent : @Html.DisplayFor(model => model.User.FirstName)
+    </h1>
+    <br />
+    
+    
+    <div id='calendar'>
+    </div>
+    <div id="event_edit_container">
+        <form>
+        <input type="hidden" />
+        <ul>
+            <li><span>Date: </span><span class="date_holder"></span></li>
+          
+            <li>
+                <label for="start">
+                    Start Time:
+                </label>
+                <select name="start">
+                    <option value="">Select Start Time</option>
+                </select>
+            </li>
+            <li>
+                <label for="end">
+                    End Time:
+                </label>
+                <select name="end" disabled="disabled">
+                    <option value="">Select End Time</option>
+                </select>
+            </li>
+            <li>
+                <label for="title">
+                    Title:
+                </label>
+                <input type="text" name="title" />
+            </li>
+            <li>
+                <label for="street">
+                    Street:
+                </label>
+                <input type="text" name="street" />
+            </li>
+            <li>
+                <label for="city">
+                    City:
+                </label>
+                <input type="text" name="city" />
+            </li>
+            <li>
+                <label for="state">
+                    State:</label>
+               @* <select name="state" style="text-align: left">
+                    <option value="CA">CA</option>
+                    <option value="NY">NY</option>
+                    <option value="TX" SELECTED >TX</option>
+                    <option value="OR">OR</option>
+                    <option value="WA">WA</option>
+                </select>*@
+                @Html.DropDownListFor(model => model.calendarEvent.state, new SelectList(Model.states), new { @Id = "statedropdown" })
+            </li>
+            <li>
+                <label for="zipcode">
+                    Zip:
+                </label>
+                <input type="text" name="zip" />
+            </li>
+            <li>
+                <label for="description">
+                    Description:
+                </label>
+                <input type="text" name="description" />
+            </li>
+
+            @Html.HiddenFor(model => Model.calendarEvent.Parent_User_Id) 
+        </ul>
+        </form>
+    </div>
+    <div id="about">
+        <h2>
+            Summary</h2>
+        <p>
+            ***Note: This demo is straight out of SVN trunk so may show unreleased features
+            from time to time.
+        </p>
+        <h2>
+            Demonstrated Features</h2>
+        <p>
+            This calendar implementation demonstrates the following features:
+        </p>
+        <ul class="formatted">
+            <li>Adding, updating and deleting of calendar events using jquery-ui dialog. Also includes
+                additional calEvent data (body field) not defined by the calEvent data structure
+                to show the storage of the data within the calEvent</li>
+            <li>Dragging and resizing of calendar events</li>
+            <li>Restricted timeslot rendering based on business hours</li>
+            <li>Week starts on Monday instead of the default of Sunday</li>
+            <li>Allowing calEvent overlap with staggered rendering of overlapping events</li>
+            <li>Use of the 'getTimeslotTimes' method to retrieve valid times for a given event day.
+                This is used to populate select fields for adding, updating events.</li>
+            <li>Use of the 'eventRender' callback to add a different css class to calEvents in the
+                past</li>
+            <li>Use of additional calEvent data to enforce readonly behaviour for a calendar event.
+                See the event titled "i'm read-only"</li>
+        </ul>
+    </div>
+
+</div>
+</div>
+

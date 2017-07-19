@@ -1,0 +1,378 @@
+﻿@model Web.ViewModel.SAPSReportViewModel
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="@Url.Content("~/Content/demo_page.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.4.4js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/scripts/TableTools.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/scripts/ZeroClipboard.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/date_picker_jui.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+    var oTable1;
+
+    $.fn.dataTableExt.afnFiltering.push(
+	function (oSettings, aData, iDataIndex) {
+
+	    var iFini = document.getElementById('fromdate').value;
+	    iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
+
+	    var iFfin = document.getElementById('dateto').value;
+	    iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
+
+
+	    var datofini = aData[7].substring(6, 10) + aData[7].substring(3, 5) + aData[7].substring(0, 2);
+	    //var datoffin = aData[7].substring(6, 10) + aData[7].substring(3, 5) + aData[7].substring(0, 2);
+
+	    if (iFini == "" && iFfin == "") {
+	        return true;
+	    }
+	    else if (iFini <= datofini && iFfin == "") {
+	        return true;
+	    }
+	    else if (iFfin >= datofini && iFini == "") {
+	        return true;
+	    }
+	    else if (iFini <= datofini && iFfin >= datofini) {
+	        return true;
+	    }
+	    return false;
+
+	}
+);
+
+
+
+    $(document).ready(function () {
+
+        //        $('#MonthlyTable').dataTable({
+        //            "sPaginationType": "full_numbers"
+        //        });
+        //        $('#TotalsTable').dataTable({
+        //            "sPaginationType": "full_numbers"
+        //        });
+        oTable1 = $('#AppointmentsTable').dataTable({ "bLengthChange": false,
+            "bScrollInfinite": true,
+            "bScrollCollapse": true,
+
+            "sScrollY": "200px",
+            "bAutoWidth": true,
+            "bLengthChange": false,
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "sSwfPath": "/Content/swf/copy_cvs_xls_pdf.swf"
+            }, "fnInitComplete": function () {
+                var tableWrapper = $('#AppointmentsTable' + '_wrapper');
+
+                //remove widths that shouldn't be there on the datatable
+                tableWrapper.css('width', '');
+                tableWrapper.find('.dataTables_scrollHead').css('width', '');
+                tableWrapper.find('.dataTables_scrollHeadInner').css('width', '');
+                tableWrapper.find('.dataTables_scrollHeadInner').find('table').css('width', '');
+
+                var tableDataContent = tableWrapper.find('.dataTables_scrollBody')[0];
+                var tableHasScrollBar = (tableDataContent.scrollHeight > tableDataContent.clientHeight);
+
+                //fixes header aligment issues in all major browsers
+                if (tableHasScrollBar)
+                    tableWrapper.find('.dataTables_scrollHead').css('margin-right', '15px');
+
+                //fixes table data stretchyness in <IE8
+                if (navigator.appVersion.indexOf("MSIE 6") != -1 || navigator.appVersion.indexOf("MSIE 7") != -1) {
+                    $('#' + tableId).css('width', '');
+                    tableWrapper.find('.dataTables_scrollBody').css('overflow-x', 'hidden');
+                }
+            }
+
+        });
+
+        $('#fromdate').change(function () { oTable1.fnDraw(); });
+        $('#dateto').change(function () { oTable1.fnDraw(); });
+
+
+        $('#usersdropdown').change(function () { oTable1.fnFilter($(this).val(), 6, false); });
+        //$('#fromdate').change(function () { oTable1.fnFilter($(this).val(), 6, false) && ($('#usersdropdown').val(), 4, false) && ($('#dateto').val(), 4, false); });
+        //$('#dateto').change(function () { oTable1.fnFilter($(this).val(), 4, false) && ($('#usersdropdown').val(), 6, false) && ($('#fromdate').val(), 4, false); });
+        $('#fromdate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function (input, instance) {
+                $(input).datepicker('setDate', new Date());
+            }
+        });
+        $('#dateto').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function (input, instance) {
+                $(input).datepicker('setDate', new Date());
+            }
+        });
+
+        var userstext;
+        document.getElementById('usersdropdown').addEventListener('change', function (e) {
+            var ddlReport = document.getElementById('usersdropdown');
+            var text = ddlReport.options[ddlReport.selectedIndex].text;
+            userstext = text;
+        }, false);
+
+        $('#AssignBtn').click(function () {
+            var datefrom = $('#fromdate').val();
+            var dateto = $('#dateto').val();
+            $('#partialdiv').html("");
+            $('#monthlypartialdiv').html("");
+
+            $('#partialdiv').load("/SAPSReport/TotalSummary?id=" + datefrom + "&text=" + dateto + "&value=" + userstext);
+            $('#monthlypartialdiv').load("/SAPSReport/MonthlySummary?id=" + datefrom + "&text=" + dateto + "&value=" + userstext);
+            return false;
+        });
+
+    });
+
+</script>
+
+<style type="text/css">
+#AppointmentsTable_filter
+{display:none} 
+.hiddenfilters
+  {
+      display:none;
+  }
+ .go 
+{
+    background-color: #7fa9aa;
+    color: White;
+    font-size: 14px;
+    font-weight: bold;
+}
+  button {
+ 	background-color: #7fa9aa;
+    color: White;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+  @if (Model.user.AssignedRoleId == 1)
+  {
+            <div class="hometab"><a href="@Url.Action("Indexad", "Home")">Home</a></div>
+  }
+    @if (Model.user.AssignedRoleId == 2)
+  {
+            <div class="hometab"><a href="@Url.Action("Index", "Home")">Home</a></div>
+  }
+			<div class="implea"><a href="@Url.Action("Index", "ImportLead")">Import Leads</a></div>
+         	<div class="leadque"><a href="@Url.Action("Index", "LeadQueue")">Leads Queue</a></div>
+            <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue")">Appt Queue</a></div>
+            <div class="dashb"><a href="/dashboard/index">Dashboard</a></div>    
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Sales Agent Performance Statistical Report - @DateTime.Today.ToShortDateString()</div>
+<div class="leftreportscolumn">
+    @using (Html.BeginForm("Index", "SAPSReport", FormMethod.Post))
+    {
+    @Html.ValidationSummary(true)
+    <table>
+             <tr>
+                 <td align="left">Sales Agent</td>                  
+                <td align="left">@Html.DropDownList("usersdropdown", Model.SAUsersDropdown, "Select")</td>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                            From
+                        </td>
+                        <td>@Html.TextBox("datefrom", Model.DateFrom, new { size = "5", id = "fromdate" })
+                            <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none"
+                                alt="">
+                </td>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                            To
+                        </td>
+                        <td>@Html.TextBox("dateto", Model.DateTo, new { size = "5" })
+                            <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none"
+                                alt="">
+                        </td>
+                <td></td>
+                <td></td>
+
+                <td><input type="Button" value="Go" id="AssignBtn" class = "go"/></td>
+              </tr>
+    </table>
+    }
+
+ <div class="report1table">
+<table id="AppointmentsTable" class="display">
+
+    <thead>
+    <tr><th colspan = "7"> APPOINTMENTS SUMMARY</th></tr>
+    <tr>
+            <th>
+               
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+               Business Name
+            </th>
+            <th>
+                Score
+            </th>
+            <th>
+                Closed
+            </th>
+            <th>
+                Accounts
+            </th>
+            <th >
+                Agent
+            </th>
+            <th class ="hiddenfilters">
+            
+            </th>
+         </tr>  
+            
+    </thead>
+    <tbody>
+    @if (Model.Appointments != null)
+    {
+        foreach (var item in Model.Appointments)
+        {
+            Model.i++;
+            
+            <tr>
+                 <td>
+                     @Model.i
+                      
+                 </td>
+                <td>
+                   @item.DayOfAppointment.Day - 
+                    @if (item.DayOfAppointment.Month == 1)
+                    {
+                         <text> Jan </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 2)
+                    {
+                         <text> Feb </text>
+                    }
+
+                   @if (item.DayOfAppointment.Month == 3)
+                    {
+                         <text> Mar </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 4)
+                    {
+                        <text> Apr </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 5)
+                    {
+                         <text> May </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 6)
+                    {
+                         <text> Jun </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 7)
+                    {
+                         <text> Jul </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 8)
+                    {
+                         <text> Aug </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 9)
+                    {
+                         <text> Sept </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 10)
+                    {
+                         <text> Oct </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 11)
+                    {
+                         <text> Nov </text>
+                    }
+
+                    @if (item.DayOfAppointment.Month == 12)
+                    {
+                         <text> Dec </text>
+                    }
+                </td>
+                <td>
+                    @item.companyname
+                </td>
+                <td>
+                    @item.Score
+                </td>
+                <td>
+                    @item.Closed
+                </td>
+                <td>
+                    @item.Accounts
+                </td>
+                <td>
+                    @item.AssignedUser.LastName,@item.AssignedUser.FirstName
+
+                </td>
+                <td class ="hiddenfilters">
+                    @if ((Int32)item.CreatedAt.Month < 10)
+                    {
+                        int i = 0;
+                        if ((Int32)item.CreatedAt.Day >= 10)
+                        {
+                     @(i.ToString() + ((item.CreatedAt.Month).ToString()) + "/" + ((item.CreatedAt.Day).ToString()) + "/" + ((item.CreatedAt.Year).ToString()));
+                        }
+                        else if ((Int32)item.CreatedAt.Day < 10)
+                        {
+                     @(i.ToString() + ((item.CreatedAt.Month).ToString()) + "/" + (i.ToString() + (item.CreatedAt.Day).ToString()) + "/" + ((item.CreatedAt.Year).ToString()));
+                        }
+                    }
+                       
+                </td>
+                
+              
+            </tr>
+        }
+    }
+    </tbody>
+    
+</table>
+
+</div>
+<div  id = "partialdiv" class="report2table">
+
+</div>
+ </div>
+ 
+<div class="rightreportscolumn">
+<div id = "monthlypartialdiv" class="report3table">
+
+</div>
+</div>
+</div>
+</div>

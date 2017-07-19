@@ -1,0 +1,287 @@
+﻿@model Web.ViewModel.AllAppointmentsViewModel
+@{
+    ViewBag.Title = "AllAppointmentsForLead";
+}
+
+
+<div class="apptsheet" id="apptsheet">
+    <table class="title">
+        <tr>
+            <td>
+                &nbsp;Appointment Sheets
+            </td>
+        </tr>
+    </table>
+    <div id="disablingappointmentsheet"></div>
+    <div class="ascard">
+        <br style="clear: both;" />
+        @using (Html.BeginForm("AllAppointmentsForLead", "Lead", FormMethod.Post, new { id = "AllAppointmentsForm" }))
+        {
+        <div class="Findresult">
+            @if (Model.appointments == null)
+            {
+            <h2>There are no appointments for this Lead at this moment.</h2> 
+            }
+            else
+            {
+                <h2> Appointments Loading ...</h2> 
+            }
+        </div>
+        }
+        <div id="invisibleresult" style="display: none;">
+            
+            @foreach (var appointmentSheet in Model.appointments)
+            {
+                <div class="appointment">       
+                    <table class="apptdate">
+                        <tr>
+                            <td colspan="2" align="left">
+                                Appointment Agent:
+                                 @Html.HiddenFor(model => appointmentSheet.ParentLeadId)
+                                 @Html.HiddenFor(model => appointmentSheet.AppointmentSheetId)
+                                  @Html.HiddenFor(model => appointmentSheet.CreatorId)
+                                 @Html.HiddenFor(model => model.user.UserId)
+                                 @Html.HiddenFor(model => appointmentSheet.CreatedAt)
+                                  @Html.HiddenFor(model => appointmentSheet.Event_Reference)
+                            </td>
+                            <td align="left">
+                             
+                                 @Html.DisplayFor(model => appointmentSheet.CreatorName)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="left">
+                                Date Set 
+                            </td>
+                            <td align="left">
+                                
+                                @Html.DisplayFor(model => appointmentSheet.CreatedAt)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="left">
+                                Last Updated 
+                            </td>
+                            <td align="left">@Html.DisplayFor(model => appointmentSheet.LastUpdated)
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="appttime">
+                        <tr>
+                            <td align="left" colspan="2">
+                                Apt Day
+                            </td>
+                            <td  >
+                                @Html.EditorFor(model => appointmentSheet.DayOfAppointment, new { @Id = "apptday" })
+                            </td>
+                          
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                From
+                            </td>
+                            <td colspan="2" align="left">
+                                @Html.EditorFor(model => appointmentSheet.AppointmentDateFrom, new { @Id = "apptfromtime" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                To
+                            </td>
+                            <td colspan="2"align="left">
+                                @Html.EditorFor(model => appointmentSheet.AppointmentDateTo, new { @Id = "appttotime" })
+                            </td>
+                        </tr>                       
+
+                    </table>
+                   
+
+                   <table style = "left:12px; top:149px; width:auto ; position:absolute" >
+
+                        <tr>
+                            <td align = "left" >
+                              Location
+                            </td>
+                            <td colspan="2" align="left">
+                                @Html.DropDownListFor(model => appointmentSheet.Location, new SelectList(Model.locations, appointmentSheet.Location), new { style = "width:145px" }) 
+                            </td>
+                        </tr>
+
+
+
+                         <tr >
+                            <td align="left">
+                                Street
+                            </td>
+                            <td colspan="2" align="left">
+                                @Html.TextBoxFor(model => appointmentSheet.Street, new { size = "19" })
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td align="left">
+                                City
+                            </td>
+                            <td align="left">@Html.TextBoxFor(model => appointmentSheet.City, new { size = "7" })
+                               
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                State
+                            </td>
+                            <td align="left">
+                                @Html.DropDownListFor(model => appointmentSheet.State, new SelectList(Model.states, appointmentSheet.State))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                Zip:
+                            </td>
+                            <td align="left">
+                                @Html.TextBoxFor(model => appointmentSheet.ZipCode, new { size = "7" })
+                            </td>
+                        </tr>
+
+                   </table>
+
+
+                    <div style="position: absolute; left: 260px; top: 15px; width: 150px">
+                        Appointment Agenda:
+                    </div>
+                    <div class="asaachbox">
+                        <ul style="position: absolute; top: 25px; left: 0px; list-style: none; text-align: left">
+                            <li>
+                                @Html.CheckBoxFor(model => appointmentSheet.Price)
+                                Price </li>
+                            <li>
+                                @Html.CheckBoxFor(model => appointmentSheet.NewEquipment)
+                                New Equipment </li>
+                            <li>
+                                @Html.CheckBoxFor(model => appointmentSheet.AddingServices)
+                                Adding Services </li>
+                            <li>
+                                @Html.CheckBoxFor(model => appointmentSheet.Unhappy)
+                                Unhappy with current provider </li>
+                                <li>&nbsp;&nbsp;Processor:
+                                @Html.DropDownListFor(model => appointmentSheet.CurrentProcessor, new SelectList(Model.processors, appointmentSheet.CurrentProcessor), new { style = "width:150px" })
+                                
+                            </li>
+                            <li>&nbsp;&nbsp;Volume $ &nbsp;&nbsp;
+                                @Html.DropDownListFor(model => appointmentSheet.Volume, new SelectList(Model.volumes, appointmentSheet.Volume), new { style = "width:150px" })
+                            </li>
+                       </ul>
+                        <ul style="position: absolute; top: 25px; left: 135px; list-style: none; text-align: left">
+                         
+                            <li>
+                                @Html.RadioButtonFor(model => appointmentSheet.SingleLocation, false)
+                                Multi-Location </li>
+                           <li> How Many? @Html.TextBoxFor(model => appointmentSheet.HowManyLocations, new { size = "1" })</li>
+                        </ul>
+                    
+                    </div>
+                    <div style="position: absolute; left: 542px; top: 15px; width: 100px">
+                        Sales Profile:
+                    </div>
+                    <div class="SProfchbox">
+                        @Html.CheckBoxFor(model => appointmentSheet.Swipe) Swipe<br>
+                        @Html.CheckBoxFor(model => appointmentSheet.Moto) Moto<br>
+                        @Html.CheckBoxFor(model => appointmentSheet.Internet) Internet<br>
+                    </div>
+                    <ul class="sali">
+                    <li>
+                     @if (appointmentSheet.AssignedUser != null && (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2))
+                     {
+                       <text>SA: </text>
+                      
+                         if (appointmentSheet.AssignedSalesAgent == 0)
+                         {
+                         @Html.DropDownListFor(model => appointmentSheet.AssignedSalesAgent, new SelectList(Model.SAUsersDropdown, appointmentSheet.AssignedSalesAgent), appointmentSheet.AssignedUser.UserName)
+                         }
+                         if(appointmentSheet.AssignedSalesAgent != 0)
+                         {
+                             @Html.DisplayFor(model => appointmentSheet.AssignedUser.UserName)
+                             @Html.HiddenFor(model => appointmentSheet.AssignedSalesAgent)
+                         }
+                         
+                         }
+                     @if (appointmentSheet.AssignedUser != null && (Model.user.AssignedRoleId == 3 || Model.user.AssignedRoleId == 4))
+                     {
+                       <p>SA:</p> 
+                            @Html.DisplayFor(model => appointmentSheet.AssignedUser.UserName)
+                             @Html.HiddenFor(model => appointmentSheet.AssignedSalesAgent)
+                     }
+                     @if (appointmentSheet.AssignedUser == null && (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2))
+                     {
+                        <p>SA:</p> 
+                         if (appointmentSheet.AssignedSalesAgent == 0)
+                         {
+                              @Html.DropDownListFor(model => appointmentSheet.AssignedSalesAgent, Model.SAUsersDropdown, "Unassigned")
+                         }
+                         else
+                         {
+                         @Html.DropDownListFor(model => appointmentSheet.AssignedSalesAgent, new SelectList(Model.SAUsersDropdown, appointmentSheet.AssignedSalesAgent), appointmentSheet.AssignedSalesAgent)
+                         }
+                     }
+                     @if (appointmentSheet.AssignedUser == null && (Model.user.AssignedRoleId == 3 || Model.user.AssignedRoleId == 4))
+                     {
+                        <p>SA: Not Assigned </p>
+                           @* <p>Now</p>        @Html.DisplayFor(model => model.AssignedUser.UserName)*@
+                     }
+                     @*@if (Model.user.AssignedRoleId == 3)
+                     {
+                         @Html.HiddenFor(model => appointmentSheet.AssignedUser.UserName)
+                     }*@
+                        </li>
+                       
+                        <li>Score: </li>
+                        <li>
+                                   @* Admin, Manager and AA can just see the appointment.*@
+                                   @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2 || Model.user.AssignedRoleId == 4)
+                                   {
+                                      @* @Html.HiddenFor(model => appointmentSheet.Score)*@
+                                       @Html.DisplayFor(model => appointmentSheet.Score)
+                                   }
+                                   @if (Model.user.AssignedRoleId == 3)
+                                   {
+                                       //if (appointmentSheet.AssignedUser.UserId == Model.user.UserId)
+                                       //{
+                                       if (DateTime.Compare(appointmentSheet.DayOfAppointment, DateTime.Now).ToString().Equals("-1"))
+                                       {
+                                             @Html.DropDownListFor(model => appointmentSheet.Score, new SelectList(Model.scores, appointmentSheet.Score))
+                                       }
+                                       else
+                                       {
+                                           <p> After Apt Day</p>
+                                       }
+                                   } 
+                         </li>
+                        
+                        
+                    </ul>
+                    <div style="position: absolute; left: 260px; top: 190px; width: 180px; height: 110px">
+                        Comments:<br>
+                            @Html.TextAreaFor(model => appointmentSheet.Comment,  new { style = "width:400px" } )
+                            
+                        </br>
+                    </div>
+                   
+                </div>
+            }
+            
+        </div>
+    </div>
+    <div class="searchcard">
+        <div id="Paging">
+        </div>
+       
+        <div style="top: 135px">
+            
+
+            @*<input type="submit" name="cancelAppointmentSheetSubmit" id="CancelAppointmentSheetSubmit"
+                value="Cancel" />*@
+        </div>
+    </div>
+            
+</div>
+

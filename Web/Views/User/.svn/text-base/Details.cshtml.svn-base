@@ -1,0 +1,56 @@
+﻿@model Data.Domain.User
+@{
+    ViewBag.Title = "Details";
+}
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        var color = $("#hiddenCalendarColor").val();
+        $("#icp_user_CalendarColor").css("background-color", color);
+    });
+</script>
+<h2>
+    Details</h2>
+<fieldset>
+    <legend>User</legend>
+    <div class="display-label">
+        User Type:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.AssignedRoleId</b></div>
+    <div class="display-label">
+        User Name:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.UserName</b></div>
+    <div class="display-label">
+        Password:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.newPassword</b></div>
+    <div class="display-label">
+        First Name:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.FirstName</b></div>
+    <div class="display-label">
+        Middle Name:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.MiddleName</b></div>
+    <div class="display-label">
+        Last Name:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.LastName</b></div>
+    <div class="display-label">
+        Address1:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.Address1</b></div>
+    <div class="display-label">
+        Address2:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.Address2</b></div>
+    <div class="display-label">
+        State:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.State</b></div>
+    <div class="display-label">
+        City:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.City</b></div>
+    <div class="display-label">
+        Zip Code:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.ZipCode</b></div>
+    <div class="display-label">
+        Office Number:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.OfficeNumber</b></div>
+    <div class="display-label">
+        Sales Rep Number:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>@Model.SalesRepNumber</b></div>
+    <div class="display-label">
+        Hourly Wage:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b>$@Model.HourlyRate</b></div>
+    <div class="display-label">
+        Calendar Color:&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;<b><span style="border-top-width: 1px;
+            border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid;
+            border-right-style: solid; border-bottom-style: solid; border-left-style: solid;
+            border-top-color: white; border-right-color: white; border-bottom-color: white;
+            border-left-color: white; float: none; width: 20px; height: 20px; background-color: rgb(255, 6, 103);
+            display: inline-block;" id="icp_user_CalendarColor" class="mColorPickerTrigger">&nbsp;</span></b></div>
+    @Html.Hidden("hiddenCalendarColor", Model.CalendarColor)
+
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,100 @@
+﻿@model Web.ViewModel.CardStackViewModel
+@{
+    ViewBag.Title = "CreateCard";
+}
+
+<div class="cardstack">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Call Record
+                </td>
+            </tr>
+        </table>
+        @using (Html.BeginForm("CreateCard", "Lead", FormMethod.Post, new { id = "CSForm" }))
+     {
+        <div class="CScard">
+            <ul class="cardinfo">
+                <li>Appointment Agent : @Html.DisplayTextFor(model => model.user.FirstName)
+                        @Html.HiddenFor(model => model.user.UserId)
+                        @Html.HiddenFor(model => model.user.UserName)                 
+                        @Html.HiddenFor(model => model.card.CreatorId)
+                    <br />
+                </li>
+                <li>@Html.DisplayTextFor(model => model.card.CreatedOn)<br>
+                @Html.HiddenFor(model => model.card.CreatedOn)
+                </li>
+                <li>
+                    <br />
+                    Call Type:
+                    @Html.DropDownListFor(model => model.card.CardType, new SelectList(Model.callTypes), new { style = "width:119px" })
+                </li>
+            </ul>
+            <table class="cbinfo" type = "hidden">
+            <tr id = "CallBackDateli">
+                <td align="right">
+                        Call Back Date:
+                </td>
+                <td>
+                    @* might need some change since later due to date format that will be decided 	*@
+                    @Html.EditorFor(model => model.card.CallBackDate, new { size = "7", @Value = "12/31/2011" })           
+                    @*<img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none" alt="" >  *@
+                </td>
+            </tr>
+            <tr id = "TalkedToDMli">
+                <td align="right">
+                    @Html.CheckBoxFor(model => model.card.TalkedToDM)                    
+                </td>
+                <td>    
+                    Talked to DM
+                </td>
+            </tr>
+            <tr id= "AcquiredDMNameli" >
+                <td align="right">
+                    @Html.CheckBoxFor(model => model.card.AcquiredDMName)
+                </td>
+                <td>Acquired DM
+                </td>
+            </tr>
+            
+            <tr id = "TalkedToOfficeManagerli" >
+                <td align="right">@Html.CheckBoxFor(model => model.card.TalkedToOfficeManager)</td>
+                <td>Talked To Office Manager</td>
+            </tr>
+            <tr id = "TalkedToOtherli">
+                <td align="right">@Html.CheckBoxFor(model => model.card.TalkedToOther)</td>
+                <td>Talked To Other</td>
+            </tr>
+            <tr id = "NoInterest">
+                <td align="right">@Html.CheckBoxFor(model => model.card.NoInterestChk)</td>
+                <td>Not Interested: </td>
+                <td> @Html.DropDownListFor( model => model.card.NoInterestRea, new SelectList(Model.noInterest))</td>
+            </tr>
+            <tr id = "TalkedToAPersonli">
+                <td align="right">@Html.CheckBoxFor(model => model.card.TalkedToPerson)
+                </td>
+                <td>Wrong #</td>
+            </tr>
+            <tr id = "LeftVMli">
+                <td align="right">@Html.CheckBoxFor(model => model.card.LeftVM)</td>    
+                <td>Left VM</td>            
+            </tr>
+            </table>
+            <ul class="csupinfo">
+                <li>Last Updated : @Html.DisplayFor(model => model.card.LastUpdated)</li>
+                <li style="text-align: left">Comments: </li>
+                <li>
+                     @Html.TextAreaFor(model => model.card.Comment, new { style = "height:110px ; width:270px" })
+                </li>
+                <li>
+                    @Html.HiddenFor(model => model.card.ParentLeadId)
+                  
+                </li>
+            </ul>
+        </div>
+      }
+        <div class="searchcard">
+
+        </div>
+  
+</div>

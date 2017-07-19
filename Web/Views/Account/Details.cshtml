@@ -1,0 +1,850 @@
+﻿@model Web.ViewModel.AccountInformationViewModel
+@{
+    ViewBag.Title = "Details";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.form.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.fileupload.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.fileupload-ui.js")" type="text/javascript"></script>
+<link href="@Url.Content("../../Content/demo_page.css")" rel="Stylesheet" type="text/css" />
+
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+@*@Html.EnableClientValidation(true);*@
+
+@*<script type="text/javascript" language="javascript">
+    /*global $ */
+    $(function () {
+        $('#file_upload').fileUploadUI({
+            uploadTable: $('#files'),
+            downloadTable: $('#files'),
+            buildUploadRow: function (files, index) {
+                return $('<tr><td>' + files[index].name + '<\/td>' +
+                    '<td class="file_upload_progress"><div><\/div><\/td>' +
+                    '<td class="file_upload_cancel">' +
+                    '<button class="ui-state-default ui-corner-all" title="Cancel">' +
+                    '<span class="ui-icon ui-icon-cancel">Cancel<\/span>' +
+                    '<\/button><\/td><\/tr>');
+            },
+            buildDownloadRow: function (file) {
+                return $('<tr><td>' + file.name + '<\/td><\/tr>');
+            }
+        });
+    });
+</script> *@
+
+<script type="text/javascript" language="javascript">
+
+    function disableAIFields() {
+        $('input[type="text"]').attr('disabled', 'disabled');
+        $('input[type="radio"]').attr('disabled', 'disabled');
+        $('select').attr('disabled', 'disabled');
+        $('textarea').attr('disabled', 'disabled');
+    }
+    function enableAIFields() {
+        $('input[type="text"]').removeAttr('disabled');
+        $('input[type="radio"]').removeAttr('disabled');
+        $('select').removeAttr('disabled');
+        $('textarea').removeAttr('disabled');
+    }
+
+    var AccountInformation;
+
+
+    $(document).ready(function () {
+        disableAIFields();
+        $('#SaveAIBtn').hide();
+        $('#CancelAIBtn').hide()
+
+        $("#EditAIBtn").click(function () {
+
+            enableAIFields();
+            $('#EditAIBtn').hide();
+            $('#SaveAIBtn').show();
+            $('#CancelAIBtn').show()
+            AccountInformation = new Object;
+            AccountInformation.TempMerchantId = $('#account_MerchantId').val();
+            AccountInformation.TempAccountName = $('#account_AccountName').val();
+            AccountInformation.TempAACreator = $('#account_AACreator').val();
+            AccountInformation.TempAssignedSalesRep = $('#account_AssignedSalesRep').val();
+            AccountInformation.TempSalesRepNumber = $('#account_SalesRepNumber').val();
+            AccountInformation.TempOfficeNumber = $('#account_OfficeNumber').val();
+            AccountInformation.TempStatus = $('#account_Status').val();
+            AccountInformation.TempAccountApprovalDate = $('#account_AccountApprovalDate').val();
+            AccountInformation.TempAnnualFee = $('input[type="radio"]').val();
+            AccountInformation.TempEstimatedMonthlyVolume = $('#account_EstimatedMonthlyVolume').val();
+            AccountInformation.TempPlatform = $('#account_Platform').val();
+            AccountInformation.TemVendor = $('#account_Vendor').val();
+            AccountInformation.TempHT = $('#account_HT').val();
+            AccountInformation.TempHMV = $('#account_HMV').val();
+            AccountInformation.TempVIP = $('input[type="radio"]').val();
+            AccountInformation.TempMBP = $('input[type="radio"]').val();
+            AccountInformation.TempFreeSupplies = $('input[type="radio"]').val();
+            AccountInformation.TempPCIRefund = $('input[type="radio"]').val();
+            AccountInformation.TempPrimaryPhone = $('#account_PrimaryPhone').val();
+            AccountInformation.TempSecondaryPhone = $('#account_SecondaryPhone').val();
+            //AccountInformation.TempPhoneRadioButton = $('input[type="radio"]').val()
+            //AccountInformation.TempPhoneRadioButton = $('input[type="radio"]').val()
+            AccountInformation.TempFaxNumber = $('#lead_FaxNumber').val();
+            AccountInformation.TempPrimaryEmail = $('#lead_PrimaryEmail').val();
+            AccountInformation.TempSecondaryEmail = $('#lead_SecondaryEmail').val();
+            AccountInformation.TempWebsite = $('#lead_Website').val();
+            AccountInformation.TempMailingStreet = $('#account_MailingStreet').val();
+            AccountInformation.TempMailingCity = $('#account_MailingCity').val();
+            AccountInformation.TempMailingState = $('#account_MailingState').val();
+            AccountInformation.TempMailingZipCode = $('#account_MailingZipCode').val();
+            AccountInformation.TempDBAStreet = $('#account_DBAStreet').val();
+            AccountInformation.TempDBACity = $('#account_DBACity').val();
+            AccountInformation.TempDBAState = $('#account_DBAState').val();
+            AccountInformation.TempDBAZipcode = $('#account_DBAZipcode').val();
+
+            AccountInformation.TempStatement = $('#lead_CompanyName').val();
+
+
+            AccountInformation.TempCredit = $('input[type="radio"]').val();
+            AccountInformation.TempDebit = $('input[type="radio"]').val();
+            AccountInformation.TempARB = $('input[type="radio"]').val();
+            AccountInformation.TempCIM = $('input[type="radio"]').val();
+            AccountInformation.TempIP = $('input[type="radio"]').val();
+            AccountInformation.TempGiftCardProcessor = $('#account_GiftCardProcessor').val();
+            AccountInformation.TempSecur_Chex = $('#account_Secur_Chex').val();
+            AccountInformation.TempSoftware = $('#account_Software').val();
+            AccountInformation.TempECommerace = $('#account_ECommerace').val();
+
+
+            AccountInformation.TempPrimaryTerminal = $('#account_PrimaryTerminal').val();
+            AccountInformation.TempPrimaryTerminalOwner = $('#account_PrimaryTerminalOwner').val();
+            AccountInformation.TempPrimaryTerminalQuantity = $('#account_PrimaryTerminalQuantity').val();
+            AccountInformation.TempSecondaryTerminal = $('#account_SecondaryTerminal').val();
+            AccountInformation.TempSecondaryTerminalOwner = $('#account_SecondaryTerminalOwner').val();
+            AccountInformation.TempSecondaryTerminalQuantity = $('#account_SecondaryTerminalQuantity').val();
+            AccountInformation.TempCheckAccountInformation = $('#account_CheckAccountInformation').val();
+            AccountInformation.TempCheckAccountInformationOwner = $('#account_CheckAccountInformationOwner').val();
+            AccountInformation.TempCheckAccountInformationQuantity = $('#account_CheckAccountInformationQuantity').val();
+            AccountInformation.TempPrimaryPINpad = $('#account_PrimaryPINpad').val();
+            AccountInformation.TempPrimaryPINpadOwner = $('#account_PrimaryPINpadOwner').val();
+            AccountInformation.TempPrimaryPINpadQuantity = $('#account_PrimaryPINpadQuantity').val();
+            AccountInformation.TempSecondaryPINpad = $('#account_SecondaryPINpad').val();
+            AccountInformation.TempSecondaryPINpadOwner = $('#account_SecondaryPINpadOwner').val();
+            AccountInformation.TempSecondaryPINpadQuantity = $('#account_SecondaryPINpadQuantity').val();
+            AccountInformation.TempPrinter = $('#account_Printer').val();
+            AccountInformation.TempPrinterOwner = $('#account_PrinterOwner').val();
+            //AccountInformation.TempUploadFile = $('#account_UploadFiles').val();
+
+            AccountInformation.TempDescription = $('#account_Description').val();
+
+            return false;
+        });
+
+        $("#CancelAIBtn").click(function () {
+            $('#account_MerchantId').val(AccountInformation.TempMerchantId);
+            $('#account_AccountName').val(AccountInformation.TempAccountName);
+            $('#account_AACreator').val(AccountInformation.TempAACreator);
+            $('#account_AssignedSalesRep').val(AccountInformation.TempAssignedSalesRep);
+            $('#account_OfficeNumber').val(AccountInformation.TempOfficeNumber);
+            $('#account_Status').val(AccountInformation.TempStatus);
+            $('#account_AccountApprovalDate').val(AccountInformation.TempAccountApprovalDate);
+            $('input[type="radio"]').val(AccountInformation.TempAnnualFee);
+            $('#account_EstimatedMonthlyVolume').val(AccountInformation.TempEstimatedMonthlyVolume);
+            $('#account_HT').val(AccountInformation.TempHT);
+            $('#account_HMV').val(AccountInformation.TempHMV);
+            $('#account_Platform').val(AccountInformation.TempPlatform);
+            $('#account_Vendor').val(AccountInformation.TempVendor);
+            $('input[type="radio"]').val(AccountInformation.TempVIP);
+            $('input[type="radio"]').val(AccountInformation.TempMBP);
+            $('input[type="radio"]').val(AccountInformation.TempFreeSupplies);
+            $('input[type="radio"]').val(AccountInformation.TempPCIRefund);
+            $('#account_MailingStreet').val(AccountInformation.TempMailingStreet);
+            $('#account_MailingCity').val(AccountInformation.TempMailingCity);
+            $('#account_MailingState').val(AccountInformation.TempMailingState);
+            $('#account_MailingZipcode').val(AccountInformation.TempMailingZipcode);
+            $('#account_DBAStreet').val(AccountInformation.TempDBAStreet);
+            $('#account_DBACity').val(AccountInformation.TempDBACity);
+            $('#account_DBAState').val(AccountInformation.TempDBAState);
+            $('#account_DBAZipcode').val(AccountInformation.TempDBAZipcode);
+            $('#account_PrimaryPhone').val(AccountInformation.TempPrimaryPhone);
+            $('#account_SecondaryPhone').val(AccountInformation.TempSecondaryPhone);
+            $('#account_FaxNumber').val(AccountInformation.TempFaxNumber);
+            $('#account_PrimaryEmail').val(AccountInformation.TempPrimaryEmail);
+            $('#account_SecondaryEmail').val(AccountInformation.TempSecondaryEmail);
+            $('#account_Website').val(AccountInformation.TempWebsite);
+
+
+            $('input[type="radio"]').val(AccountInformation.TempCredit);
+            $('input[type="radio"]').val(AccountInformation.TempDebit);
+            $('input[type="radio"]').val(AccountInformation.TempARB);
+            $('input[type="radio"]').val(AccountInformation.TempCIM);
+            $('input[type="radio"]').val(AccountInformation.TempIP);
+            $('#account_GiftCardProcessor').val(AccountInformation.TempGiftCardProcessor);
+            $('#account_Secur_Chex').val(AccountInformation.TempSecur_Chex);
+            $('#account_Software').val(AccountInformation.TempSoftware);
+            $('#account_ECommerace').val(AccountInformation.TempECommerace);
+
+            $('#account_PrimaryTerminal').val(AccountInformation.TempPrimaryTerminal);
+            $('#account_PrimaryTerminalOwner').val(AccountInformation.TempPrimaryTerminalOwner);
+            $('#account_PrimaryTerminalQuantity').val(AccountInformation.TempPrimaryTerminalQuantity);
+            $('#account_SecondaryTerminal').val(AccountInformation.TempSecondaryTerminal);
+            $('#account_SecondaryTerminalOwner').val(AccountInformation.TempSecondaryTerminalOwner);
+            $('#account_SecondaryTerminalQuantity').val(AccountInformation.TempSecondaryTerminalQuantity);
+            $('#account_CheckAccountInformation').val(AccountInformation.TempCheckAccountInformation);
+            $('#account_CheckAccountInformationOwner').val(AccountInformation.TempCheckAccountInformationOwner);
+            $('#account_CheckAccountInformationQuantity').val(AccountInformation.TempCheckAccountInformationQuantity);
+            $('#account_PrimaryPINpad').val(AccountInformation.TempPrimaryPINpad);
+            $('#account_PrimaryPINpadOwner').val(AccountInformation.TempPrimaryPINpadOwner);
+            $('#account_PrimaryPINpadQuantity').val(AccountInformation.TempPrimaryPINpadQuantity);
+            $('#account_SecondaryPINpad').val(AccountInformation.TempSecondaryPINpad);
+            $('#account_SecondaryPINpadOwner').val(AccountInformation.TempSecondaryPINpadOwner);
+            $('#account_SecondaryPINpadQuantity').val(AccountInformation.TempSecondaryPINpadQuantity);
+            $('#account_Printer').val(AccountInformation.TempPrinter);
+            $('#account_PrinterOwner').val(AccountInformation.TempPrinterOwner);
+            //AccountInformation.TempUploadFile = $('#account_UploadFiles').val();
+
+            $('#account_Description').val(AccountInformation.TempDescription);
+            return false;
+        });
+
+        // I am not able to figure out why Cancel is Save and Save does nothing
+
+        $("#SaveAIBtn").click(function () {
+            var AIFormContent = $("#ACForm").serialize()
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:49541/Account/AccountInformation",
+                data: AIFormContent,
+                success: function (msg) { alert(msg); }
+            });
+            //            var options = {
+            //                success: function (responsetext, statusText, xhr, $form) {
+            //                    alert(responsetext);
+            //                },
+            //                beforeSubmit: function () {
+            //                    return $("#ACForm").valid();
+            //                }
+            //            }
+            $("#ACForm").ajaxSubmit(options);
+            //disableAIFields();
+            $('#SaveAIBtn').hide();
+            $('#CancelAIBtn').hide();
+
+            return false;
+        });
+
+
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#TicketsTable').dataTable({
+            "sPaginationType": "full_numbers",
+            "bInfo": false,
+            "bLengthChange": false,
+            "iDisplayLength": 5
+        });
+    });
+</script>
+<style type="text/css">
+div
+{
+    position:absolute;
+}
+</style>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+@using (Html.BeginForm("AccountInformation", "Account", FormMethod.Post, new { id = "ACForm" }))
+{@Html.ValidationSummary(true)
+<div class="container">
+<div class="header">
+            @if (Model.user.AssignedRoleId == 1)
+                 {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("AppointmentQueue", "Lead", Model.user.UserId)">Appointment Queue</a></div>
+                }
+             @if (Model.user.AssignedRoleId == 2)
+               {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("AppointmentQueue", "Lead", Model.user.UserId)">Appointment Queue</a></div>
+                }
+               @if (Model.user.AssignedRoleId == 3)
+               {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Call/Reschedule</a></li> 
+                    <li><a href="#">Appointments</a></li>
+   				  </ul></div>
+                <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+               }
+            <div class="dashb"><a href="#">Dashboard</a></div>
+             
+            <div class="logout"><a href="#" style="color:White">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+    <img border="0" src="../../Content/images/banner.png" alt="alt" />
+</div>
+
+<div class="content">
+
+   
+    <div class="acctcreateac">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Account Information
+                </td>
+            </tr>
+        </table>    
+       <table class="profcontactmerchant">
+       <tr>
+        <td>Merchant ID</td>
+         <td align="left" colspan="2">@Html.EditorFor(model => model.account.MerchantId, new { size = "20" })</td>
+        </tr>
+        <tr>
+          <td>Account Name</td>
+        <td colspan="2"> @Html.TextBoxFor(model => model.account.AccountName, new { size = "18" })</td>
+          </tr>         
+         <tr> <td>AA Name </td>        
+         <td colspan="2">@Html.EditorFor(model => model.account.AACreator, new { size = "20" })</td>
+         </tr>
+          <tr><td>Sales Rep. Name</td>
+         <td colspan="2">@Html.TextBoxFor(model => model.account.AssignedSalesRep, new { size = "15" })</td>
+         </tr>
+         <tr><td>Sales Rep. #</td>
+         <td colspan="2"> @Html.TextBoxFor(model => model.account.SalesRepNumber, new { size = "15" }) </td>
+         </tr>
+        <tr><td>Office #</td>
+         <td colspan="2">@Html.TextBoxFor(model => model.account.OfficeNumber, new { size = "20" })</td> 
+         </tr>
+         <tr><td>Account Status</td>
+        <td colspan="2">@Html.DropDownListFor(model => model.account.Status, new SelectList(Model.statuslist), "select")</td>
+        </tr>
+         <tr><td colspan="2">Account Approval Date</td>
+         <td>@Html.TextBoxFor(model => model.account.AccountApprovalDate, new { size = "5" })
+         <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none" alt=""></td>
+          </tr>
+         <tr><td>Account Fee</td>
+         <td>@Html.CheckBoxFor(model => model.account.AnnualFee)</td>
+         </tr>
+         <tr>
+         <td colspan="2">Estimated Monthly Volume</td>
+         <td>@Html.DropDownListFor(model => model.account.EstimatedMonthlyVolume, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+          </tr>
+          <tr><td>HT &nbsp;&nbsp;&nbsp;@Html.TextBoxFor(model => model.account.HT, new { size = "5" })</td>
+         <td>Platform</td>
+          <td>@Html.DropDownListFor(model => model.account.Platform, new SelectList(Model.platform), "select")</td>
+         </tr>
+         <tr><td>HMV @Html.TextBoxFor(model => model.account.HMV, new { size = "5" }) </td>
+         <td>Vendor</td>
+          <td>@Html.DropDownListFor(model => model.account.Vendor, new SelectList(Model.vender), "select")</td>
+          </tr>
+        </table> 
+        <table class="profcontactchecks">
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.VIP)
+                    </td>
+                    <td align="left">
+                        VIP
+                    </td>
+                </tr>
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.MBP)
+                    </td>
+                    <td align="left">
+                        MBP
+                    </td>
+                </tr>
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.FreeSupplies)
+                    </td>
+                    <td align="right">
+                        Free Supplies
+                    </td>
+                </tr>
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.PCIRefund)
+                    </td>
+                    <td align="left">
+                        PCI Refund
+                    </td>
+                </tr>
+        </table>
+        <table class="profcontactcenter">
+                <tr><th colspan="2" align="center">
+                        Mailing/Billing Address
+                    </th></tr>
+                    <tr>
+                    <td align="right">
+                        Street
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="street" size="27">*@
+                        @Html.EditorFor(model => model.account.MailingStreet, new { size = "27" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        City
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="city" size="10"/>*@
+                        @Html.EditorFor(model => model.account.MailingCity, new { size = "10" })
+                        @Html.ValidationMessageFor(model => model.account.MailingCity)
+                        </td>
+                        </tr>
+                        <tr>
+                        <td align="right">
+                        State </td>
+                    <td>    @Html.DropDownListFor(model => model.account.MailingState, new SelectList(Model.states), "Select")
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Zip
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="zip" size="25" />*@
+                        @Html.EditorFor(model => model.account.MailingZipcode, new { size = "25" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Primary Phone
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="primpho" size="20"/>*@
+                        @Html.EditorFor(model => model.account.PrimaryPhone, new { size = "20" })
+                        @Html.ValidationMessageFor(model => model.account.PrimaryPhone)
+                        <input type="radio" name="primpho" value="1" checked="checked" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Additional Phone
+                    </td>
+                    <td align="left">  
+                        @*<input type="text" name="addpho" size="20">*@
+                        @Html.EditorFor(model => model.account.SecondaryPhone, new { size = "20" })
+                        <input type="radio" name="primpho" value="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Fax Number
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="fax" size="20">*@
+                        @Html.EditorFor(model => model.account.FaxNumber, new { size = "20" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Primary E-mail
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="primee" size="20">*@
+                        @Html.EditorFor(model => model.account.PrimaryEmail, new { size = "20" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Additional E-mail
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="adde" size="20">*@
+                        @Html.EditorFor(model => model.account.SecondaryEmail, new { size = "20" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Website
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="websi" size="30">*@
+                        @Html.EditorFor(model => model.account.Website, new { size = "30" })
+                    </td>
+                </tr>
+            </table>
+            <table class="profaddaccount" id="form">
+            
+             <tr><th align="right"><input type="checkbox" name="sameasbilling" value="checkbox" onclick="shipsame(this.form);" /> </th>
+             <th align="left">DBA Address </th></tr>
+                <tr>
+                    <td align="right">
+                        Street
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="street" size="27">*@
+                        @Html.EditorFor(model => model.account.DBAStreet, new { size = "27" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        City
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="city" size="10"/>*@
+                        @Html.EditorFor(model => model.account.DBACity, new { size = "10" })
+                        @Html.ValidationMessageFor(model => model.account.DBACity)
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        State 
+                    </td>
+                    <td align="left">
+                        @Html.DropDownListFor(model => model.account.DBAState, new SelectList(Model.states), "Select")
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Zip
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="zip" size="25" />*@
+                        @Html.EditorFor(model => model.account.DBAZipcode, new { size = "25" })
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="right">
+                        Statement
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="statement" size="25">*@
+                        @*@Html.EditorFor(model => model.lead.StatementFile, new { size = "25"})*@
+                    <br /> 
+                    <br />
+                    @*<form id="file_upload" action="upload.php" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" multiple>
+                    <button>Upload</button>
+                    <div>Upload files</div>
+                    </form>*@
+                    </td>
+                </tr>
+            </table>
+            <div style="position: absolute; left: 825px; margin-top: 150px;">
+            </div>
+        <div class="BIViewAtt">
+            <a href="#" class="viewprof">
+                <img src="images/profileviewattac.png" style="border: none" alt=""></a>&nbsp;&nbsp;<a
+                    href="#" class="viewprof"><img src="images/profileviewbut.png" style="border: none"
+                        alt=""></a>
+        </div>
+        </div>
+    <div class="acctcreateapp">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Application
+                </td>
+            </tr>
+        </table>
+        <table class="profcontactmerchant">
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.Credit)
+                    </td>
+                    <td align="left">
+                        Credit
+                    </td>
+                </tr>
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.Debit)
+                    </td>
+                    <td align="left">
+                        Debit
+                    </td>
+                </tr>
+               </table>
+               <table class="profcontactappsecond">
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.ARB)
+                    </td>
+                    <td align="right">
+                        ARB
+                    </td>
+                </tr>
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.CIM)
+                    </td>
+                    <td align="left">
+                        CIM
+                    </td>
+                </tr>
+                <tr> 
+                    <td align="left">
+                       @Html.CheckBoxFor(model => model.account.IP)
+                    </td>
+                    <td align="left">
+                        IP
+                    </td>
+                </tr>
+               
+        </table>
+         <table class="profcontactchecks">
+               <tr> <td>Gift Cards</td>
+         <td>@Html.DropDownListFor(model => model.account.GiftCardProcessor, new SelectList(Model.GiftCard), "select")</td>
+          </tr>
+          <tr>
+         <td>Secur-Chex</td>
+          <td>@Html.DropDownListFor(model => model.account.Secur_Chex, new SelectList(Model.securchex), "select")</td>
+         </tr>
+         </table>
+         <table class="profcontactaccount">
+               <tr> <td>Software</td>
+         <td>@Html.DropDownListFor(model => model.account.Software, new SelectList(Model.software), "select")</td>
+          </tr>
+          <tr>
+         <td>E-Commerce</td>
+          <td>@Html.DropDownListFor(model => model.account.ECommerace, new SelectList(Model.ecommerce), "select")</td>
+         </tr>
+         </table>
+        </div>
+      <div class="acctcreateequip">
+      
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Equipment
+                </td>
+            </tr>
+        </table>
+     
+            <table class="profcontactmerchant">
+            <tr>
+             <td>
+             Primary Terminal
+             </td>
+
+            <td>
+             @Html.DropDownListFor(model => model.account.PrimaryTerminal, new SelectList(Model.terminals), "select")
+            </td>
+            </tr>
+            <tr>
+            <td>
+               Primary Terminal <br />Ownership
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.PrimaryTerminalOwner, new SelectList(Model.ownership), "select")</td>
+            </tr>
+             <tr>
+            <td>
+               Primary Terminal Qty.
+            </td>
+            <td>@Html.TextBoxFor(model => model.account.PrimaryTerminalQuantity)</td>
+            </tr>
+             <tr>
+            <td>
+               Secondary Terminal
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.SecondaryTerminal, new SelectList(Model.terminals), "select")</td>
+            </tr>
+              <tr>
+            <td>
+               Secondary Terminal <br /> Ownership
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.SecondaryTerminalOwner, new SelectList(Model.ownership), "select")</td>
+            </tr>
+              <tr>
+            <td>
+               Secondary Terminal Qty.
+            </td>
+            <td>@Html.TextBoxFor(model => model.account.SecondaryTerminalQuantity)</td>
+            </tr>
+         </table>
+         <table class="profcontactcenter">
+               <tr><th> </th></tr>
+               <tr>
+               <td>
+               Printer
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.Printer, new SelectList(Model.terminals), "select")</td>
+                 </tr>
+                <tr>
+                <td>
+                    Printer Ownership
+                </td>
+                <td>@Html.DropDownListFor(model => model.account.PrinterOwner, new SelectList(Model.ownership), "select")</td>
+                </tr>
+                <tr><td></td></tr>
+                <tr> 
+               <td>
+               Check Equipment
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.CheckEquipment, new SelectList(Model.equipment), "select")</td>
+                 </tr>
+                 <tr> 
+               <td align="left">
+               Check Equipment <br />Ownership
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.CheckEquipmentOwner, new SelectList(Model.ownership), "select")</td>
+                 </tr>
+                <tr> 
+               <td>
+               Check Equipment Qty.
+               </td>
+                <td>@Html.TextBoxFor(model => model.account.CheckEquipmentQuantity)</td>
+               </tr>
+               </table>
+               <table class="profaddaccount">
+               <tr> 
+               <td>
+               Primary PIN Pad
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.PrimaryPINpad, new SelectList(Model.pinpad), "select")</td>
+                 </tr>
+                <tr>
+                <td>
+                   Primary <br />PIN Pad Owner
+                </td>
+                <td>@Html.DropDownListFor(model => model.account.PrimaryPINpadOwner, new SelectList(Model.ownership), "select")</td>
+                </tr>
+                <tr>
+                <td>
+                   Primary <br />PIN Pad Qty.
+                </td>
+                <td>@Html.TextBoxFor(model => model.account.PrimaryPINpadQuantity, new {size = "7"})</td>
+                </tr>
+                <tr> 
+               <td>
+               Secondary PIN Pad
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.SecondaryPINpad, new SelectList(Model.pinpad), "select")</td>
+                 </tr>
+                 <tr> 
+               <td>
+               Secondary <br />PIN Pad Owner
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.SecondaryPINpadOwner, new SelectList(Model.ownership), "select")</td>
+                 </tr>
+                <tr> 
+               <td>
+               Secondary <br />PIN Pad Qty.
+               </td>
+                <td>@Html.TextBoxFor(model => model.account.SecondaryPINpadQuantity, new { size="7"})</td>
+               </tr>
+               </table>
+           @* <div style="position: absolute; left: 825px; margin-top: 150px;">
+                <input type="submit" name="save" id="SaveEqBtn" value="Save" style="border:none;"/><br />
+               <input type="submit" name="cancel" id="CancelEqBtn" value="Cancel" style="border:none;"/>
+            </div>*@
+       
+        </div>
+         <div class="acctcreateaddin">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Additional Information
+                </td>
+            </tr>
+        </table>
+        <div>
+        <div><table><tr><td>Description</td>
+       <td> @Html.TextBoxFor(model => model.account.Description, new { size = "110" })</td>
+       @Html.HiddenFor(model => model.account.ParentLead)
+       @Html.HiddenFor(model => model.account.AccountId)
+       @*<td>
+                 <input type="submit" name="save" id="SaveAdBtn" value="Save" style="border:none;"/></td>
+             <td> <input type="submit" name="cancel" id="CancelAdBtn" value="Cancel" style="border:none;"/> </td>*@ 
+                </tr>
+                </table>
+            </div>
+        </div>
+         </div>
+         @if (Model.user.AssignedRoleId == 3 || Model.user.AssignedRoleId == 2 || Model.user.AssignedRoleId == 5 || Model.user.AssignedRoleId == 1)
+         {
+          <div class="acctticket">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Tickets
+                </td>
+            </tr>
+        </table>
+        <table id = "TicketsTable" class="display" style="overflow:scroll;border: solid 1px black">
+        <thead>
+        <tr >
+       
+        <th>
+            Ticket Number
+        </th>
+        <th>
+            Subject
+        </th>
+        <th>
+            Date/Time Opened
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Priority
+        </th>
+        <th>
+
+        </th>
+      
+         </tr>
+        </thead>
+        <tbody>
+
+@foreach (var item in Model.tickets) {
+    <tr>
+       
+        <td>
+            @item.TicketNumber
+        </td>
+        <td>
+            @item.Subject
+        </td>
+        <td>
+            @item.DateOpened
+        </td>
+        <td>
+            @item.Status
+        </td>
+       
+        <td>
+           @item.Priority
+        </td>
+         <td>
+            @Html.ActionLink("Edit", "Details", "Ticket", new {item.TicketId}, null)
+         </td>
+    </tr>
+}
+</tbody>
+        </table>
+         </div>
+         }
+
+
+
+
+
+
+<div style="position: absolute; left: 1000px; margin-top:750px;">
+             <table><tr>
+             <td>  
+                <input type="submit" name="edit" id="EditAIBtn" value="Edit"/></td>
+             <td>  
+                <input type="submit" name="save" id="SaveAIBtn" value="Save"/></td>
+              <td> <input type="submit" name="cancel" id="CancelAIBtn" value="Cancel"/></td></tr></table>
+ </div>
+ </div>
+          
+</div>
+}

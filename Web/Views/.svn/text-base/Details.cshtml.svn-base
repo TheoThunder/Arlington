@@ -1,0 +1,678 @@
+﻿@model Web.ViewModel.AccountInformationViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.form.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.fileupload.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.fileupload-ui.js")" type="text/javascript"></script>
+@*@Html.EnableClientValidation(true);*@
+
+@*<script type="text/javascript" language="javascript">
+    /*global $ */
+    $(function () {
+        $('#file_upload').fileUploadUI({
+            uploadTable: $('#files'),
+            downloadTable: $('#files'),
+            buildUploadRow: function (files, index) {
+                return $('<tr><td>' + files[index].name + '<\/td>' +
+                    '<td class="file_upload_progress"><div><\/div><\/td>' +
+                    '<td class="file_upload_cancel">' +
+                    '<button class="ui-state-default ui-corner-all" title="Cancel">' +
+                    '<span class="ui-icon ui-icon-cancel">Cancel<\/span>' +
+                    '<\/button><\/td><\/tr>');
+            },
+            buildDownloadRow: function (file) {
+                return $('<tr><td>' + file.name + '<\/td><\/tr>');
+            }
+        });
+    });
+</script> *@
+
+<script type="text/javascript" language="javascript">
+
+    function disableAIFields() {
+        $('input[type="text"]').attr('disabled', 'disabled');
+        $('input[type="radio"]').attr('disabled', 'disabled');
+        $('select').attr('disabled', 'disabled');
+        $('textarea').attr('disabled', 'disabled');
+    }
+    function enableAIFields() {
+        $('input[type="text"]').removeAttr('disabled');
+        $('input[type="radio"]').removeAttr('disabled');
+        $('select').removeAttr('disabled');
+        $('textarea').removeAttr('disabled');
+    }
+
+    var AccountInformation;
+    var Applications;
+    var Equipment;
+    var AdditionalInformation;
+
+    $(document).ready(function () {
+        disableAIFields();
+        $('#SaveBIBtn').hide();
+        $('#CancelBIBtn').hide()
+
+
+        $("#EditBIBtn").click(function () {
+            enableAIFields();
+            $('#SaveBIBtn').show();
+            $('#CancelBIBtn').show();
+            $('#EditBIBtn').hide();
+            AccountInformation = new Object;
+            AccountInformation.TempCompanyName = $('#lead_CompanyName').val();
+            AccountInformation.TempContact1Name = $('#lead_Contact1Name').val();
+            AccountInformation.TempContact1Title = $('#lead_Contact1Title').val();
+            AccountInformation.TempContact2Name = $('#lead_Contact2Name').val();
+            AccountInformation.TempContact2Title = $('#lead_Contact2Title').val();
+            AccountInformation.TempPrimaryPhoneNumber = $('#lead_PrimaryPhoneNumber').val();
+            AccountInformation.TempAdditionalPhoneNumber = $('#lead_AdditionalPhoneNumber').val();
+            ////AccountInformation.TempPhoneRadioButton = $('input[type="radio"]').val()
+            AccountInformation.TempPhoneRadioButton = $('input[type="radio"]').val()
+            AccountInformation.TempFaxNumber = $('#lead_FaxNumber').val();
+            AccountInformation.TempPrimaryEmailAddress = $('#lead_PrimaryEmailAddress').val();
+            AccountInformation.TempAdditionalEmailAddress = $('#lead_AdditionalEmailAddress').val();
+            AccountInformation.TempWebsite = $('#lead_WebsiteLink').val();
+            AccountInformation.TempStreetName = $('#lead_StreetAddress1').val();
+            AccountInformation.TempCity = $('#lead_City').val();
+            AccountInformation.TempState = $('#lead_State').val();
+            AccountInformation.TempZip = $('#lead_ZipCode').val();
+            AccountInformation.TempZone = $('#lead_Zone').val();
+            AccountInformation.TempStatement = $('#lead_CompanyName').val();
+            return false;
+        });
+
+        $("#CancelBIBtn").click(function () {
+            $('#lead_CompanyName').val(AccountInformation.TempCompanyName);
+            $('#lead_Contact1Title').val(AccountInformation.TempContact1Title);
+            $('#lead_Contact1Name').val(AccountInformation.TempContact1Name);
+            $('#lead_Contact2Title').val(AccountInformation.TempContact2Title);
+            $('#lead_Contact2Name').val(AccountInformation.TempContact2Name);
+            $('#lead_PrimaryPhoneNumber').val(AccountInformation.TempPrimaryPhoneNumber);
+            $('#lead_AdditionalPhoneNumber').val(AccountInformation.TempAdditionalPhoneNumber);
+            $('input[type="radio"]').val(AccountInformation.TempPhoneRadioButton);
+            $('#lead_FaxNumber').val(AccountInformation.TempFaxNumber);
+            $('#lead_PrimaryEmailAddress').val(AccountInformation.TempPrimaryEmailAddress);
+            $('#lead_AdditionalEmailAddress').val(AccountInformation.TempAdditionalEmailAddress);
+            $('#lead_WebsiteLink').val(AccountInformation.TempWebsite);
+            $('#lead_StreetAddress1').val(AccountInformation.TempStreetName);
+            $('#lead_City').val(AccountInformation.TempCity);
+            $('#lead_State').val(AccountInformation.TempState);
+            $('#lead_ZipCode').val(AccountInformation.TempZip);
+            $('#lead_Zone').val(AccountInformation.TempZone);
+            $('#lead_Statement').val();
+            disableBIFields();
+            $('#SaveBIBtn').hide();
+            $('#CancelBIBtn').hide();
+            $('#EditBIBtn').show();
+            return false;
+        });
+
+        $("#SaveBIBtn").click(function () {
+            var BIFormContent = $("#ACForm").serialize()
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:49541/Account/AccountInformation",
+                data: BIFormContent,
+                success: function (msg) { alert(msg); }
+            });
+            //            var options = {
+            //                success: function (responsetext, statusText, xhr, $form) {
+            //                    alert(responsetext);
+            //                },
+            //                beforeSubmit: function () {
+            //                    return $("#BIForm").valid();
+            //                }
+            //            }
+            //$("#BIForm").ajaxSubmit(options);
+            disableAIFields();
+            $('#SaveBIBtn').hide();
+            $('#CancelBIBtn').hide();
+            $('#EditBIBtn').show();
+            return false;
+        });
+
+    });
+</script>
+
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+@using (Html.BeginForm("AccountInformation", "Account", FormMethod.Post, new { id = "ACForm" }))
+{@Html.ValidationSummary(true)
+<div class="container">
+<div class="header">
+
+    <img border="0" src="../../Content/images/banner.png" alt="alt" />
+</div>
+
+
+
+    
+    <div style="margin-top:150px;">
+   
+    <div style="position: absolute; left: 12px">
+        <table class="title">
+            <tr>
+                <td>
+                <br />
+                    &nbsp;Account Information
+                </td>
+            </tr>
+        </table>
+     <div>
+       <table class="profcontactmerchant">
+       <tr>
+        <td>Merchant ID</td>
+         <td>@Html.EditorFor(model => model.account.MerchantId, new { size = "20" })</td>
+        </tr>
+        <tr>
+          <td>Account Name</td>
+        <td> @Html.TextBoxFor(model => model.account.AccountName, new { size = "18" })</td>
+          </tr>         
+         <tr> <td>AA Name </td>        
+         <td>@Html.EditorFor(model => model.account.AACreator.UserName, new { size = "20" })</td>
+         </tr>
+          <tr><td>Sales Rep. Name</td>
+         <td>@Html.TextBoxFor(model => model.account.AssignedSalesRep.UserName, new { size = "15" })</td>
+         </tr>
+         <tr><td>Sales Rep. #</td>
+         <td> @Html.TextBoxFor(model => model.account.SalesRepNumber, new { size = "15" }) </td>
+         </tr>
+        <tr><td>Office #</td>
+         <td>@Html.TextBoxFor(model => model.account.OfficeNumber, new { size = "20" })</td> 
+         </tr>
+         <tr><td>Account Status</td>
+        <td>@Html.DropDownListFor(model => model.account.Status, new SelectList(Model.statuslist), "select")</td>
+        </tr>
+         <tr><td>Account Approval Date</td>
+         <td>@Html.TextBoxFor(model => model.account.AccountApprovalDate, new { size = "5" })
+         <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none" alt=""></td>
+          </tr>
+         <tr><td>Account Fee</td>
+         <td>@Html.CheckBoxFor(model => model.account.AnnualFee)</td>
+         
+         <td>Estimated Monthly Volume</td>
+         <td>@Html.DropDownListFor(model => model.account.EstimatedMonthlyVolume, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+          </tr>
+          <tr><td>HT </td>
+         <td>@Html.TextBoxFor(model => model.account.HT, new { size = "5" })</td>
+         <td>Platform</td>
+          <td>@Html.DropDownListFor(model => model.account.Platform, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+         </tr>
+         <tr><td>HMV</td>
+         <td>@Html.TextBoxFor(model => model.account.HMV, new { size = "5" })</td>
+         
+         <td>Vendor</td>
+          <td>@Html.DropDownListFor(model => model.account.Vendor, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+          </tr>
+        </table> 
+        <table class="profcontactchecks">
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.VIP)
+                    </td>
+                    <td align="left">
+                        VIP
+                    </td>
+                </tr>
+                
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.MBP)
+                    </td>
+                    <td align="left">
+                        MBP
+                    </td>
+                </tr>
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.FreeSupplies)
+                    </td>
+                    <td align="right">
+                        Free Supplies
+                    </td>
+                </tr>
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.PCIRefund)
+                    </td>
+                    <td align="left">
+                        PCI Refund
+                    </td>
+                </tr>
+               
+        </table>
+      
+        
+        
+        <table class="profcontactcenter">
+                <tr><th>
+                        Mailing/Billing Address
+                    </th></tr>
+                    <tr>
+                    <td align="right">
+                        Street
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="street" size="27">*@
+                        @Html.EditorFor(model => model.account.MailingStreet, new { size = "27" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        City
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="city" size="10"/>*@
+                        @Html.EditorFor(model => model.account.MailingCity, new { size = "10" })
+                        @Html.ValidationMessageFor(model => model.account.MailingCity)
+                        </td>
+                        </tr>
+                        <tr>
+                        <td align="right">
+                        State @*<select name="stat">
+                    <option value="AL">AL </option>
+                    <option value="TX">TX </option>
+                    <option value="WY">WY </option>
+                </select>*@</td>
+                    <td>    @Html.DropDownListFor(model => model.account.MailingState, new SelectList(Model.states), "Select")
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Zip
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="zip" size="25" />*@
+                        @Html.EditorFor(model => model.account.MailingZipcode, new { size = "25" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Primary Phone
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="primpho" size="20"/>*@
+                        @Html.EditorFor(model => model.account.PrimaryPhone, new { size = "20" })
+                        @Html.ValidationMessageFor(model => model.account.PrimaryPhone)
+                        <input type="radio" name="primpho" value="1" checked="checked" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Additional Phone
+                    </td>
+                    <td align="left">  
+                        @*<input type="text" name="addpho" size="20">*@
+                        @Html.EditorFor(model => model.account.SecondaryPhone, new { size = "20" })
+                        <input type="radio" name="primpho" value="2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Fax Number
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="fax" size="20">*@
+                        @Html.EditorFor(model => model.account.FaxNumber, new { size = "20" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Primary E-mail
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="primee" size="20">*@
+                        @Html.EditorFor(model => model.account.PrimaryEmail, new { size = "20" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Additional E-mail
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="adde" size="20">*@
+                        @Html.EditorFor(model => model.account.SecondaryEmail, new { size = "20" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Website
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="websi" size="30">*@
+                        @Html.EditorFor(model => model.account.Website, new { size = "30" })
+                    </td>
+                </tr>
+            </table>
+            <table class="profaddaccount">
+            <tr><th>DBA Address </th></tr>
+                <tr>
+                    <td align="right">
+                        Street
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="street" size="27">*@
+                        @Html.EditorFor(model => model.account.DBAStreet, new { size = "27" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        City
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="city" size="10"/>*@
+                        @Html.EditorFor(model => model.account.DBACity, new { size = "10" })
+                        @Html.ValidationMessageFor(model => model.account.DBACity)
+                        State @*<select name="stat">
+                    <option value="AL">AL </option>
+                    <option value="TX">TX </option>
+                    <option value="WY">WY </option>
+                </select>*@
+                        @Html.DropDownListFor(model => model.account.DBAState, new SelectList(Model.states), "Select")
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        Zip
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="zip" size="25" />*@
+                        @Html.EditorFor(model => model.account.DBAZipcode, new { size = "25" })
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="right">
+                        Statement
+                    </td>
+                    <td align="left">
+                        @*<input type="text" name="statement" size="25">*@
+                        @*@Html.EditorFor(model => model.lead.StatementFile, new { size = "25"})*@
+                    <br /> 
+                    <br />
+                    @*<form id="file_upload" action="upload.php" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" multiple>
+                    <button>Upload</button>
+                    <div>Upload files</div>
+                    </form>*@
+                    </td>
+                </tr>
+            </table>
+            <div style="position: absolute; left: 825px; margin-top: 150px;">
+                <input type="submit" name="edit" id="EditBIBtn" value="Edit"  style="border:none;"/><br>
+                <input type="submit" name="save" id="SaveBIBtn" value="Save" style="border:none;"/>
+                <input type="submit" name="cancel" id="CancelBIBtn" value="Cancel" style="border:none;"/>
+            </div>
+        </div>
+        <div class="BIViewAtt">
+            <a href="#" class="viewprof">
+                <img src="images/profileviewattac.png" style="border: none" alt=""></a>&nbsp;&nbsp;<a
+                    href="#" class="viewprof"><img src="images/profileviewbut.png" style="border: none"
+                        alt=""></a>
+        </div>
+
+        </div>
+         
+  
+    <div style="margin-top:440px;">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Applications
+                </td>
+            </tr>
+        </table>
+        <div>
+        <table class="profcontactmerchant">
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.Credit)
+                    </td>
+                    <td align="left">
+                        Credit
+                    </td>
+                </tr>
+                
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.Debit)
+                    </td>
+                    <td align="left">
+                        Debit
+                    </td>
+                </tr>
+               </table>
+               <table class="profcontactappsecond">
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.ARB)
+                    </td>
+                    <td align="right">
+                        ARB
+                    </td>
+                </tr>
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.CIM)
+                    </td>
+                    <td align="left">
+                        CIM
+                    </td>
+                </tr>
+                <tr> 
+                    
+                    <td align="left">
+                       
+                       @Html.CheckBoxFor(model => model.account.IP)
+                    </td>
+                    <td align="left">
+                        IP
+                    </td>
+                </tr>
+               
+        </table>
+         <table class="profcontactchecks">
+               <tr> <td>Gift Cards</td>
+         <td>@Html.DropDownListFor(model => model.account.GiftCardProcessor, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+          </tr>
+          <tr>
+         <td>Secur-Chex</td>
+          <td>@Html.DropDownListFor(model => model.account.Secur_Chex, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+         </tr>
+         </table>
+         <table class="profcontactaccount">
+               <tr> <td>Software</td>
+         <td>@Html.DropDownListFor(model => model.account.Software, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+          </tr>
+          <tr>
+         <td>E-Commerce</td>
+          <td>@Html.DropDownListFor(model => model.account.ECommerace, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+         </tr>
+         </table>
+         <div style="position: absolute; left: 825px; margin-top: 10px;">
+                <input type="submit" name="edit" id="EditBIBtn" value="Edit" style="border:none;" /><br />
+                <input type="submit" name="save" id="SaveBIBtn" value="Save" style="border:none;"/>
+               
+            </div>
+         </div>
+          
+        </div>
+        
+    
+      
+      <div style = "margin-top:550px;">
+      
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Equipment
+                </td>
+            </tr>
+        </table>
+        <div>
+        <table class="profcontactmerchant">
+            <tr>
+             <td>
+             Primary Terminal
+             </td>
+
+            <td>
+             @Html.DropDownListFor(model => model.account.PrimaryTerminal, new SelectList(Model.estimatedmonthlyvolume), "select")
+            </td>
+            </tr>
+            <tr>
+            <td>
+               Primary Terminal Ownership
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.PrimaryTerminalOwner, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+            </tr>
+             <tr>
+            <td>
+               Primary Terminal Qty.
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.PrimaryTerminalQuantity, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+            </tr>
+             <tr>
+            <td>
+               Secondary Terminal
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.SecondaryTerminal, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+            </tr>
+              <tr>
+            <td>
+               Secondary Terminal Ownership
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.SecondaryTerminalOwner, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+            </tr>
+              <tr>
+            <td>
+               Secondary Terminal Qty.
+            </td>
+            <td>@Html.DropDownListFor(model => model.account.SecondaryTerminalQuantity, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+            </tr>
+         </table>
+         <table class="profcontactcenter">
+               <tr><th> </th></tr>
+               <tr>
+               <td>
+               Printer
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.Printer, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                 </tr>
+                <tr>
+                <td>
+                    Printer Ownership
+                </td>
+                <td>@Html.DropDownListFor(model => model.account.PrinterOwner, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                </tr>
+                <tr><td></td></tr>
+                <tr> 
+               <td>
+               Check Equipment
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.CheckEquipment, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                 </tr>
+                 <tr> 
+               <td align="left">
+               Check Equipment Ownership
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.CheckEquipmentOwner, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                 </tr>
+                <tr> 
+               <td>
+               Check Equipment Qty.
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.CheckEquipmentQuantity, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+               </tr>
+               </table>
+               <table class="profaddaccount">
+               <tr> 
+               <td>
+               Primary PIN Pad
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.PrimaryPINpad, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                 </tr>
+                <tr>
+                <td>
+                   Primary PIN Pad Owner
+                </td>
+                <td>@Html.DropDownListFor(model => model.account.PrimaryPINpadOwner, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                </tr>
+                <tr>
+                <td>
+                   Primary PIN Pad Qty.
+                </td>
+                <td>@Html.DropDownListFor(model => model.account.PrimaryPINpadQuantity, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                </tr>
+                <tr> 
+               <td>
+               Secondary PIN Pad
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.SecondaryPINpad, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                 </tr>
+                 <tr> 
+               <td>
+               Secondary PIN Pad Owner
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.SecondaryPINpadOwner, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+                 </tr>
+                <tr> 
+               <td>
+               Secondary PIN Pad Qty.
+               </td>
+                <td>@Html.DropDownListFor(model => model.account.SecondaryPINpadQuantity, new SelectList(Model.estimatedmonthlyvolume), "select")</td>
+               </tr>
+               </table>
+            <div style="position: absolute; left: 825px; margin-top: 150px;">
+                <input type="submit" name="edit" id="EditBIBtn" value="Edit" style="border:none;" /><br/>
+                <input type="submit" name="save" id="SaveBIBtn" value="Save" style="border:none;"/>
+               
+            </div>
+            </div>
+        </div>
+        
+    
+         <div style = "margin-top:880px;">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Additional Information
+                </td>
+            </tr>
+        </table>
+        <div>
+        <div><table><tr><td>Description</td>
+       <td> @Html.TextBoxFor(model => model.account.Description, new { size = "110" })</td>
+       <td>
+                <input type="submit" name="edit" id="EditBIBtn" value="Edit" style="border:none;"/></td>
+             <td>  <input type="submit" name="save" id="SaveBIBtn" value="Save" style="border:none;"/></td> 
+                </tr>
+                </table>
+            </div>
+        </div>
+         </div>
+    
+
+
+</div>
+</div>
+}

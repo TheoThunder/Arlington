@@ -1,0 +1,130 @@
+﻿@model Web.ViewModel.FollowUpViewModel
+@{
+    ViewBag.Title = "FollowUp";
+}
+<meta name="viewport" content="width=720, maximum-scale=1.0" />
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ColdLeadsTable').dataTable({
+            "sPaginationType": "full_numbers"
+        });
+    });
+</script>
+
+
+<div class="container">
+<div class="header">
+               <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+               @if (Model.user.AssignedRoleId == 3)
+               {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                   <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+                <div class="futabon"><a href="/lead/followup">Follow Up</a></div>
+               }
+                  @if (Model.user.AssignedRoleId == 4)
+                  {
+                <div class="hometabaa"><a href="@Url.Action("Indexaa", "Home", Model.user)">Home</a></div>
+                <div class="todotabaa"><a href="#">To Do List</a>
+                  <ul class="todolistaa" >
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+   				  </ul></div>
+               
+                  }
+               
+          
+            <div class="logout"><a href="/auth/login">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Follow Up List - @DateTime.Today.ToShortDateString()</div>
+<div style="margin-left:auto; margin-right:auto; position:relative; width: 80%;">
+
+@*I am using the same DataTable for uniformity. Please do not confuse yourself with the table names*@
+<table id="ColdLeadsTable" class="display"  style="border: solid 1px black; position:relative;">
+    <thead>
+            <th>
+                Company / Contact
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Zip
+            </th>
+            <th>
+                Zone
+            </th> 
+            <th>
+                Phone
+            </th>
+            <th>
+            Appt Description
+            </th>
+            <th colspan="2">
+  
+            </th>
+
+    </thead>
+    <tbody>
+        @foreach (var item in Model.FollowUP)
+        {
+            <tr>
+                <td>
+                    @item.CompanyName
+                </td>
+                <td>
+                    @item.City
+                </td>
+                <td>
+                    @item.State
+                </td>
+                <td>
+                    @item.ZipCode
+                </td>
+                <td>
+                    @if (item.ZoneNumber != null)
+                    {
+                        @item.ZoneNumber
+                    }
+                </td>
+                <td>
+                    @item.PrimaryPhoneNumber
+                </td>
+                <td>
+                    @item.appointmentdesc
+                </td>
+                <td>
+                <a href= '@Url.Action("CallProfile", "Lead", new { item.LeadId })' >
+                <img src="../../Content/images/CallCard.png" /></a>
+                </td>
+                <td>
+                <div class="viewprof" style="margin: 0 auto"><a href= '@Url.Action("Profile", "Lead", new { item.LeadId }) '>View Profile</a></div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+</div>
+</div>

@@ -1,0 +1,18 @@
+﻿@model Data.Domain.Lead
+
+@{
+    ViewBag.Title = "Main";
+}
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<div class="container">
+    <div class="header">
+        <img border="0" src="../../Content/images/banner.png" alt="alt" />
+    </div>
+    <div class="content">
+@{ Html.RenderAction("Index");
+   //Html.RenderAction("Leads");
+   
+   }
+    </div>
+
+</div>

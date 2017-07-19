@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Index2";
+}
+<div class="container">
+<div class="content">
+<div class="header">
+            <div class="hometabu"><a href="#"></a></div>
+			<div class="todotab"><a href="#"></a></div>
+            <div class="dashb"><a href="#"></a></div>
+            <div class="logout"><a href="/auth/login"></a></div>
+    Trinity Header</div>
+
+<table class="loglinks">
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/profile.jpg" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "/Lead/index"  >Profiles</a></td>  
+            </tr>
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/call icon.png" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "#"  >Make a direct call</a></td>        
+        </tr>
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/Check-icon.png" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "#"  >Accounts</a></td>        
+        </tr>
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/Setting-icon.png" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "#"  >Settings</a></td>        
+        </tr>
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/Calendar.gif" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "#"  >View Calendar</a></td>        
+        </tr>
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/upcoming-events.jpg" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "#"  >Preview Upcoming Events</a></td>        
+        </tr>
+        <tr>
+        	<td align="bottom"><a href= "#"  ><img border="0" src="../../Content/themes/base/images/reports-icon.png" alt="Pulpit rock"
+    width="104" height="128" /></a></td>
+            <td align="top"><a href= "#"  >Reports</a></td>        
+        </tr>
+        </table>
+<ul>
+    @if (User.IsInRole(Data.Constants.Permissions.LEAD_VIEW))
+    {
+        <li><a href="Lead">Lead Profile Search</a></li>
+    }
+    @if (User.IsInRole(Data.Constants.Permissions.CALENDAR_VIEW))
+    {
+        <li><a href="Lead">View Calendar</a></li>
+        <li><a href="Lead">Preview Upcoming Events</a></li>
+    }
+    @if (User.IsInRole(Data.Constants.Permissions.PHONE_DIRECTCALL))
+    {
+        <li><a href="Lead">Make a direct call</a></li>
+    }
+    @if (User.IsInRole(Data.Constants.Permissions.USER_MANAGE))
+    {
+        <li><a href="Lead">Users</a></li>
+    }
+    @if (User.IsInRole(Data.Constants.Permissions.ACCOUNTS_VIEW))
+    {
+        <li><a href="Lead">Accounts</a></li>
+    }
+    @if (User.IsInRole(Data.Constants.Permissions.ZONES_MANAGE))
+    {
+        <li><a href="Lead">Manage Zones</a></li>
+    }
+    @if (User.IsInRole(Data.Constants.Permissions.SETTINGS_EDIT))
+    {
+        <li><a href="Lead">Settings</a></li>
+    }
+   @* <li><a href="Lead">Reports</a></li>*@
+</ul>
+ 
+
+</div>
+</div>

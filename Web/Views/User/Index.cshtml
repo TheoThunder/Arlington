@@ -1,0 +1,169 @@
+﻿ @model Web.ViewModel.UserCreateViewModel
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#UserTable').dataTable({
+            "sPaginationType": "full_numbers"
+        }      
+        
+        );
+
+
+        var oTable = $('#UserTable').dataTable();
+        $('#rolelist').change(function () { oTable.fnFilter($(this).val(), 2, false) && ($('#statuslist').val(), 6, false); });
+        $('#statuslist').change(function () { oTable.fnFilter($(this).val(), 6, false) && ($('#rolelist').val(), 2, false); });
+   
+    });
+
+    
+
+</script>
+<style type="text/css">
+#hidden1
+{
+    display:none;
+}
+</style>
+
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+            <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+            @if (Model.user.AssignedRoleId == 1)
+            {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home",  Model.user )">Home</a></div>
+            }
+            @if (Model.user.AssignedRoleId == 2)
+            {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+            }
+			<div class="implea"><a href="@Url.Action("Index", "ImportLead",  Model.user.UserId)">Import Leads</a></div>
+         	<div class="leadque"><a href="@Url.Action("Index", "LeadQueue",  Model.user.UserId)">Leads Queue</a></div>
+            <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+            <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>      
+            <div class="logout"><a href="/auth/login">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Users List - @DateTime.Today.ToShortDateString()</div>
+<div style="margin-left:auto; margin-right:auto; position:relative; width: 70%;">
+
+<table>
+<tr><td>@Html.DropDownList("rolelist", new SelectList(Model.roleList), "All", new { style = "width:170px" }) </td> 
+<td>View:</td>
+<td><select id="statuslist">
+    <option value=" ">All</option>
+    <option value="Active">Active</option>
+    <option value="Deleted">In-Active</option>
+    </select></td></tr>
+
+    </table>
+<div class="newemployee" style="float:right">@Html.ActionLink("Create New", "Create")</div>
+
+<table id="UserTable" class="display"  style="margin-left:1px;border: solid 1px black; position:relative;">
+    <thead>
+        
+        <th>
+            Name
+        </th>
+        <th>
+            Employee ID
+        </th>
+        <th>
+            Role
+        </th>
+        <th>
+            Office #
+        </th>
+        <th>
+            Contact Phone Number
+        </th>
+        <th>
+            Status
+        </th>
+        <th id="hidden1">
+            
+        </th>
+        <th colspan="2"></th>
+    </thead>
+    <tbody>
+@foreach (var item in Model.users)
+{
+    <tr>
+        <td>
+            @item.FirstName @item.MiddleName @item.LastName
+        </td>
+        <td>
+            @item.SalesRepNumber
+        </td>
+        <td>@if (item.AssignedRoleId == 1)
+            {
+                <text> Administrator </text>
+            }
+            @if (item.AssignedRoleId == 2)
+            {
+                <text> Manager </text>
+            }
+            @if (item.AssignedRoleId == 3)
+            {
+                <text> Sales Agent </text>
+            }
+            @if (item.AssignedRoleId == 4)
+            {
+                <text> Appointment Agent </text>
+            }
+            @if (item.AssignedRoleId == 5)
+            {
+                <text>Customer Service Agent</text>
+            }
+        </td>
+        <td>
+            @item.OfficeNumber
+        </td>
+        <td>
+            @item.PhoneNumberOne
+        </td>
+        <td>@if (item.IsActive == true)
+            {
+                <text> Active </text>
+            }
+            @if (item.IsActive == false)
+            {
+                <text> In-Active </text>
+            }
+            
+        </td>
+        <td id="hidden1">@if (item.IsActive == true)
+            {
+                <text> Active </text>
+            }
+            @if (item.IsActive == false)
+            {
+                <text> Deleted </text>
+            }
+            
+        </td>
+        <td align="center">
+            <div class="viewprof" style="margin: 0 auto"><a href= '@Url.Action("Edit", "User", new { id = @item.UserId }) '>View Profile</a></div></td>
+            <td align="center">  
+             <div class="viewprof" style="margin: 0 auto"><a href= '@Url.Action("Delete", "User", new { id = @item.UserId }) '>Delete Profile</a></div>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
+</div>
+</div>
+</div>

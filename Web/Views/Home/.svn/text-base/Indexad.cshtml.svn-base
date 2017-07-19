@@ -1,0 +1,82 @@
+﻿@model Web.ViewModel.UserCreateViewModel
+            
+@{
+    ViewBag.Title = "Indexad";
+}
+
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<div class="container">
+<div class="header">
+    <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>   
+            <div class="hometabon"><a href="@Url.Action("Index", "Home")">Home</a></div>
+			<div class="implea"><a href="@Url.Action("Index", "ImportLead")">Import Leads</a></div>
+         	<div class="leadque"><a href="@Url.Action("Index", "LeadQueue")">Leads Queue</a></div>
+            <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue")">Appt Queue</a></div>
+            <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>    
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+
+<table class="loglinks_Col1">
+        <tr>
+        	<td align="bottom"><a href= "@Url.Action("Index", "User",  Model.user.UserId )"  ><img border="0" src="../../Content/images/Users.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top">@Html.ActionLink("Users", "Index", "User", new { id = Model.user.UserId }, null)
+            </td>  
+        </tr>
+        
+        <tr>
+        	<td align="bottom"><a href= "@Url.Action("Index", "LeadList", Model.user.UserId )"  ><img border="0" src="../../Content/images/Folders.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top">@Html.ActionLink("Business Profiles", "Index", "LeadList", new { id = Model.user.UserId }, null)</td>  
+        </tr>
+
+        <tr>
+        	<td align="bottom"><a href= "@Url.Action("Index", "Account", Model.user.UserId )"  ><img border="0" src="../../Content/images/Check-icon.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top">@Html.ActionLink("Accounts", "Index", "Account", new { id = Model.user.UserId }, null)</td>        
+        </tr>
+
+        <tr>
+        	<td align="bottom"><a href=  "@Url.Action("Index", "Zone", Model.user.UserId )"  ><img border="0" src="../../Content/images/Settings.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top">@Html.ActionLink("Settings", "Index", "Zone", new { id = Model.user.UserId }, null)</td>        
+        </tr>
+        
+        </table>
+
+<table class="loglinks_Col2">
+ 
+@*        <tr>
+        	<td align="bottom"><a href= "/callcard/index"  ><img border="0" src="../../Content/images/call icon.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/callcard/index"  >Make a direct call</a></td>        
+        </tr>*@
+
+        <tr>
+        	<td align="bottom"><a href= "/Calendar/mancalendar"  ><img border="0" src="../../Content/images/Calendar.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/Calendar/mancalendar"  >Calendar</a></td>        
+        </tr>
+
+         <tr>
+        	<td align="bottom"><a href= "/Ticket/Index"  ><img border="0" src="../../Content/images/tickets128.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/Ticket/Index"  >Tickets</a></td>  
+        </tr>
+  
+        <tr>
+        	<td align="bottom"><a href= "/reportlist/Index"  ><img border="0" src="../../Content/images/ChartPie.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/reportlist/Index"  >Reports</a></td>        
+        </tr>
+        </table>
+
+</div>
+</div>

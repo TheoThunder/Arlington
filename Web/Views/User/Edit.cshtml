@@ -1,0 +1,743 @@
+﻿@model Web.ViewModel.UserCreateViewModel
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.maskedinput-1.2.2.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.autotab-1.1b.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/createuser.css")" rel="stylesheet" type="text/css" />
+    
+<script type="text/javascript" src="../../Scripts/mColorPicker.js" charset="UTF-8"></script>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<div class="container">  
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+             @if (Model.displayuser.AssignedRoleId == 1)
+             {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                 <div class="implea"><a href="@Url.Action("Index", "ImportLead")">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue")">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue")">Appt Queue</a></div>
+                 <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+             }
+            @if (Model.displayuser.AssignedRoleId == 2)
+            {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead")">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue")">Leads Queue</a></div>
+                 <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue")">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+            }
+            @if (Model.displayuser.AssignedRoleId == 3)
+            {
+                 <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home")">Home</a></div>
+                <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+                 <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="#">Appointments</a></li>
+   				  </ul></div>
+                 <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+            }
+             @if (Model.displayuser.AssignedRoleId == 4)
+             {
+                  <div class="hometabaa"><a href="@Url.Action("Indexaa", "Home")">Home</a></div>
+                  <div class="todotabaa"><a href="#">To Do List</a>
+                  <ul class="todolistaa" >
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+   				  </ul></div>
+                
+             }
+        
+            
+            <div class="logout"><a href="#">@(Model.displayuser.FirstName) @(Model.displayuser.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.displayuser.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+   
+</div>
+
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function (event) {
+
+        $(".zip").mask("99999", { placeholder: " " });
+        $(".PhoneNumber").mask("(999) 999-9999", { placeholder: " " });
+        $("#wage").autotab_filter('numeric');
+        $(".Name").autotab_filter('alpha');
+        $("#user_OfficeNumber").autotab_filter('numeric');
+        $("#extensionNum").autotab_filter('numeric');
+
+        $(".mColorPickerInput").hide();
+        //        $('#user_CalendarColor').bind('colorpicked', function () {
+        //            alert($(this).val());
+        //        });
+
+        $("#User_Create").hide();
+
+        var firstNameTB = $('#user_FirstName');
+        var userNameTB = $("#user_UserName");
+        var middleNameTB = $('#user_MiddleName');
+        var lastNameTB = $('#user_LastName');
+
+        var jay = function () {                                                                            //function masks username input
+            if (middleNameTB.val() == "")
+                var un = firstNameTB.val() + "." + lastNameTB.val();
+            else
+                var un = firstNameTB.val() + "." + middleNameTB.val()[0] + "." + lastNameTB.val();
+            $('#user_UserName').val(un);
+        }
+
+        var validate = function () {
+            if (firstNameTB.val() == "") {
+                alert("Enter a First Name!");
+            }
+            if (lastNameTB.val() == "") {
+                alert("Enter a Last Name!");
+            }
+
+            if ($("#myselect option:selected").text() == "")
+                alert("Please Select a Role!");
+
+            if (firstNameTB.val() == "" || lastNameTB.val() == "" || $("#myselect option:selected").text() == "")
+                return false;
+            else
+                return true;
+
+        }
+
+
+        var kay = function () {                                                                            //function submits ajax request of assigned zones and serialized form
+            $("#user_AssignedZoneIds *").attr("selected", "selected");
+            $("#ZoneList *").attr("selected", "selected");
+            $("#user_UserName").removeAttr('disabled');
+            var realvalues = [];
+            var textvalues = [];
+            var postvalue = new Array();
+            $('#user_AssignedZoneIds :selected').each(function (i, selected) {
+                realvalues[i] = $(selected).val();
+                textvalues[i] = $(selected).text();
+                postvalue.push(textvalues[i]);
+            });
+
+
+            var op = $('#oldPassword').val();
+            var np = $('#nPassword').val();
+            var cp = $('#confirmPassword').val();
+
+            var postPswd = [op, np, cp];
+
+            var postData = postvalue;
+            var UserCreate = $("#UserForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/User/Edit",
+                dataType: "json",
+                traditional: true,
+                success: function (data, textStatus, xhr) {
+                    if (data.data) {
+                        alert("Profile Updated!\nPassword Changed!");
+                        window.location.href = data.redirectToUrl;
+                    }
+                    else {
+                        alert("Profile Updated!\nPassword was not changed!");
+                        window.location.href = data.redirectToUrl;
+                    }
+
+                },
+                data: "values=" + postData + "&" + "vals=" + postPswd + "&" + UserCreate
+            });
+        }
+
+        var checkPassword = function () {
+            if ($('#hiddenPassword').val() == $('#oldPassword').val())
+                $('#check1').show('fast');
+            else
+                $('#check1').hide('fast');
+        }
+
+        var checkPassword2 = function () {
+            if ($('#nPassword').val() == $('#confirmPassword').val())
+                $('#check2').show('fast');
+            else
+                $('#check2').hide('fast');
+        }
+
+        var color = $("#user_CalendarColor").val();
+        $("#icp_user_CalendarColor").css("background-color", color);
+        $("#icp_user_CalendarColor").css("value", color);
+
+        var sel = $("#myselect option:selected").text();
+
+        switch (sel) {
+            case "Administrator":
+            case "Manager":
+                $('.role').hide('fast');
+                $('.azone').hide('fast');
+                $('.team').hide('fast');
+                $('.hour').hide('fast');
+                break;
+            case "SA":
+                if (($("#displayuser_AssignedRoleId").val() == 1) || ($("#displayuser_AssignedRoleId").val() == 2)) {
+                    $('.role').show('fast');
+                    $('.azone').show('fast');
+                    $('.team').show('fast');
+                    $('.hour').hide('fast');
+                    break;
+                }
+            case "AA":
+                $('.office').hide('fast');
+                $('.color').hide('fast');
+                $('.role').hide('fast');
+                $('.azone').hide('fast');
+                $('#team').show('fast');
+                $('.hour').show('fast');
+                break;
+            case "Customer Service Agent":
+                $('.role').hide('fast');
+                $('.azone').hide('fast');
+                $('.team').hide('fast');
+                $('.hour').hide('fast');
+                break;
+        }
+
+
+        $('#user_UserName').attr('disabled', 'disabled');
+        $('#user_FirstName').attr('disabled', 'disabled');
+        $('#user_MiddleName').attr('disabled', 'disabled');
+        $('#user_LastName').attr('disabled', 'disabled');
+        $('#user_PhoneNumberOne').attr('disabled', 'disabled');
+        $('#user_PhoneNumberTwo').attr('disabled', 'disabled');
+        $('#user_EmailOne').attr('disabled', 'disabled');
+        $('#user_EmailTwo').attr('disabled', 'disabled');
+        $('#user_FaxNumber').attr('disabled', 'disabled');
+        $('#user_Address1').attr('disabled', 'disabled');
+        $('#user_City').attr('disabled', 'disabled');
+        $('#user_State').attr('disabled', 'disabled');
+        $('#user_ZipCode').attr('disabled', 'disabled');
+        $('#myselect').attr('disabled', 'disabled');
+        $('#user_OfficeNumber').attr('disabled', 'disabled');
+        $('#user_CalendarColor').attr('disabled', 'disabled');
+        $('#wage').attr('disabled', 'disabled');
+        $('#user_TeamNumber').attr('disabled', 'disabled');
+        $('#oldPassword').attr('disabled', 'disabled');
+        $('#newPassword').attr('disabled', 'disabled');
+        $('#newPassword').attr('disabled', 'disabled');
+        $('#extensionNum').attr('disabled', 'disabled');
+        $("#savePersonal").click(function () {
+
+            $('#user_UserName').attr('disabled', 'disabled');
+            $('#user_FirstName').attr('disabled', 'disabled');
+            $('#user_MiddleName').attr('disabled', 'disabled');
+            $('#user_LastName').attr('disabled', 'disabled');
+            $('#user_PhoneNumberOne').attr('disabled', 'disabled');
+            $('#user_PhoneNumberTwo').attr('disabled', 'disabled');
+            $('#user_EmailOne').attr('disabled', 'disabled');
+            $('#user_EmailTwo').attr('disabled', 'disabled');
+            $('#user_FaxNumber').attr('disabled', 'disabled');
+            $('#user_Address1').attr('disabled', 'disabled');
+            $('#user_City').attr('disabled', 'disabled');
+            $('#user_State').attr('disabled', 'disabled');
+            $('#user_ZipCode').attr('disabled', 'disabled');
+
+        });
+
+        $("#editPersonal").click(function () {
+
+            // $('#user_UserName').removeAttr('disabled');
+            $('#user_FirstName').removeAttr('disabled');
+            $('#user_MiddleName').removeAttr('disabled');
+            $('#user_LastName').removeAttr('disabled');
+            $('#user_PhoneNumberOne').removeAttr('disabled');
+            $('#user_PhoneNumberTwo').removeAttr('disabled');
+            $('#user_EmailOne').removeAttr('disabled');
+            $('#user_EmailTwo').removeAttr('disabled');
+            $('#user_FaxNumber').removeAttr('disabled');
+            $('#user_Address1').removeAttr('disabled');
+            $('#user_City').removeAttr('disabled');
+            $('#user_State').removeAttr('disabled');
+            $('#user_ZipCode').removeAttr('disabled');
+            $('#extensionNum').removeAttr('disabled');
+
+
+        });
+
+        $("#saveCareer").click(function () {
+
+            $('#myselect').attr('disabled', 'disabled');
+            $('#user_OfficeNumber').attr('disabled', 'disabled');
+            $('#user_CalendarColor').attr('disabled', 'disabled');
+            $('#user_HourlyRate').attr('disabled', 'disabled');
+            $('#user_TeamNumber').attr('disabled', 'disabled');
+
+        });
+
+        $("#editCareer").click(function () {
+
+            $('#user_FirstName').removeAttr('disabled');
+            $('#user_MiddleName').removeAttr('disabled');
+            $('#user_LastName').removeAttr('disabled');
+            $('#user_PhoneNumberOne').removeAttr('disabled');
+            $('#user_PhoneNumberTwo').removeAttr('disabled');
+            $('#user_EmailOne').removeAttr('disabled');
+            $('#user_EmailTwo').removeAttr('disabled');
+            $('#user_FaxNumber').removeAttr('disabled');
+            $('#user_Address1').removeAttr('disabled');
+            $('#user_City').removeAttr('disabled');
+            $('#user_State').removeAttr('disabled');
+            $('#user_ZipCode').removeAttr('disabled');
+            $('#user_selectedRole').removeAttr('disabled');
+            $('#user_OfficeNumber').removeAttr('disabled');
+            $('#user_CalendarColor').removeAttr('disabled');
+            $('#wage').removeAttr('disabled');
+            $('#user_TeamNumber').removeAttr('disabled');
+            $('#myselect').removeAttr('disabled');
+            $('#extensionNum').removeAttr('disabled');
+
+            $("#User_Create").show('fast');
+            $("#editCareer").hide('fast');
+        });
+
+        $("#Add_Zone").click(function () {
+            return !$('#ZoneList option:selected').appendTo('#user_AssignedZoneIds');
+        });
+        $("#Remove_Zone").click(function () {
+            return !$('#user_AssignedZoneIds option:selected').appendTo('#ZoneList');
+        });
+
+        $("#User_Create").click(function () {
+            //  $("#user_AssignedZoneIds *").attr("selected", "selected");
+            $("#user_UserName").removeAttr('disabled');
+            $('#user_FirstName').removeAttr('disabled');
+            $('#user_MiddleName').removeAttr('disabled');
+            $('#user_LastName').removeAttr('disabled');
+            $('#user_PhoneNumberOne').removeAttr('disabled');
+            $('#user_PhoneNumberTwo').removeAttr('disabled');
+            $('#user_EmailOne').removeAttr('disabled');
+            $('#user_EmailTwo').removeAttr('disabled');
+            $('#user_FaxNumber').removeAttr('disabled');
+            $('#user_Address1').removeAttr('disabled');
+            $('#user_City').removeAttr('disabled');
+            $('#user_State').removeAttr('disabled');
+            $('#user_ZipCode').removeAttr('disabled');
+            $('#user_selectedRole').removeAttr('disabled');
+            $('#user_OfficeNumber').removeAttr('disabled');
+            $('#user_CalendarColor').removeAttr('disabled');
+            $('#wage').removeAttr('disabled');
+            $('#user_TeamNumber').removeAttr('disabled');
+            $('#extensionNum').removeAttr('disabled');
+
+            $("#User_Create").hide('fast');
+            $("#editCareer").show('fast');
+
+            if (validate()) {
+                kay();
+            }
+        });
+
+        $("#pswd").click(function () {
+
+            var op = $('#oldPassword').val();
+            var np = $('#nPassword').val();
+            var cp = $('#confirmPassword').val();
+
+            var postData = [op, np, cp];
+            var UserCreate = $("#UserForm").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/User/SavePassword",
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.data) {
+                        alert(data.msg);
+                        alert("Password Changed!");
+                    }
+                    else
+                        alert("Passwords do not match!");
+                },
+                data: "values=" + postData + "&" + UserCreate
+            });
+
+        });
+
+        $('.loginbox').hide();
+        $('#check1').hide();
+        $('#check2').hide();
+
+        $("#Change_Password").click(function () {
+            if ($('.loginbox').is(':visible')) {
+                $('.loginbox').hide('slow');
+                $('#oldPassword').attr('disabled', 'disabled');
+                $('#nPassword').attr('disabled', 'disabled');
+                $('#nPassword').attr('disabled', 'disabled');
+            }
+            if ($('.loginbox').is(':hidden')) {
+                $('.loginbox').show('slow');
+                $('#oldPassword').removeAttr('disabled');
+                $('#nPassword').removeAttr('disabled');
+                $('#nPassword').removeAttr('disabled');
+            }
+        });
+        firstNameTB.keyup(jay);
+        middleNameTB.keyup(jay);
+        lastNameTB.keyup(jay);
+        $('#oldPassword').keyup(checkPassword);
+        $('#confirmPassword').keyup(checkPassword2);
+
+        if ($("#user_AssignedRoleId").val() == 3)
+            $('.assigned').show();
+        else
+            $('.azone').hide();
+        $("#myselect").change(function () {
+
+            var sel = $("#myselect option:selected").text();
+
+            switch (sel) {
+                case "Administrator":
+                case "Manager":
+                    $('.role').hide('fast');
+                    $('.azone').hide('fast');
+                    $('.team').hide('fast');
+                    $('.hour').hide('fast');
+                    break;
+                case "SA":
+                    $('.role').show('fast');
+                    $('.azone').show('fast');
+                    $('.team').show('fast');
+                    $('.hour').show('fast');
+                    break;
+                case "AA":
+                    $('.office').hide('fast');
+                    $('.color').hide('fast');
+                    $('.role').hide('fast');
+                    $('.azone').hide('fast');
+                    $('.team').show('fast');
+                    $('.hour').show('fast');
+                    break;
+                case "Customer Service Agent":
+                    $('.role').hide('fast');
+                    $('.azone').hide('fast');
+                    $('.team').hide('fast');
+                    $('.hour').hide('fast');
+                    break;
+            }
+        });
+
+
+        var userCheck = function () {
+
+            var sel = $("uid").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/User/UserNameCheck",
+                dataType: "json",
+                traditional: true,
+                success: function (data) {
+                    return data.data;
+                },
+                data: "values=" + sel
+            });
+        };
+
+    });
+</script>
+<div class="content">
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { id = "UserForm" }))
+{
+    @Html.ValidationSummary(false)
+
+     @Html.HiddenFor(model => model.displayuser.UserId)
+     @Html.HiddenFor(model => model.user.UserId)
+     @Html.HiddenFor(model => model.user.AssignedRoleId)
+     @Html.HiddenFor(model => model.displayuser.AssignedRoleId)
+     @Html.HiddenFor(model => model.user.CalendarColor)
+    <div class="personinfo">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Personal Information
+                </td>
+            </tr>
+        </table>
+        <table class="pinfoform">
+            <tr>
+                <td>
+                    Employee ID:
+                </td>
+                <td>
+                   @Model.eId
+                </td>
+                <td></td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.user.IsActive) Active
+                </td>
+            </tr>
+            <tr class="tablemin">
+                <td>
+                </td>
+                <td>
+                    First Name
+                </td>
+                
+                <td>
+                    Middle Name
+                </td>
+                <td colspan="2">
+                    Last Name
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Name
+                </td>
+                @*<td><input type="text" name="fname" size="15"/> </td>*@
+                <td>@Html.TextBoxFor(model => model.user.FirstName, new { @class = "Name" })
+                    @Html.ValidationMessageFor(model => model.user.FirstName)
+                </td>
+
+                @*<td><input type="text" name="mname" size="10"/></td>*@
+                <td>@Html.TextBoxFor(model => model.user.MiddleName, new { @class = "Name" })
+                    @Html.ValidationMessageFor(model => model.user.MiddleName)
+                </td>
+                @*<td> <input type="text" name="lname" size="15"/></td>*@
+                <td colspan="2">@Html.TextBoxFor(model => model.user.LastName, new { @class = "Name" })
+                    @Html.ValidationMessageFor(model => model.user.LastName)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Contact #1
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.user.PhoneNumberOne, new { @class = "PhoneNumber" })
+                    @Html.ValidationMessageFor(model => model.user.PhoneNumberOne)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Contact #2
+                </td>
+                <td>@Html.TextBoxFor(m => m.user.PhoneNumberTwo, new { @class = "PhoneNumber" })
+                    @Html.ValidationMessageFor(model => model.user.PhoneNumberTwo)
+                </td>
+            
+                <td></td>
+                <td colspan="2">
+                    E-mail Address #1
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.user.EmailOne)
+                    @Html.ValidationMessageFor(model => model.user.EmailOne)
+                </td>
+              
+            </tr>
+            <tr>
+                <td>
+                    Fax #
+                </td>
+                <td>@Html.TextBoxFor(model => model.user.FaxNumber, new { @class = "PhoneNumber" })
+                    @Html.ValidationMessageFor(model => model.user.FaxNumber)
+                </td>
+                <td>
+                </td>
+                <td colspan="2">
+                    E-mail Address #2
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.user.EmailTwo)
+                    @Html.ValidationMessageFor(model => model.user.EmailTwo)
+                </td>
+               
+            </tr>
+            <tr class="tablemin">
+                <td>
+                </td>
+                <td>
+                    Street
+                </td>
+                <td>
+                    City
+                </td>
+                <td>
+                    State
+                </td>
+                <td>
+                    Zip
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Address
+                </td>
+                <td>@Html.EditorFor(model => model.user.Address1)
+                    @Html.ValidationMessageFor(model => model.user.Address1)
+                </td>
+                <td>@Html.EditorFor(model => model.user.City)
+                    @Html.ValidationMessageFor(model => model.user.City)
+                </td>
+                <td>@Html.DropDownListFor(model => model.user.State, new SelectList(Model.states), "-Select-")
+                    @Html.ValidationMessageFor(model => model.user.State)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.user.ZipCode, new { maxlength = 5, size = 5, @class = "zip" })
+                    @Html.ValidationMessageFor(model => model.user.ZipCode)
+                </td>
+            </tr>
+        </table>
+
+          <div style="position:relative; float:right; top: 100px; margin-right: 50px;">
+                    @*<input type="button" id="editPersonal" value="Edit" /><br />*@
+              
+                    @*<input type="button" id="savePersonal" value="Save" />*@</div>
+                
+    </div>
+    <div class="careinfo">
+            <table class="title"><tr><td>&nbsp;Career Information</td></tr>
+            </table>
+            <table>
+            <tr>
+
+            <td>Role</td>
+            <td>@Html.DropDownListFor(model => model.user.selectedRole, new SelectList(Model.types), new { @id = "myselect", style = "width:170px"})
+                @Html.ValidationMessageFor(model => model.user.AssignedRoleId)</td>
+                
+            
+            </tr>
+            
+            <tr>
+            <td>Employee ID</td>
+            <td>@Model.eId</td>
+            </tr>
+
+                        <tr>
+            <td class="role">Office #</td>
+            <td>@Html.TextBoxFor(model => model.user.OfficeNumber, new { size = 6, maxlength = 6, @class = "role" })
+                @Html.ValidationMessageFor(model => model.user.OfficeNumber)</td>
+            </tr>
+            <tr>
+            <td class="role">Color Code</td>
+            <td class="role"><input id="user_CalendarColor" name="user.CalendarColor" class="role" type="color" value="#ff0667" data-text="hidden" style="height:20px;width:20px;" />
+                @Html.ValidationMessageFor(model => model.user.CalendarColor)</td>
+            </tr>
+            @if ((@Model.displayuser.AssignedRoleId == 1) || (@Model.displayuser.AssignedRoleId == 2))
+            {
+            <tr>
+            <td class="hour">Hourly Rate $</td>
+            <td> @Html.TextBoxFor(model => model.user.HourlyRate, new { size = 3, maxlength = 3, @id = "wage", @class = "hour" })
+                 @Html.ValidationMessageFor(model => model.user.HourlyRate)</td>
+            </tr>
+            }
+            <tr>
+            <td class ="team">Team :</td>
+            <td>@Html.DropDownListFor(model => model.user.TeamNumber, new SelectList(Model.team), new { @class = "team" })</td>
+            </tr>
+            <tr>
+            <td>Extension Number :</td>
+            <td>@Html.TextBoxFor(model => model.extensionNum, new { size = 5 })</td>
+            </tr>
+            </table> 
+            <div class="azone">
+            <table id="zonetable">
+                <tr>
+                    <td  colspan="2">Un-Assigned Zones</td>
+                    
+                    <td>Assigned Zones</td>
+                </tr>
+                <tr>
+                <td>
+                
+                @Html.ListBoxFor(model => model.user.ZoneIds, new SelectList(Model.ZoneList, "ZoneId", "ZoneNumber"), new { id = "ZoneList" })
+                @Html.ValidationMessageFor(model => model.ZoneList)
+                </td>
+                <td>
+
+                <input id="Add_Zone" type="button" value="Add -->" />
+                <input id="Remove_Zone" type="button" value="<-- Remove" />
+                @*<input id="Save_Zones" type="button" value="Save Zones" />*@
+                </td>
+                <td class="assigned">
+                
+                @Html.ListBoxFor(model => model.user.AssignedZoneIds, new SelectList(Model.AssignedZoneList))
+                @Html.ValidationMessageFor(model => model.user.AssignedZoneIds)
+                </td>
+                </tr>
+            </table>
+            </div>
+        <div style="position:relative; float:right; margin-right: 50px; margin-top: -80px;">
+
+
+            @*<input id="saveCareer" type="button" value="Save" />*@
+
+
+         </div>
+         </div>
+     
+    <div class="loginfou">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Login Information
+                </td>
+            </tr>
+        </table>
+        <ul style="position: absolute; top: 30px; left: 10px; list-style: none; text-align: left">
+            <li style="font-size: 16px; font-weight: bold;">User ID </li>
+            <li>
+                @Html.TextBoxFor(model => model.user.UserName)
+                @Html.ValidationMessageFor(model => model.user.UserName)
+            </li>
+            <li>
+                <br />
+                 <input type="button" id="Change_Password" value="Change Password" /></li>
+        </ul>
+        <div class="loginbox">
+            <table class="logintab"> 
+            <tr>
+                <td>Old Password</td>
+                <td><input type="password" id="oldPassword" name="user.oldPassword" size="15" /> </td>
+              @* @Html.HiddenFor(model => model.user.newPassword)*@
+              
+            </tr> 
+            <tr>
+                <td>New Password</td>
+                <td><input type="password" id="nPassword" name="user.changePassword1" size="15" /></td>
+            </tr>
+            <tr>
+                <td>Re-Enter Password</td>
+                <td><input type="password" id="confirmPassword" name="user.changePassword2" size="15" /></td>
+            </tr>
+
+@*            <tr>
+                <td><input type="button" id="pswd" value="Save" /></td>
+            </tr>*@
+
+             </table>
+            </div>
+        @if (Model.displayuser.AssignedRoleId == 1 || Model.displayuser.AssignedRoleId == 2)
+        { <input id="editCareer" type="button" value="Edit" style="position: absolute; left: 650px;
+            top: 60px;" /><br /> }
+       @* @if (Model.displayuser.AssignedRoleId == 3 || Model.displayuser.AssignedRoleId == 4)
+        { <input id="editPersonal" type="button" value="Edit" style="position: absolute; left: 650px;
+            top: 60px;" /><br /> }    *@                                                         
+        <input id="User_Create" type="button" value="Save" style="position: absolute; left: 650px;
+            top: 90px;" />
+    </div>
+}
+</div>

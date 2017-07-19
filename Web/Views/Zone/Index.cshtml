@@ -1,0 +1,886 @@
+﻿@model Web.ViewModel.ZoneManagementViewModel
+@{
+	ViewBag.Title = "Settings";
+ }
+
+<script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+<style type="text/css">
+
+#EquipmentsTable_paginate
+{
+	margin-top: 15px;
+}
+
+
+</style>
+
+<script language="javascript" type="text/javascript">
+	$(document).ready(function () {
+		var count;
+		$('#EquipmentsTable').dataTable({
+			"sPaginationType": "full_numbers",
+			"bInfo": false,
+			"bLengthChange": false,
+			"iDisplayLength": 6
+		});
+
+		$("form").validate();
+		$("#ZoneTxtBox").rules("add",
+		{
+			required: true,
+			digits: true,
+			/*remote:
+			{
+			url: "/Zone/addZone",
+			type: "post",
+			data: "text=" + function () { return $("#ZoneTxtBox").val() },
+			},*/
+
+			messages:
+			{
+				required: "Required Zone Number",
+				remote: "Please enter a unique Zone Number",
+				digits: "Please only enter numbers for Zone Number"
+			}
+		});
+		$("#ZipTxtBox").rules("add",
+		{
+			required: true,
+			digits: true,
+			messages:
+			{
+				required: "Required Zone Number",
+				remote: "Please enter a unique Zone Number",
+				digits: "Please only enter numbers for Zone Number"
+			}
+		});
+		$("#AddZoneButton").click(function (event) {
+
+			$("form").validate();
+			if ($("#ZoneTxtBox").valid()) {
+				text = $("#ZoneTxtBox").val();
+
+				$.ajax({
+					type: "POST",
+					url: "/Zone/addZone",
+					data: "text=" + text,
+					success: function (msg) {
+						if (msg != "false") {
+							alert("Zone# " + msg.ZoneNumber + " added");
+							$("#ZoneList").append("<option value=" + msg.ZoneId + ">" + text + "</option>");
+							$("#ZoneList2").append("<option value=" + msg.ZoneId + ">" + text + "</option>");
+							$("#ZoneTxtBox").val(" ");
+						}
+						else {
+							alert("Zone Number already exists");
+							$("#ZoneTxtBox").val(" ");
+						}
+					}
+
+
+				});
+			}
+			else { alert("Required field: Any Number") }
+
+		});
+
+		$("#AddZipcodeButton").click(function (event) {
+			$("form").validate();
+			if ($("#ZipTxtBox").valid()) {
+				var txt = $("#ZipTxtBox").val();
+				//var Id = $("#HiddenForm").val();
+				var Id = $("#ZoneList2").val();
+
+				$.ajax({
+					type: "POST",
+					url: "/Zone/addZipcode",
+					data: "text=" + txt + "&" + "id=" + Id,
+					success: function (msg) {
+						if (msg != "false") {
+							$("#ZipcodeList option").remove();
+							for (var i in msg.ZipCodesCovered) {
+								$("#ZipcodeList").append("<option value=" + i + ">" + msg.ZipCodesCovered[i] + "</option>");
+							}
+							//setTimeout("window.location.reload()", 1500);
+							$("#ZipTxtBox").val("");
+							alert("Zipcode " + txt.substring(0, 5) + " is added");
+						}
+						else {
+							alert("Zipcode already exists");
+						}
+					}
+				});
+
+				event.preventDefault();
+			}
+			else { alert("Required field: Any Number") }
+		});
+
+
+		$("#AddEquipmentButton").click(function (event) {
+			if ($("#AddAccepted").attr("checked")) { Id = "true"; } else { Id = "false" }
+			count++;
+			var txt = $("#EquipAddTxtBox").val();
+			var type = $("#EquipType option:selected").val();
+			var typeTxt = $("#EquipType option:selected").text();
+			$.ajax({
+				type: "POST",
+				url: "/Zone/equipmentAdd",
+				data: "text=" + txt + "&" + "id=" + Id + "&" + "value=" + type,
+				success: function (msg) {
+					if (msg != "false") {
+
+						//$.when($('#EquipDiv').empty()).done($('#EquipDiv').load("/Zone/Index/" + Id + " #EquipDiv"));
+
+						/*var test = $('#EquipmentsTable').dataTable();
+						test.fnUpdate(txt, type, 0);
+						//test.fnFilter(test);*/
+						$('#EquipmentsTable').dataTable().fnAddData([
+						   txt,
+						   typeTxt,
+						   Id,
+						   " ",
+						]);
+						window.setTimeout('location.reload()', 0.01);
+						//$("#ZoneList2 option:selected")
+					}
+					else {
+						alert("Equipment already exists.");
+					}
+				}
+			});
+			event.preventDefault();
+
+		});
+
+
+$('.editing').editable('/Zone/Edit', {
+            type: 'select',
+            data: " { 'Terminal' : 'Terminal' , 'Pinpad' : 'Pinpad' , 'Check' : 'Check' } ",
+			submit: 'OK',
+			tooltip: "Click To Edit Equipment.",
+			onblur: "ignore",
+			success: function (msg1) { alert(msg1); }
+		});
+
+		$('.uppervalue').editable('/Zone/ChangeUpperCalendar', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: 'ignore',
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be greater than Upper Limit!");
+
+				}
+				else if (value != "false") {
+					$('.loadupper').html(parseInt(value) + 1);
+				}
+			}
+		});
+
+		$('.lowervalue').editable('/Zone/ChangeLowerCalendar', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be less than Upper Limit!");
+
+				}
+				else if (value != "false") {
+					$('.loadlower').html(parseInt(value) - 1);
+				}
+			}
+		});
+
+		$('.dsauppervalue').editable('/Zone/ChangeUpperDashboardSA', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be greater than Upper Limit!");
+				}
+				else if (value != "false") {
+					$('.dsaloadupper').html(parseInt(value) + 1);
+				}
+			}
+		});
+
+		$('.dsalowervalue').editable('/Zone/ChangeLowerDashboardSA', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be less than Upper Limit!");
+
+				}
+				else if (value != "false") {
+					$('.dsaloadlower').html(parseInt(value) - 1);
+				}
+			}
+		});
+
+		$('.dgauppervalue').editable('/Zone/ChangeUpperDashboardGA', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be greater than Upper Limit!");
+
+				}
+				else if (value != "false") {
+					$('.dgaloadupper').html(parseInt(value) + 1);
+				}
+			}
+		});
+
+		$('.dgalowervalue').editable('/Zone/ChangeLowerDashboardGA', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be less than Upper Limit!");
+
+				}
+				else if (value != "false") {
+					$('.dgaloadlower').html(parseInt(value) - 1);
+				}
+			}
+		});
+
+		$('.dncuppervalue').editable('/Zone/ChangeUpperDashboardNC', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be greater than Upper Limit!");
+
+				}
+				else if (value != "false") {
+					$('.dncloadupper').html(parseInt(value) + 1);
+				}
+			}
+		});
+
+		$('.dnclowervalue').editable('/Zone/ChangeLowerDashboardNC', {
+			submit: 'OK',
+			cancel: 'Cancel',
+			tooltip: "Click To edit Value.",
+			onblur: "ignore",
+
+			submit: '<button type="submit" class="mystyle">OK</button>',
+			cancel: '<button type="button" class="mystyle">Cancel</button>',
+			cssclass: 'mystyle',
+			callback: function (value) {
+				if (value == "false") {
+					alert("Value should be less than Upper Limit!");
+				}
+				else if (value != "false") {
+					$('.dncloadlower').html(parseInt(value) - 1);
+				}
+			}
+		});
+
+
+		$('.chkediting').change(function (event) {
+			var itemsId = [];
+			var i = 1;
+			while (i < 10000) {
+
+				if ($("#chkediting" + i).attr("checked")) {
+					alert("iam in" + i);
+
+					itemsId.push(i);
+				}
+
+				i++;
+			}
+			$.ajax({
+				type: "POST",
+				url: "/Zone/ChkEdit",
+				traditional: true,
+				data: { id: itemsId }
+			});
+		});
+
+		$("#RemoveZoneButton").click(function (event) {
+			var zonetxt = null;
+			var zoneId = $("#ZoneList option:selected").val();
+			if (zoneId != undefined) {         //check to see if a zone has be selected
+				var selectedText = $("#ZoneList option[value=" + zoneId + "]").text();
+				$("#ZoneList option:selected").remove();
+				$("#ZoneList2 option[value=" + zoneId + "]").remove();
+				$.ajax({
+					type: "POST",
+					url: "/Zone/removeZone",
+					data: "id=" + zoneId,
+					success: function (msg) {
+						alert("Zone# " + selectedText + " removed");
+						window.setTimeout('location.reload()', 0.001);
+					}
+				});
+				event.preventDefault();
+			}
+			else {
+				alert("Please select a zone to remove");
+				event.preventDefault();
+			}
+		});
+		$("#RemoveZipCodeButton").click(function (event) {
+			var zipcode = $("#ZipcodeList option:selected").text();
+			//var zoneNum = $("#ZoneList2").text();
+			//alert(zoneNum);
+			//var zipcode = 3;
+			var zoneId = $("#ZoneList2 option:selected").val();
+			//var selectedText = $("#ZipcodeList option[value=" + zoneId + "]").text();
+			if (zipcode != "") {            //checks to see if zipcode is selected
+				$("#ZipcodeList option:selected").remove();
+				//$("#ZoneList2 option[value=" + zoneId + "]").tremove();
+				$.ajax({
+					type: "POST",
+					url: "/Zone/removeZipcode",
+					data: "id=" + zipcode,
+					success: function (msg) {
+						alert("Zipcode : " + zipcode + " was removed");
+
+					}
+				});
+				event.preventDefault();
+			}
+			else {
+				alert("Please select an zipcode from the list");
+				event.preventDefault();
+			}
+
+		});
+
+		$('.delete').click(function () {
+			if (confirm('Delete?')) {
+				var $link = $(this);
+				$.ajax({
+					url: this.href,
+					type: 'DELETE',
+					success: function (result) {
+						$link.parent().parent().remove();
+
+					}
+				});
+			}
+			return false;
+		});
+
+		$("#ZoneList2").change(function () {
+
+			var txt = $("#ZoneList2").val();
+			$.ajax({
+				type: "POST",
+				url: "/Zone/gatherZipcodes",
+				data: "id=" + txt,
+				success: function (msg) {
+					$("#HiddenForm").val(msg.ZoneId);
+					$("#ZipcodeList option").remove();
+					for (var i in msg.ZipCodesCovered) {
+						$("#ZipcodeList").append("<option value='i'>" + msg.ZipCodesCovered[i] + "</option>");
+					}
+				}
+			});
+		});
+	});
+   
+</script>
+<style type="text/css">
+
+input.assign
+{
+
+	width:90px;
+	height:28px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+	background: -moz-linear-gradient(bottom, #5e5284, #bcafe4);  */
+	background: #93624B;
+	color: White;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 3px 0 3px 0;
+	border-radius: 3px 3px;
+	text-align:center;
+	border-style:none;
+
+}
+
+.mystyle
+{
+	font-family:Verdana,Helvetica,Sans-Serif;
+	font-size:0.75em;
+}
+
+</style>
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+				@if (Model.user.AssignedRoleId == 1)
+				{
+				<div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+				<div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+				<div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+				<div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+					<div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+				}
+			 @if (Model.user.AssignedRoleId == 2)
+			 {
+				<div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+				<div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+				<div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+				<div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+				 <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+			 }
+			   @if (Model.user.AssignedRoleId == 3)
+			   {
+				<div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+				   <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+				<div class="todotabsa"><a href="#">To Do List</a>
+				  <ul class="todolistsa" >  
+					<li><a href="/lead/coldleads">Cold Leads</a></li>  
+					<li><a href="/lead/CallBack">Callback List</a></li>
+					<li><a href="/lead/Reschedule">Reschedule List</a></li> 
+					<li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+				  </ul></div>
+				<div class="futab"><a href="/lead/followup">Follow Up</a></div>
+			   }
+			   
+			
+			  
+			<div class="logout"><a href="/auth/login">@(Model.user.FirstName) @(Model.user.LastName)</a>
+			<ul class="logoutlist" >  
+					<li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+					<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+				  </ul>
+			 </div>
+
+</div>
+ @using (Html.BeginForm())
+ {
+<div class="content">
+
+ <div style="left:17px; position:relative; border:solid 1px black" class="uni_all">
+ <table class="title"><tr><td>Zones</td></tr></table>
+		   <table>
+		   <tr>
+				<br />
+		   </tr>  
+				<br /><br />
+		   <tr>
+		   
+		   </tr>  
+				<tr>
+					<td colspan ="2"><b>New Zone Number</b></td>
+
+					<td>@Html.TextBox("ZoneTxtBox", "", new { maxlength = 25, @class = "myclass", size = 1 })</td>
+					
+					<td><input type="button" id="AddZoneButton" value="Add>>"  class ="assign" /></td>
+					 <td><b>Zones</b></td>
+			</tr>
+			<tr>
+			<td>@Html.ValidationMessageFor(model => model.SelectedZoneNumber)
+			</td>
+			<td colspan="3"></td>
+			<td>
+				@Html.ListBox("ZoneList", new SelectList(Model.ZoneList, "ZoneId", "ZoneNumber"), new { size = 3 })</td>
+			</tr>
+			<tr>
+			<td colspan="3"></td>
+			<td><input type="reset" id="RemoveZoneButton" value="<<Remove" class ="assign" /></td>
+			<td></td>
+			</tr>    
+			<tr>
+			</tr>
+		   
+			</table>
+
+
+			<table class="profadd" style="margin-left:-50px">
+			<tr>
+			<td>
+				<br /><br />
+			</td>
+			</tr>
+			<tr>
+
+				<br /><br /><br />
+			</tr>
+			 <tr>
+				<td>&nbsp;&nbsp;&nbsp;</td>
+				<td align ="right"><b> Select Zone </b> </td>
+				<td>@Html.DropDownList("ZoneList2", new SelectList(Model.ZoneList, "ZoneId", "ZoneNumber"))@*@Html.ValidationMessageFor(model => model.SelectedZoneNumber)*@</td>
+			</tr>
+			<tr>
+			<td colspan="2"><b>New Zip Code</b></td>
+			<td>@Html.TextBox("ZipTxtBox", "", new { maxlength = 25, @class = "myclass", size = 7 })</td>
+			<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td><input type="submit" id="AddZipcodeButton" value="Add>>" class ="assign" /></td>
+			<td><b>ZipCodes</b></td>
+			</tr>
+			<tr> <td colspan="4"></td>
+			<td>&nbsp;</td>
+			
+			<td> @Html.ListBox("ZipcodeList", new SelectList(Model.ZipcodeList, "ZoneId"), new {size=3 })
+			 @* @Html.ListBoxFor(model => model.ZipcodeList, new SelectList(Model.ZipcodeList, "ZoneId"), new { id = "ZipcodeList" })*@
+			</td>
+		   
+				<td>@Html.Hidden("HiddenZipcode", Model.ZipcodeList)
+				@*@Html.ValidationMessageFor(model => model.SelectedZipCodes)*@</td>
+			</tr>
+			<tr>
+			<td colspan="3"></td>
+				  @Html.Hidden("HiddenForm", Model.ZoneList)
+			   <td>&nbsp;</td>
+			  <td>  <input type="reset" id="RemoveZipCodeButton" class ="assign" value="<<Remove" /></td>
+			<td></td>
+			</tr> 
+			</table>
+		</div>
+	<div style="left:17px; position:relative;border:solid 1px black; height:380px;" class="uni_all">    
+   
+			<table class="title"><tr><td>Thresholds</td></tr></table>
+			<table style="margin-left:30px; margin-top:25px">
+			<tr>
+			<td colspan = "3">
+			<table border="dotted"><br />
+				<thead><td colspan ="4" style = "text-align: center"><b>Calendar</b></td></thead>
+				<tbody>
+				<tr> 
+					<td>
+					</td>
+					<td align="center">
+					   <b> Color </b>
+					</td>
+					<td align="center">
+					   <b> Low </b>
+					</td>
+					<td align="center">
+					   <b> High </b>
+					</td>
+				</tr>
+				<tr style = "width:50px; height:50px">
+					<td> <img border="0" src="../../Content/images/Green.png" alt="Pulpit rock" width="35" height="35" /></td>
+					 <td align="left" > Green</td >
+					<td class = "loadupper" align="Center" style = "width:30px">@(Model.threshold.Upper_Calendar+1)</td>
+					<td align="Center"><b> &#8734; </b> </td>
+				</tr>
+				<tr  style = "width:50px; height:50px">
+			
+					<td> <img border="0" src="../../Content/images/Yellow.png" alt="Pulpit rock" width="35" height="35" /></td>
+					  <td align="left" >Yellow</td>
+					<td class = "lowervalue" align="Center" style = "width:50px ; font-weight:bolder; font-size:larger; color:Red; text-decoration:underline;">@Model.threshold.Lower_Calendar</td>
+					<td align="Center" style = "width:50px; font-weight:bolder; font-size:larger; color:Green; text-decoration:underline;" class = "uppervalue"> @Model.threshold.Upper_Calendar </td>
+		   
+				</tr>
+				<tr  style = "width:50px; height:50px">
+			<td> <img border="0" src="../../Content/images/Red.png" alt="Pulpit rock" width="35" height="35" /></td>
+					 <td align="left"> Red</td>
+					<td align="Center" style = "width:50px;" class = "lowestvalue"> 0 </td>
+					<td align="Center" style = "width:50px;" class = "loadlower">@(Model.threshold.Lower_Calendar-1)</td>
+				</tr>
+				</tbody>
+				</table>
+				</td>
+				<td>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+				<td colspan = "3">
+					<table border ="dotted"><br />
+				<thead><td colspan ="4" style = "text-align: center"><b> Dashboard: Work Efficiency &#8658; Good Appointments </b></td></thead>
+				<tbody>
+				<tr> 
+					<td>
+					</td>
+					<td align="center">
+					   <b> Color </b>
+					</td>
+					<td align="center">
+					   <b> Low </b>
+					</td>
+					<td align="center">
+					   <b> High </b>
+					</td>
+				</tr>
+				<tr style = "width:50px; height:50px">
+				 <td> <img border="0" src="../../Content/images/Green.png" alt="Pulpit rock" width="35" height="35" /></td>
+					 <td align="left" > Green</td >
+					 
+				   <td align="Center" style = "width:50px;" class = "dgaloadupper">@(Model.threshold.WE_GA_Upper_Dashboard + 1)</td>
+				   <td align="Center"> <b> &#8734; </b> </td>
+				
+				</tr>
+				<tr  style = "width:50px; height:50px">
+			
+				 <td> <img border="0" src="../../Content/images/Yellow.png" alt="Pulpit rock" width="35" height="35" /></td>
+					  <td align="left" >Yellow</td>
+					<td class = "dgalowervalue" align="Center" style = "width:50px ; font-weight:bolder; font-size:larger; color:Red; text-decoration:underline;">@Model.threshold.WE_GA_Lower_Dashboard</td>
+					<td align="Center" style = "width:50px; font-weight:bolder; font-size:larger; color:Green; text-decoration:underline;" class = "dgauppervalue"> @Model.threshold.WE_GA_Upper_Dashboard</td>
+
+				</tr>
+				<tr  style = "width:50px; height:50px">
+				 <td> <img border="0" src="../../Content/images/Red.png" alt="Pulpit rock" width="35" height="35" /></td>
+					 <td align="left"> Red</td>
+					<td align="Center" style = "width:50px;"  class = "dgalowestvalue"> 0 </td>
+					<td class = "dgaloadlower" align="Center" style = "width:30px">@(Model.threshold.WE_GA_Lower_Dashboard - 1)</td>
+				</tr>
+				</tbody>
+			</table>
+			</td>
+			<td>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			<td colspan = "3">
+					<table border ="dotted"><br />
+				<thead><td colspan ="4" style = "text-align: center"><b> Dashboard: Work Efficiency &#8658; Set Appointments </b></td></thead>
+				<tbody>
+				<tr> 
+					<td>
+					</td>
+					<td align="center">
+					   <b> Color </b>
+					</td>
+					<td align="center">
+					   <b> Low </b>
+					</td>
+					<td align="center">
+					   <b> High </b>
+					</td>
+				</tr>
+				<tr style = "width:50px; height:50px">
+				<td> <img border="0" src="../../Content/images/Green.png" alt="Pulpit rock" width="35" height="35" /></td>
+					<td align="left" > Green</td >
+					<td class = "dsaloadupper" align="Center" style = "width:30px">@(Model.threshold.WE_SA_Upper_Dashboard+1)</td>
+					<td align="Center"> <b> &#8734; </b> </td>
+				
+				</tr>
+				<tr  style = "width:50px; height:50px">
+			
+				 <td> <img border="0" src="../../Content/images/Yellow.png" alt="Pulpit rock" width="35" height="35" /></td>
+					  <td align="left" >Yellow</td>
+					<td class = "dsalowervalue" align="Center" style = "width:50px ; font-weight:bolder; font-size:larger; color:Red; text-decoration:underline;">@Model.threshold.WE_SA_Lower_Dashboard</td>
+					<td align="Center" style = "width:50px; font-weight:bolder; font-size:larger; color:Green; text-decoration:underline;" class = "dsauppervalue"> @Model.threshold.WE_SA_Upper_Dashboard</td>
+				</tr>
+				<tr  style = "width:50px; height:50px">
+				 <td> <img border="0" src="../../Content/images/Red.png" alt="Pulpit rock" width="35" height="35" /></td>
+					 <td align="left"> Red</td>
+					<td align="Center" style = "width:50px;"  class = "dsalowestvalue"> 0 </td>
+					<td align="Center" style = "width:50px;" class = "dsaloadlower">@(Model.threshold.WE_SA_Lower_Dashboard-1)</td>
+				</tr>
+				</tbody>
+			</table>
+			</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			<td colspan = "3">
+				<table border ="dotted"><br />
+			<thead><td colspan ="4" style = "text-align: center"><b>Dashboard: Number of Calls </b></td></thead>
+			<tbody>
+			<tr>
+					<td>
+					</td>
+					<td align="center">
+						<b> Color </b>
+					</td>
+					<td align="center">
+						<b> Low </b>
+					</td>
+					<td align="center">
+						<b> High </b>
+					</td>
+				</tr>
+			<tr style = "width:50px; height:50px">
+			<td> <img border="0" src="../../Content/images/Green.png" alt="Pulpit rock" width="35" height="35" /></td>
+				<td align="left" > Green</td >
+					<td class = "dncloadupper" align="Center" style = "width:30px">@(Model.threshold.NC_Upper_Dashboard + 1)</td>
+					<td align="Center"> <b> &#8734; </b> </td>
+			</tr>
+			<tr  style = "width:50px; height:50px">
+			
+				<td> <img border="0" src="../../Content/images/Yellow.png" alt="Pulpit rock" width="35" height="35" /></td>
+					<td align="left" >Yellow</td>
+					<td class = "dnclowervalue" align="Center" style = "width:50px ; font-weight:bolder; font-size:larger; color:Red; text-decoration:underline;">@Model.threshold.NC_Lower_Dashboard</td>
+					<td align="Center" style = "width:50px; font-weight:bolder; font-size:larger; color:Green; text-decoration:underline;" class = "dncuppervalue"> @Model.threshold.NC_Upper_Dashboard </td>
+			</tr>
+			<tr  style = "width:50px; height:50px">
+				<td><img border="0" src="../../Content/images/Red.png" alt="Pulpit rock" width="35" height="35" /></td>
+				<td align="left"> Red</td>
+				<td align="Center" style = "width:50px;" class = "dnclowestvalue"> 0 </td>
+				<td align="Center" style = "width:50px;" class = "dncloadlower">@(Model.threshold.NC_Lower_Dashboard-1)</td>
+			</tr>
+			</tbody>
+			</table>
+			</td>
+			<td>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			</tr>
+			</table>
+			
+	
+	</div>
+	<div  id ="EquipDiv" style="left: 17px; position:relative;  border:solid 1px black; height: 400px; " class="uni_all" >
+			
+			<table class="title"><tr><td>Equipment</td></tr></table>
+			
+   <table  id = "EquipmentsTable" class="display"  style="top:30px; border:none">
+	<thead border="none" >
+	<tr>
+	   
+		<th>
+			Equipment Name
+		</th>
+		 <th>
+			Equipment Type
+		</th>
+		<th>
+			Active
+		</th>
+		
+		
+		<th></th>
+	  
+	</tr>
+</thead>
+<tbody border="none">
+
+@foreach (var item in Model.Equipment)
+{
+	  
+	<tr>
+	   
+		<td class = "editing" id = "@item.EquipmentId">
+			@item.Name
+		  
+		</td>
+		 <td class = "editing" id = "@item.EquipmentId">
+		   @item.Type
+		  
+		</td>
+	   
+	  
+		<td>
+			@Html.CheckBox("chkediting" + @item.EquipmentId, item.Active, new { @class = "chkediting" })
+		</td>
+	  
+		   
+		<td align="right">
+		  @Html.ActionLink("Delete", "Delete", new { item.EquipmentId }, new { @class = "delete" })
+		</td>
+	</tr>
+	
+}
+</tbody>
+<tfoot>
+  <tr>
+	<td style="width: 150px;">
+			 @Html.TextBox("EquipAddTxtBox", "", new { maxlength = 25, @class = "myclass", size = 12 })
+		</td>
+		<td style="width: 150px;">
+			<select id="EquipType" style="width:inherit; text-align:center">
+						<option value="1">Terminal</option>
+						<option value="2">Pinpad</option>
+						<option value="3">Check</option>
+			</select> 
+		</td>
+		<td style="width: 150px;">
+			 <input id="AddAccepted" name="isTermsAccepted" type="checkbox" value="true" class ="assign"/>
+		</td>
+		
+		 <td style="width: 122px;">
+				<input type="submit" id="AddEquipmentButton" value="Add" class ="assign"/>
+
+		 </td>
+
+		 </tr>
+</tfoot>
+</table>
+
+</div>
+	@*
+<table  id = "EquipmentTable" class="equipmenttable">
+<thead>
+	<tr >
+	   
+		<th>
+			gdfgdf
+		</th>
+	   
+		<th>
+			gdfgdfg
+		</th>
+		
+		 <th style="width:60px"></th>
+		<th style="width:60px"></th>
+	  
+	</tr>
+</thead>
+	<tbody>
+	<tr>
+	<td style="width: 150px;">
+			 @Html.TextBox("EquipAddTxtBox", "", new { maxlength = 25, @class = "myclass", size = 20 })
+		</td>
+	   
+		<td style="width: 150px;">
+			 @Html.CheckBox("check", new { }) 
+		</td>
+		
+		 <td style="width: 122px;">
+				<input type="submit" id="AddEquipmentButton" value="Add" />
+		 </td>
+		 </tr>
+	</tbody>
+</table>*@
+		
+	  
+</div>
+ }
+</div>

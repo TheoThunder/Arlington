@@ -1,0 +1,91 @@
+﻿@model Web.ViewModel.AccountInformationViewModel
+
+@{
+    ViewBag.Title = "AllAccountsForLead";
+}
+
+ 
+
+
+ <div class="accounts">
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Accounts
+                </td>
+            </tr>
+        </table>
+ @if (Model.accounts.Count() != 0)
+ {  
+<table id = "AccountsTable" class="display" style="border: solid 1px black">
+<thead>
+    <tr>
+       
+        <th>
+            Account Name
+        </th>
+        <th>
+            Merchant ID
+        </th>
+        <th>
+            Account Status
+        </th>
+        <th>
+            Sales Agent
+        </th>
+        <th>
+            Approval Date
+        </th>
+        <th>
+        </th>
+       
+        
+    </tr>
+</thead>
+<tbody>
+@Html.HiddenFor(model => model.leadId)
+@foreach (var item in Model.accounts)
+{
+    <tr>
+       
+        <td>
+            @item.AccountName
+        </td>
+        <td>
+            @item.MerchantId
+        </td>
+        <td>
+            @item.Status
+        </td>
+        <td>
+            @item.AssignedUser.UserName
+        </td>
+       
+        <td>
+            @String.Format("{0:g}", item.AccountApprovalDate)
+        </td>
+         <td>
+            @Html.ActionLink("Edit", "Edit", "Account", new { item.AccountId }, null)
+            </td>
+           
+    </tr>
+}
+</tbody>
+</table>
+ }
+ else
+ {
+ <div style = "margin-left:200px; margin-top:50px">
+ <h3>There are no accounts for this Lead at this moment.</h3></div>
+ }
+ @if (Model.Scored == true || Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+ {
+<div style = "margin-left:700px; top:0px;">
+
+       <div class="newemployee">@Html.ActionLink("Create Account", "Create", "Account", new { Model.leadId }, null)</div>
+         @*<input type="submit" name="edit" id="EditAccountBtn" value="Edit Account" />*@
+
+</div>
+ }
+</div>
+

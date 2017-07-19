@@ -1,0 +1,410 @@
+﻿@model Web.ViewModel.ImportLeadViewModel
+     
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+@*<link href="@Url.Content("~/Content/demo_table.css")" rel="stylesheet" type="text/css" />*@
+
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var oTable1;
+    var oTable2;
+    var userstext;
+    function globalreload() {
+        window.location.href = "/ImportLead/Index";
+    }
+
+    $(document).ready(function () {
+        //Get the size of the table to loop over it for checkbox. Have to get it before the declaring the datatable.
+
+        var oRows = document.getElementById('ColdLeadsTable').getElementsByTagName('tr');
+        var iRowCount = oRows.length;
+
+        //alert('Your table has ' + iRowCount + ' rows.');
+        $('.display').dataTable({
+            "sPaginationType": "full_numbers",
+
+            //            "aaSorting": [],
+            //            "aoColumns": [],
+            //                "bInfo": false
+            "sInfo": false
+
+        });
+
+        oTable1 = $('#ColdLeadsTable').dataTable();
+        oTable2 = $('#IgnoredLeadsTable').dataTable();
+
+        $("#check_active").live("click", function (event) {
+            if ($("#check_active").hasClass('not_checked')) {
+                $("#check_active").removeClass('not_checked');
+                $(".chkediting").attr('checked', true);
+            }
+            else {
+                $("#check_active").addClass('not_checked');
+                $(".chkediting").attr('checked', false);
+            }
+        });
+
+        $("#check_ignored").live("click", function (event) {
+            if ($("#check_ignored").hasClass('not_checked')) {
+                $("#check_ignored").removeClass('not_checked');
+                $(".chkediting").attr('checked', true);
+            }
+            else {
+                $("#check_ignored").addClass('not_checked');
+                $(".chkediting").attr('checked', false);
+            }
+        });
+
+
+
+        $('#AssignBtn').click(function () {
+
+            //            $('.chkediting').change(function (event) {
+            if (userstext != undefined) {
+               
+                var checkedlist = new Array();
+                var i = 1;
+                // -1 to get rid of header tr
+                while (i < 1000000) {
+                    if ($("#chkediting" + i).attr("checked")) {
+
+                        checkedlist.push(i);
+
+
+                    }
+                    //                else if ($("#chkediting" + i).attr("checked") == false) {
+                    //                    alert("not" + i);
+                    //                }
+                    i++;
+                }
+                if (checkedlist != "") {
+                    alert("Lead(s) are being assigned to " + userstext + "\nPlease allow 5 seconds for page to reload.");
+                    $.ajax({
+                        type: "POST",
+                        url: "/ImportLeadList/Index",
+                        data: "text=" + userstext + "&" + "id=" + checkedlist,
+                        success: setTimeout("window.location.reload()", 6000)
+                    });
+
+                    //setTimeout("globalreload()", 1000);
+                }
+                else {
+                    alert("Please select a lead to assign.");
+                }
+            }
+            else {
+                alert("Please select a AA/SA");
+            }
+
+            //            });
+            //            setTimeout("window.location.reload()", 3000);
+        });
+
+
+
+
+    });
+
+
+
+    window.onload = function () {
+        document.getElementById('myselect').addEventListener('change', function (e) {
+            var ddlReport = document.getElementById('myselect');
+            var Text = ddlReport.options[ddlReport.selectedIndex].text;
+            document.getElementById('activeleads').style.display = "block";
+            switch (Text) {
+
+                case "UnAssigned":
+
+                   // document.getElementById('hider').style.display = "none";
+                    document.getElementById('activeleads').style.display = "block";
+                    document.getElementById('ignoredleads').style.display = "none";
+
+                    break;
+
+                case "Ignored":
+                   
+                   // document.getElementById('hider').style.display = "none";
+                    document.getElementById('activeleads').style.display = "none";
+                    document.getElementById('ignoredleads').style.display = "block";
+
+                    break;
+               
+            }
+        }, false);
+        document.getElementById('usersdropdown').addEventListener('change', function (e) {
+            var ddlReport = document.getElementById('usersdropdown');
+            var text = ddlReport.options[ddlReport.selectedIndex].text;
+            userstext = text;
+        }, false);
+
+
+
+    }
+
+        
+    
+</script>
+
+<style type="text/css">
+
+input.assign
+{
+
+    width:90px;
+	height:23px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+    background: -moz-linear-gradient(bottom, #5e5284, #bcafe4); */
+    background: #93624B; 
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px 3px;
+    text-align:center;
+    border-style:none;
+    padding-bottom: 3px;
+
+}
+
+
+</style>
+
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+  @if (Model.user.AssignedRoleId == 1)
+  {
+            <div class="hometab"><a href="@Url.Action("Indexad", "Home")">Home</a></div>
+  }
+    @if (Model.user.AssignedRoleId == 2)
+    {
+            <div class="hometab"><a href="@Url.Action("Index", "Home")">Home</a></div>
+    }
+			<div class="impleaon"><a href="@Url.Action("Index", "ImportLead")">Import Leads</a></div>
+         	<div class="leadque"><a href="@Url.Action("Index", "LeadQueue")">Leads Queue</a></div>
+            <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue")">Appt Queue</a></div>
+            <div class="dashb"><a href="@Url.Action("Index", "Dashboard")">Dashboard</a></div>    
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Import Leads List - @DateTime.Today.ToShortDateString()</div>
+<div style="margin-left:auto; margin-right:auto; position:relative; width: 80%;">
+
+   
+
+    <div style = "position:relative; margin-left:10px; margin-top:20px;">
+    @using (Html.BeginForm("Index", "ImportLead", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+             @Html.ValidationSummary(" No")
+                 <div style="position:relative; margin-top:10px;width:40%">
+                    <table>
+                    <tr>
+                        <td>Leads
+                        </td>
+                        <td>@Html.DropDownListFor(model => model.lead.Status, new SelectList(Model.statuslist), new { @Id = "myselect" ,style = "width:100px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Source
+                        </td>
+                        <td>@Html.DropDownListFor(model => model.lead.StatementFiles, new SelectList(Model.sourcelist), new { style = "width:100px" } )
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="bottom" colspan="3"><div id="hider" class="hiderss"><input type="file" name="file" id="file" /><input type="submit" value="Import" /></div>
+                        </td>
+                    </tr>
+                    </table>                                                                   
+                    </div>
+    }    
+                    <div style = "float:right;position:relative; width:40%;margin-left: 10px;margin-top:-20px; text-align:right;" >
+                         @using (Html.BeginForm("Index", "ImportLeadList", FormMethod.Post))
+                         {
+                        @Html.ValidationSummary(true)
+                        <table style="float:right">
+                        <tr>
+                        <td>AA / SA </td>
+                        <td align="left">@Html.DropDownList("usersdropdown", Model.AAUsersDropdown, "Select", new { style = "width : 150px" } )
+                        </td>                    
+                 
+
+                         <td align="left"><input type="Button"  class= "assign" value="Assign" id="AssignBtn" /></td>
+                         </tr>
+                        </table>
+                         }
+                    </div>        
+                    
+                 </div>
+    
+   
+  <div id="activeleads" >
+  <table id="ColdLeadsTable" class="display" style ="margin-top:40px; border: 1px solid #000">
+    <thead>
+            <th>
+                <input type="checkbox" class="check-box not_checked" id="check_active">
+            </th>
+            <th>
+                Company        
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Zip
+            </th>
+            <th>
+                Zone
+            </th> 
+            <th>
+                Phone  
+            </th>
+            <th>
+                Date Imported
+            </th>
+            <th>
+                Date Ignored
+            </th>
+            
+    </thead>
+      <tbody>
+        @foreach (var items in Model.Unassignedleads)
+        {
+            <tr>
+                 <td>
+                     @Html.CheckBox("chkediting" + @items.LeadId, items.Active, new { @class = "chkediting" })
+                      
+                 </td>
+                <td>
+                    @items.CompanyName
+                </td>
+                <td>
+                    @items.City
+                </td>
+                <td>
+                    @items.State
+                </td>
+                <td>
+                    @items.ZipCode
+                </td>
+                <td>
+                    @if (items.ZoneNumber != null)
+                    {
+                        @items.ZoneNumber
+                    }
+                </td>
+                <td>
+                    @items.PrimaryPhoneNumber
+                </td>
+                <td>
+                    @items.DateTimeImported.ToShortDateString()
+                </td>
+                <td>
+                <p> - </p>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    
+    </div>
+   <div id="ignoredleads">
+  <table id="IgnoredLeadsTable" class="display" style ="margin-top:40px">
+    <thead>
+            <th>
+               <input type="checkbox" class="check-box not_checked" id="check_ignored">
+            </th>
+            <th>
+                Company
+            </th>
+            <th>
+                City
+            </th>
+            <th>
+                State
+            </th>
+            <th>
+                Zip
+            </th>
+            <th>
+                Zone
+            </th> 
+            <th>
+                Phone
+            </th>
+            <th>
+                Date Imported
+            </th>
+            <th>
+                Date Ignored
+            </th>
+            
+    </thead>
+      <tbody>
+        @foreach (var item in Model.Ignoredleads)
+        {
+            
+            <tr>
+                <td>
+                         @Html.CheckBox("chkediting" + @item.LeadId, item.Active, new { @class = "chkediting" })
+                </td>
+                <td>
+                    @item.CompanyName
+                </td>
+                <td>
+                    @item.City
+                </td>
+                <td>
+                    @item.State
+                </td>
+                <td>
+                    @item.ZipCode
+                </td>
+                <td>
+                    @if (item.ZoneNumber != null)
+                    {
+                        @item.ZoneNumber
+                    }
+                </td>
+                <td>
+                    @item.PrimaryPhoneNumber
+                </td>
+                <td>
+                    @item.DateTimeImported.ToShortDateString()
+                </td>
+                <td>
+                    @if (item.IgnoredDate.ToString() != "1/1/0001 12:00:00 AM")
+                    {
+                        @item.IgnoredDate.ToShortDateString()
+                   
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+    
+    </div>  
+ 
+ </div>
+
+</div>
+</div>

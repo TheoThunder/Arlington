@@ -1,0 +1,43 @@
+END
+FollowUpViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/trinitycrminternal/!svn/ver/366/trunk/Web/Models/FollowUpViewModel.cs
+END
+ImportLeadViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/repos/trinitycrminternal/!svn/ver/346/trunk/Web/Models/ImportLeadViewModel.cs
+END
+WarmLeadsViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/trinitycrminternal/!svn/ver/366/trunk/Web/Models/WarmLeadsViewModel.cs
+END
+ScheduledAppointmentViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/repos/trinitycrminternal/!svn/ver/388/trunk/Web/Models/ScheduledAppointmentViewModel.cs
+END
+ColdLeadsViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/trinitycrminternal/!svn/ver/366/trunk/Web/Models/ColdLeadsViewModel.cs
+END
+LeadQueueViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/repos/trinitycrminternal/!svn/ver/361/trunk/Web/Models/LeadQueueViewModel.cs
+END
+CallBackViewModel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/repos/trinitycrminternal/!svn/ver/366/trunk/Web/Models/CallBackViewModel.cs
+END

@@ -1,0 +1,37 @@
+END
+ITicketHistoryRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/trinitycrminternal/!svn/ver/455/trunk/Data/Repositories/Abstract/ITicketHistoryRepository.cs
+END
+IRoleRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/repos/trinitycrminternal/!svn/ver/82/trunk/Data/Repositories/Abstract/IRoleRepository.cs
+END
+ILeadAccessRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/trinitycrminternal/!svn/ver/264/trunk/Data/Repositories/Abstract/ILeadAccessRepository.cs
+END
+ICardRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/repos/trinitycrminternal/!svn/ver/101/trunk/Data/Repositories/Abstract/ICardRepository.cs
+END
+IPermissionRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/trinitycrminternal/!svn/ver/46/trunk/Data/Repositories/Abstract/IPermissionRepository.cs
+END
+IUploadedFileRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/repos/trinitycrminternal/!svn/ver/19/trunk/Data/Repositories/Abstract/IUploadedFileRepository.cs
+END

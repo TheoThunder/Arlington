@@ -1,0 +1,434 @@
+﻿@model Web.ViewModel.TicketViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+
+ <meta name="viewport" content="width=720, maximum-scale=1.0" />
+<script type="text/javascript">
+    function globalreload() {
+        setTimeout("window.location.reload()", 1000);
+    }
+    $(document).ready(function () {
+        $('#LeadsTable').dataTable({
+            "sPaginationType": "full_numbers"
+        });
+        var oTable = $('#LeadsTable').dataTable();
+//        $('#ownerdropdown').change(function () { oTable.fnFilter($(this).val()) });
+        $('#mystatus').change(function () { oTable.fnFilter($(this).val(), 4, false) && ($('#ownerdropdown').val(), 5, false) && ($('#ZoneList2').val(), 6, false) && ($('#mypriority').val(), 7, false); });
+        $('#ownerdropdown').change(function () { oTable.fnFilter($(this).val(), 5, false) && ($('#mystatus').val(), 4, false) && ($('#ZoneList2').val(), 6, false) && ($('#mypriority').val(), 7, false); });
+        $('#ZoneList2').change(function () { oTable.fnFilter($(this).val(), 6, false) && ($('#ownerdropdown').val(), 5, false) && ($('#mystatus').val(), 4, false) && ($('#mypriority').val(), 7, false); });
+        $('#mypriority').change(function () { oTable.fnFilter($(this).val(), 7, false) && ($('#ownerdropdown').val(), 5, false) && ($('#ZoneList2').val(), 6, false) && ($('#mystatus').val(), 4, false); });
+
+        var i = 1;
+        var Text = "Undefined";
+        $('.assign').click(function () {
+
+            while (i < 1000000) {
+                if ($("#chkediting" + i).attr("checked")) {
+                    var value = document.getElementById('usersdropdown' + i);
+                    Text = value.options[value.selectedIndex].text;
+
+
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Ticket/Assign",
+                        data: "ticketid=" + i + "&" + "text=" + Text,
+                        success: setTimeout("globalreload()", 1000)
+                    });
+                }
+                i++;
+
+            }
+            if (Text == "Undefined") {
+                alert("Please select the ticket.");
+                setTimeout("globalreload()")
+            }
+        });
+
+        $('.release').click(function () {
+            while (i < 1000000) {
+                if ($("#chkediting" + i).attr("checked")) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Ticket/Release",
+                        data: "ticketid=" + i,
+                        success: setTimeout("globalreload()", 1000)
+                    });
+                }
+                i++;
+
+            }
+
+        });
+
+
+
+
+    });
+</script>
+
+<style type="text/css">
+
+input.assign
+{
+
+    width:90px;
+	height:28px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+    background: -moz-linear-gradient(bottom, #5e5284, #bcafe4);  */
+    background: #93624B;
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 0 3px 0;
+    border-radius: 3px 3px;
+    text-align:center;
+    border-style:none;
+
+}
+
+input.dassign
+{
+
+    width:90px;
+	height:28px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+    background: -moz-linear-gradient(bottom, #5e5284, #bcafe4); */
+    background: #93624B; 
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 0 3px 0;
+    border-radius: 3px 3px;
+    text-align:center;
+    border-style:none;
+
+}
+
+input.release
+{
+
+    width:90px;
+	height:28px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+    background: -moz-linear-gradient(bottom, #5e5284, #bcafe4);  */
+    background: #93624B;
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 0 3px 0;
+    border-radius: 3px 3px;
+    text-align:center;
+    border-style:none;
+
+}
+input.assigncsr
+{
+
+    width:90px;
+	height:28px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+    background: -moz-linear-gradient(bottom, #5e5284, #bcafe4);  */
+    background: #93624B;
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 0 3px 0;
+    border-radius: 3px 3px;
+    text-align:center;
+    border-style:none;
+
+}
+
+input.releasecsr
+{
+
+    width:90px;
+	height:28px; 
+	/*
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bcafe4), to(#5e5284));
+    background: -moz-linear-gradient(bottom, #5e5284, #bcafe4);  */
+    background: #93624B;
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 0 3px 0;
+    border-radius: 3px 3px;
+    text-align:center;
+    border-style:none;
+
+}
+</style>
+
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+                @if (Model.user.AssignedRoleId == 1)
+                {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>   
+                }
+             @if (Model.user.AssignedRoleId == 2)
+             {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>   
+             }
+               @if (Model.user.AssignedRoleId == 3)
+               {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                   <div class="tickettabon"><a href="/ticket/index">Tickets</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+                <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+               }
+               @if (Model.user.AssignedRoleId == 5)
+               {
+                   <div class="hometabsa"><a href="/home/indexcsr"> Home</a></div>
+                   <div class="tickettabon"><a href="/ticket/index">Tickets</a></div>
+			
+               }
+            <div class="logout"><a href="/auth/login">@Html.Label(Model.user.FirstName) @Html.Label(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Tickets List - @DateTime.Today.ToShortDateString()</div>
+ <div style="position:relative; margin-left: 80%; top:30px; z-index:9999999">
+    
+    <div class="newemployee" style="position:relative; margin-top: -10px;"> @Html.ActionLink("Create Ticket", "CreateNew", "Ticket")</div>
+    
+    </div>
+
+<div style="position:relative; margin-left:auto; margin-right:auto; width: 80%; z-index: -12">
+ @using (Html.BeginForm("Index", "Ticket", FormMethod.Post, new { id = "DropDown" }))
+ {
+
+             @Html.ValidationSummary(true)
+                 <table style = "left:10px; top:80px; width:auto">
+                        <tr>
+                        <td>
+                        Ticket Status
+                        </td>
+                        <td  width = "160px">
+                             @Html.DropDownListFor(model => model.ticket.Status, new SelectList(Model.Status), new { @id = "mystatus", style = "width:130px" } )
+                       
+                        </td>
+                        <td>
+                        
+                        </td>
+                        
+                             <td align="right">Zone</td>                   
+                             <td colspan="2" align="left">@Html.DropDownList("ZoneList2", new SelectList(Model.ZoneDropdown, "ZoneNumber"), "All")
+                             
+                             </td>
+                        </tr>
+                        <tr>
+                        <td>
+                        Ticket Owner
+                        </td>
+                        <td>
+                            @Html.DropDownList("ownerdropdown", Model.AAUsersDropdown, "All", new { style = "width:130px" } )
+                                                
+                        </td>
+                        <td>
+                        
+                        </td>
+                        
+                             <td align="left">Ticket Priority</td>                   
+                           <td> @Html.DropDownListFor(model => model.ticket.Priority, new SelectList(Model.Priority), new { @id = "mypriority" })
+                             
+                           </td>
+                        </tr>
+            
+                        
+                         
+                </table>
+ }
+ 
+
+@* @using (Html.BeginForm("Assign", "Ticket", FormMethod.Post, new { id = "Assign" }))
+ {*@
+<table id="LeadsTable" class="display" style= "border:1px solid #000; ">
+<thead>
+    <tr>
+        <th>
+        </th>
+        <th>
+            Ticket #
+        </th>
+        <th>
+            Customer
+        </th>
+        <th>
+            Subject
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Owner
+        </th>
+        <th>
+            Zone
+        </th>
+        <th>
+            Priority
+        </th>
+        <th>
+            Date/Time Opened
+        </th>
+
+
+        <th>
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+        
+    </tr>
+    </thead>
+      <tbody>
+@foreach (var item in Model.Tickets)
+{
+  
+    <tr>
+         <td>
+             @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+             {
+                     @Html.CheckBox("chkediting" + @item.TicketId, new { @class = "chkediting" })
+             } 
+        </td>
+        <td>
+            @item.TicketHistoryID
+        </td>
+        <td>
+            @item.CustomerName
+        </td>
+        <td>
+            @item.Subject
+        </td>
+        <td>
+            @item.Status
+        </td>
+        <td>
+        @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+        {
+            if (item.AssignedUser.FirstName != null)
+            {
+            @Html.DropDownList("usersdropdown" + item.TicketId, Model.AAUsersDropdown, item.AssignedUser.LastName + "," + item.AssignedUser.FirstName, new { @class = "userdroplist" })
+            }
+            if (item.AssignedUser.FirstName == null)
+            {
+                 @Html.DropDownList("usersdropdown" + item.TicketId, Model.AAUsersDropdown, "Not Assigned", new { @class = "userdroplist" })
+            }
+        }
+        
+        @if (Model.user.AssignedRoleId == 5 || Model.user.AssignedRoleId == 3)
+        {
+             @item.AssignedUser.UserName
+         
+            @*<input style="border:none" class = "uservalue" type="text" name="offnum" size="12" id="uservalue @item.TicketId"  value="@item.AssignedUser.LastName,@item.AssignedUser.FirstName"  />
+         *@
+        }
+        </td>
+        <td>
+            @item.Zone
+        </td>
+        <td>
+            @item.Priority
+        </td>
+        <td>
+            @item.DateOpened.ToShortDateString() <br />@item.DateOpened.ToShortTimeString()
+        </td>
+        
+        <td>
+         <div class="viewprof"><a href= '@Url.Action("Details", "Ticket", new { item.TicketId }) '>View</a></div>
+        </td>
+        <td>
+         @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+         {
+             if (item.Status == "New" || item.Status == "Un-Assigned")
+             {
+
+             <input type="submit"  class = "assign" value = "Assign" id = "@item.TicketId" />
+         
+             }
+             if (item.Status == "Assigned" || item.Status == "Closed")
+             {
+                 <input type="submit"  class = "dassign" value = "Assign" id = "U @item.TicketId"  onclick ="alert('Already assigned to @item.AssignedUser.FirstName . Click on release and reassign it.')"/>
+             }
+         }
+         @if (Model.user.AssignedRoleId == 3 || Model.user.AssignedRoleId == 5)
+         {
+             if (item.Status == "New" || item.Status == "Un-Assigned")
+             {
+                 using (Ajax.BeginForm("AssignCSR", "Ticket", new { item.TicketId }, new AjaxOptions { HttpMethod = "POST" }))
+                 {
+                        <input type="submit" id = "assigncsr @item.TicketId" class = "assigncsr" value = "Assign"/>
+                 }
+
+             }
+             if (item.CurrentOwner == Model.user.UserId)
+             {
+                 using (Ajax.BeginForm("ReleaseCSR", "Ticket", new { item.TicketId }, new AjaxOptions { HttpMethod = "POST" }))
+                 {
+                        <input type="submit" id = "releasecsr @item.TicketId" class = "releasecsr" value = "Release"/>
+                 }
+             }
+         }
+         
+        </td>
+         <td>
+          @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+          {
+              if (item.Status == "New" || item.Status == "Un-Assigned")
+              {
+                   <input type="submit"  class = "dassign" value = "Release" id = "R @item.TicketId"  onclick ="alert('Not assigned to anyone. Check the box and assign it by selecting Owner.')"/>
+              }
+              if (item.Status == "Assigned")
+              {
+                
+                        <input type="button"  class = "release" value = "Release"/>
+              
+              }
+
+          }
+          </td>
+             
+    </tr>
+   
+}
+ </tbody>
+</table>
+ @*}*@
+</div>
+</div>
+</div>

@@ -1,0 +1,98 @@
+﻿<table id= "WeeklyTable" class = "display">
+
+    <thead>
+            <th colspan="2">
+                WEEKLY PERFORMANCE
+            </th>
+            
+           
+    </thead>
+    <tbody>
+            <tr>
+                <td align="left" style ="text-align:left">
+               Working AAs Per Week
+                
+                </td>
+                <td>
+                @Model.WorkingAAPerWeek
+                </td>
+             </tr>
+             <tr>
+               <td align="left" style ="text-align:left">
+                 Appointments Per Week
+                
+                </td>
+                <td>
+                @Model.AppointmentPerWeek
+                </td>
+             </tr>
+             <tr>
+                <td align="left" style ="text-align:left">
+                Appointments Per Week Per AA
+                
+                </td>
+                <td>
+                @Model.AppointmentPWPAA
+                </td>
+             </tr>
+             <tr>
+                <td align="left" style ="text-align:left">
+                  Good Appointments Per Week
+                
+                </td>
+                <td>
+                     @Model.GoodAppointmentsPerWeek
+
+                </td>
+             </tr>
+             <tr>
+                <td align="left" style ="text-align:left">
+                    Closes Per Week
+                
+                </td>
+                <td>
+                     @Model.ClosesPerWeek
+                </td>
+             </tr>
+            
+    </tbody>
+        
+        
+</table>
+<script type ="text/javascript">
+    var oTable2 = $('#WeeklyTable').dataTable({
+
+        "bAutoWidth": false,
+        "bFilter": false,
+        "bLengthChange": false,
+        "bPaginate": false,
+        "bInfo": false,
+        "bSort": false,
+        "sDom": 'T<"clear">lfrtip',
+        "oTableTools": {
+            "sSwfPath": "/Content/swf/copy_cvs_xls_pdf.swf"
+        }, "fnInitComplete": function () {
+            var tableWrapper = $('#WeeklyTable' + '_wrapper');
+
+            //remove widths that shouldn't be there on the datatable
+            tableWrapper.css('width', '');
+            tableWrapper.find('.dataTables_scrollHead').css('width', '');
+            tableWrapper.find('.dataTables_scrollHeadInner').css('width', '');
+            tableWrapper.find('.dataTables_scrollHeadInner').find('table').css('width', '');
+
+            var tableDataContent = tableWrapper.find('.dataTables_scrollBody')[0];
+            var tableHasScrollBar = (tableDataContent.scrollHeight > tableDataContent.clientHeight);
+
+            //fixes header aligment issues in all major browsers
+            if (tableHasScrollBar)
+                tableWrapper.find('.dataTables_scrollHead').css('margin-right', '15px');
+
+            //fixes table data stretchyness in <IE8
+            if (navigator.appVersion.indexOf("MSIE 6") != -1 || navigator.appVersion.indexOf("MSIE 7") != -1) {
+                $('#' + tableId).css('width', '');
+                tableWrapper.find('.dataTables_scrollBody').css('overflow-x', 'hidden');
+            }
+        }
+    });
+
+</script>

@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A6422D1A-3BF8-4B1F-A56D-D7722BDF8C91}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Data</RootNamespace>
+    <AssemblyName>Data</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <OutputPath>bin\Test\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DataAnnotationsExtensions">
+      <HintPath>..\packages\DataAnnotationsExtensions.0.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.0.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers">
+      <HintPath>..\RelatedLibraries\FileHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\RelatedLibraries\npgsql-2.0.11\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.1.0.0\lib\NETFramework40\WebActivator.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppStart_RegisterClientValidationExtensions.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Constants\UploadedfileTable.cs" />
+    <Compile Include="Domain\Account.cs" />
+    <Compile Include="Domain\AppointmentSheet.cs" />
+    <Compile Include="Domain\CalendarDTO.cs" />
+    <Compile Include="Domain\CalendarEvent.cs" />
+    <Compile Include="Domain\CalendarSettings.cs" />
+    <Compile Include="Domain\Card.cs" />
+    <Compile Include="Domain\Equipment.cs" />
+    <Compile Include="Domain\GroupReport.cs" />
+    <Compile Include="Domain\ImportedLead.cs" />
+    <Compile Include="Domain\LeadAccessRecord.cs" />
+    <Compile Include="Domain\Permission.cs" />
+    <Compile Include="Domain\PhoneUser.cs" />
+    <Compile Include="Domain\Report.cs" />
+    <Compile Include="Domain\Role.cs" />
+    <Compile Include="Domain\Lead.cs" />
+    <Compile Include="Domain\Threshold.cs" />
+    <Compile Include="Domain\Ticket.cs" />
+    <Compile Include="Domain\TicketHistory.cs" />
+    <Compile Include="Domain\TimeSlot.cs" />
+    <Compile Include="Domain\UploadedFile.cs" />
+    <Compile Include="Domain\User.cs" />
+    <Compile Include="Domain\UserZone.cs" />
+    <Compile Include="Domain\ZipCodes.cs" />
+    <Compile Include="Domain\Zone.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\Abstract\IAAPSReportRepository.cs" />
+    <Compile Include="Repositories\Abstract\IAccountRepository.cs" />
+    <Compile Include="Repositories\Abstract\IAppointmentSheet.cs" />
+    <Compile Include="Repositories\Abstract\ICalendarEventRepository.cs" />
+    <Compile Include="Repositories\Abstract\ICardRepository.cs" />
+    <Compile Include="Repositories\Abstract\IDashboardRepository.cs" />
+    <Compile Include="Repositories\Abstract\IEquipmentRepository.cs" />
+    <Compile Include="Repositories\Abstract\IGenericUsageRepositoryInferface.cs" />
+    <Compile Include="Repositories\Abstract\IGroupPPReportRepository.cs" />
+    <Compile Include="Repositories\Abstract\ILeadAccessRepository.cs" />
+    <Compile Include="Repositories\Abstract\ILeadRepository.cs" />
+    <Compile Include="Repositories\Abstract\IMonthlyVolumeReportRepository.cs" />
+    <Compile Include="Repositories\Abstract\IPermissionRepository.cs" />
+    <Compile Include="Repositories\Abstract\IPhoneUserRepository.cs" />
+    <Compile Include="Repositories\Abstract\IRoleRepository.cs" />
+    <Compile Include="Repositories\Abstract\ISAPSReportRepository.cs" />
+    <Compile Include="Repositories\Abstract\IThresholdRepository.cs" />
+    <Compile Include="Repositories\Abstract\ITicketHistoryRepository.cs" />
+    <Compile Include="Repositories\Abstract\ITicketReportRepository.cs" />
+    <Compile Include="Repositories\Abstract\ITicketRepository.cs" />
+    <Compile Include="Repositories\Abstract\ITimeSlotRepository.cs" />
+    <Compile Include="Repositories\Abstract\IUploadedFileRepository.cs" />
+    <Compile Include="Repositories\Abstract\IUserRepository.cs" />
+    <Compile Include="Repositories\Abstract\IUserZoneRepository.cs" />
+    <Compile Include="Repositories\Abstract\IZoneRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGAAPSReportRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGAccountRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGAppointmentSheetRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGCardRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGDashboardRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGEquipmentRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGEventRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGGroupPPReportRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGIncodeQueriesRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGLeadRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGMonthlyVolumeReportRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGPhoneUserRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGRoleRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGSAPSRepositoryRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGThresholdRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGTicketHistoryRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGTicketReportRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGTicketRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGTimeSlotRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGUploadedfileRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGUserRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGUserZoneRepository.cs" />
+    <Compile Include="Repositories\Postgres\PGZoneRepository.cs" />
+    <Compile Include="Repositories\Static\StaticAccountRepository.cs" />
+    <Compile Include="Repositories\Static\StaticAppointmentSheetRepository.cs" />
+    <Compile Include="Repositories\Static\StaticCardRepository.cs" />
+    <Compile Include="Repositories\Static\StaticEquipmentRepository.cs" />
+    <Compile Include="Repositories\Static\StaticLeadAccessRepository.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repositories\Static\StaticLeadRepository.cs" />
+    <Compile Include="Repositories\Static\StaticPermissionRepository.cs" />
+    <Compile Include="Repositories\Static\StaticRepositoryPopulator.cs" />
+    <Compile Include="Repositories\Static\StaticRoleRepository.cs" />
+    <Compile Include="Repositories\Static\StaticUploadedFileRepository.cs" />
+    <Compile Include="Repositories\Static\StaticUserRepository.cs" />
+    <Compile Include="Repositories\Static\StaticZoneRepository.cs" />
+    <Compile Include="Repositories\Static\StaticCalendarEventRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Diagram\DomainClassDiagram.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{DD5888CF-8570-4A82-8C2F-0F16040584AA}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

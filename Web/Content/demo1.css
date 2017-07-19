@@ -1,0 +1,37 @@
+
+#Findresult {
+	border:solid 1px #eef;
+	padding:1px;
+	background:#eef;
+}
+
+#Findresult p { margin-bottom:1.4em;}
+
+#Findresult dt {
+}
+
+#Findresult dd {
+}
+
+#ImageContainer {
+    height:125px;
+    width:140px;
+    border:solid 1px #ccc;
+    margin-bottom:10px;
+}
+
+#ImageContainer img {display:none;}
+
+
+
+label 
+{
+    position:relative;
+	float:left;
+	width:250px;
+	display:block;
+}
+
+form p {
+	clear:both;
+}

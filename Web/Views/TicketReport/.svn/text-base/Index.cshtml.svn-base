@@ -1,0 +1,330 @@
+﻿@model Web.ViewModel.TicketReportViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="@Url.Content("~/Content/demo_page.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/date_picker_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.4.4js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/scripts/TableTools.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/scripts/ZeroClipboard.js")" type="text/javascript"></script>
+
+
+ 
+<script type="text/javascript">
+    function globalreload() {
+        setTimeout("window.location.reload()", 1000);
+    }
+    $.fn.dataTableExt.afnFiltering.push(
+	function (oSettings, aData, iDataIndex) {
+
+	    var iFini = document.getElementById('fromdate').value;
+	    iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2)
+
+	    var iFfin = document.getElementById('dateto').value;
+	    iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2)
+
+
+	    var datofini = aData[7].substring(6, 10) + aData[7].substring(3, 5) + aData[7].substring(0, 2);
+	    //var datoffin = aData[7].substring(6, 10) + aData[7].substring(3, 5) + aData[7].substring(0, 2);
+
+	    if (iFini == "" && iFfin == "") {
+	        return true;
+	    }
+	    else if (iFini <= datofini && iFfin == "") {
+	        return true;
+	    }
+	    else if (iFfin >= datofini && iFini == "") {
+	        return true;
+	    }
+	    else if (iFini <= datofini && iFfin >= datofini) {
+	        return true;
+	    }
+	    return false;
+
+	}
+);
+
+    $(document).ready(function () {
+        $('#LeadsTable').dataTable({
+            "bScrollInfinite": true,
+            "bScrollCollapse": true,
+
+            "sScrollY": "200px",
+            "bAutoWidth": true,
+            "bLengthChange": false,
+            "sDom": 'T<"clear">lfrtip',
+            "oTableTools": {
+                "sSwfPath": "/Content/swf/copy_cvs_xls_pdf.swf"
+            },
+                "fnInitComplete": function () {
+                var tableWrapper = $('#LeadsTable' + '_wrapper');
+
+                //remove widths that shouldn't be there on the datatable
+                tableWrapper.css('width', '');
+                tableWrapper.find('.dataTables_scrollHead').css('width', '');
+                tableWrapper.find('.dataTables_scrollHeadInner').css('width', '');
+                tableWrapper.find('.dataTables_scrollHeadInner').find('table').css('width', '');
+
+                var tableDataContent = tableWrapper.find('.dataTables_scrollBody')[0];
+                var tableHasScrollBar = (tableDataContent.scrollHeight > tableDataContent.clientHeight);
+
+                //fixes header aligment issues in all major browsers
+                if (tableHasScrollBar)
+                    tableWrapper.find('.dataTables_scrollHead').css('margin-right', '15px');
+
+                //fixes table data stretchyness in <IE8
+                if (navigator.appVersion.indexOf("MSIE 6") != -1 || navigator.appVersion.indexOf("MSIE 7") != -1) {
+                    $('#' + tableId).css('width', '');
+                    tableWrapper.find('.dataTables_scrollBody').css('overflow-x', 'hidden');
+                }
+            }
+        });
+       
+	    var oTable = $('#LeadsTable').dataTable();
+	    //        $('#ownerdropdown').change(function () { oTable.fnFilter($(this).val()) });
+	    $('#openersdropdown').change(function () { oTable.fnFilter($(this).val(), 3, false) && ($('#closersdropdown').val(), 6, false); });
+	    $('#closersdropdown').change(function () { oTable.fnFilter($(this).val(), 6, false) && ($('#openersdropdown').val(), 3, false); });
+
+	    $('#fromdate').change(function () { oTable.fnDraw(); });
+	    $('#dateto').change(function () { oTable.fnDraw(); });
+
+	    $('#fromdate').datepicker({
+	        changeMonth: true,
+	        changeYear: true,
+	        beforeShow: function (input, instance) {
+	            $(input).datepicker('setDate', new Date());
+	        }
+	    });
+	    $('#dateto').datepicker({
+	        changeMonth: true,
+	        changeYear: true,
+	        beforeShow: function (input, instance) {
+	            $(input).datepicker('setDate', new Date());
+	        }
+	    });
+
+	    var openertext;
+	    var closertext;
+	    document.getElementById('openersdropdown').addEventListener('change', function (e) {
+	        var ddlReport = document.getElementById('openersdropdown');
+	        var text = ddlReport.options[ddlReport.selectedIndex].text;
+	        openertext = text;
+	    }, false);
+
+	    document.getElementById('closersdropdown').addEventListener('change', function (e) {
+	        var ddlReportclose = document.getElementById('closersdropdown');
+	        var textclose = ddlReportclose.options[ddlReportclose.selectedIndex].text;
+	        closertext = textclose;
+	    }, false);
+
+	    $('#AssignBtn').click(function () {
+	        var datefrom = $('#fromdate').val();
+	        var dateto = $('#dateto').val();
+
+	        $('#monthlypartialdiv').html("");
+	        if (openertext != undefined) {
+	            $('#monthlypartialdiv').load("/TicketReport/MonthlySummary?id=" + datefrom + "&text=" + dateto + "&value=" + openertext);
+	        }
+	        if (closertext != undefined) {
+	            $('#monthlypartialdiv').load("/TicketReport/MonthlySummary?id=" + datefrom + "&text=" + dateto + "&value=" + closertext);
+	        }
+	        return false;
+	    });
+
+	});
+</script>
+<style type="text/css">
+#LeadsTable_filter
+{display:none} 
+.go 
+{
+    background-color: #7fa9aa;
+    color: White;
+    font-size: 14px;
+    font-weight: bold;
+}
+button {
+ 	background-color: #7fa9aa;
+    color: White;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>
+<div class="container">
+<div class="header">
+               <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                 <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>   
+               
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div>   
+             
+              
+            <div class="logout"><a href="/auth/login" style="color:White">@Html.Label(Model.user.FirstName) @Html.Label(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+   
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Customer Support - Statistical Report</div>
+ 
+<div class="leftreportscolumn">
+
+ @using (Html.BeginForm("Index", "TicketReport", FormMethod.Post, new { id = "DropDown" }))
+ {
+
+             @Html.ValidationSummary(true)
+                 <table style = "left:10px; top:80px; width:auto">
+                        <tr>
+                        <td>
+                        Opening Sales Agent/CSR
+                        </td>
+                        <td>
+                            @Html.DropDownList("openersdropdown", Model.UsersDropdown, "All")
+                       
+                        </td>
+                        <td>
+                        
+                        </td>
+                        
+                             <td align="right">From</td>                   
+                             <td>@Html.TextBox("datefrom", Model.DateFrom, new { size = "5", id = "fromdate" })
+                            <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none"
+                                alt="">
+                            </td>
+                            <td>
+                        
+                        </td>
+                        
+                             <td align="right">To</td>                   
+                             <td>@Html.TextBox("dateto", Model.DateTo, new { size = "5" })
+                            <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none"
+                                alt="">
+                            </td>
+                            <td><input type="Button" value="Go" id="AssignBtn" class = "go"/></td>
+                        </tr>
+                        <tr>
+                        <td>
+                        Closing Sales Agent/CSR
+                        </td>
+                        <td>
+                            @Html.DropDownList("closersdropdown", Model.UsersDropdown, "All")
+                                                
+                        </td>
+                        
+                        </tr>
+            
+                        
+                         
+                </table>
+ }
+ 
+
+   <div class="report1table">
+<table id="LeadsTable" class="display" style= "border:1px solid #000; ">
+<thead>
+    <tr>
+    <th colspan = "9">Customer Support Summary </th>
+    </tr>
+    <tr>
+        <th>
+            Index
+        </th>
+        <th>
+            Ticket Number
+        </th>
+        <th>
+            Account Name
+        </th>
+        <th>
+            Opening SA/CSR
+        </th>
+        <th>
+            Opening Date
+        </th>
+        <th>
+            Current Status
+        </th>
+        <th>
+            Closing SA/CSR
+        </th>
+        <th>
+            Closing Date
+        </th>
+        <th>
+            Date/Time Opened
+        </th>
+
+    </tr>
+    </thead>
+    
+@foreach (var item in Model.Tickets)
+{
+    Model.i++;
+    <tbody>
+    <tr>
+         <td>
+            @Model.i
+        </td>
+        <td>
+            @item.TicketHistoryID
+        </td>
+        <td>
+            @item.AccountName
+        </td>
+        <td>
+            @item.CreaterBy
+        </td>
+        <td>
+                    @if ((Int32)item.DateOpened.Month < 10)
+                    {
+                        int i = 0;
+                        if ((Int32)item.DateOpened.Day >= 10)
+                        {
+                     @(i.ToString() + ((item.DateOpened.Month).ToString()) + "/" + ((item.DateOpened.Day).ToString()) + "/" + ((item.DateOpened.Year).ToString()));
+                        }
+                        else if ((Int32)item.DateOpened.Day < 10)
+                        {
+                     @(i.ToString() + ((item.DateOpened.Month).ToString()) + "/" + (i.ToString() + (item.DateOpened.Day).ToString()) + "/" + ((item.DateOpened.Year).ToString()));
+                        }
+                    }
+        </td>
+        <td>
+            @item.Status
+        </td>
+        <td>
+            @item.ClosedByUser
+        </td>
+        <td>
+            @item.DateClosed
+        </td>
+        
+    </tr>
+    </tbody>
+}
+
+</table>
+
+    </div>
+    </div>
+    <div class="rightreportscolumn">
+<div  id = "monthlypartialdiv" >
+
+</div>
+</div>
+</div>
+</div>

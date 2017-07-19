@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Alphabetical" MembersFormat="NameAndType">
+  <Class Name="Data.Domain.Lead">
+    <Position X="9.25" Y="8.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ABSAQEAEAAMAAAEKABIAIAAAAABAIASDhAEABAAAAAg=</HashCode>
+      <FileName>Domain\Lead.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Zone" />
+      <Property Name="StatementFile" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="CardStack" />
+      <Property Name="AppointmentSheets" />
+      <Property Name="Accounts" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Data.Domain.Zone">
+    <Position X="2.25" Y="7.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Zone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.Domain.UploadedFile">
+    <Position X="15.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABACAA=</HashCode>
+      <FileName>Domain\UploadedFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.Domain.User">
+    <Position X="6.25" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ACAAQEIAACAAAACIAAAECAAAABAAAAADAQAABAAAAEg=</HashCode>
+      <FileName>Domain\User.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AssignedRole" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="AssignedLeads" />
+      <Property Name="AssignedZones" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Data.Domain.AppointmentSheet">
+    <Position X="13" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAxAkAQKIAIgoAKAAAQEACAAAgAABEAYABAAAAAA=</HashCode>
+      <FileName>Domain\AppointmentSheet.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Creator" />
+      <Property Name="ParentLead" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Data.Domain.Card">
+    <Position X="9.75" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAEAABIACAAIAAAAAEAgAgCAAAAFAgAAAAAAAA=</HashCode>
+      <FileName>Domain\Card.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Creator" />
+      <Property Name="ParentLead" />
+      <Property Name="AppointmentSet" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Data.Domain.Account">
+    <Position X="5.75" Y="11.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>ACAQUUAUCBGmgFShAAAwISAQcBkyogBADJQAQAAAIkI=</HashCode>
+      <FileName>Domain\Account.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PrimaryTerminal" />
+      <Property Name="SecondaryTerminal" />
+      <Property Name="CheckEquipment" />
+      <Property Name="PrimaryPINpad" />
+      <Property Name="SecondaryPINpad" />
+      <Property Name="Printer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Data.Domain.Equipment">
+    <Position X="2.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAgAQAAAAAAAAA=</HashCode>
+      <FileName>Domain\Equipment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.Domain.Permission">
+    <Position X="2" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Domain\Permission.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Data.Domain.Role">
+    <Position X="2" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Domain\Role.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Permissions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Data.Domain.CalendarEvent">
+    <Position X="6" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAIAAAAAAAAIIAAAAADEAAABAEACgQ=</HashCode>
+      <FileName>Domain\CalendarEvent.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="RelatedAppointmentSheet" />
+      <Property Name="Creator" />
+      <Property Name="Assigned" />
+      <Property Name="InsideZone" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Data.Domain.LeadAccessRecord">
+    <Position X="6" Y="10" Width="2.25" />
+    <AssociationLine Name="WhoAccessed" Type="Data.Domain.User">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.552" Y="0.21" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAABAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\LeadAccessRecord.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="LeadAccessed" />
+      <Property Name="WhoAccessed" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Data.Domain.CalendarSettings">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAYAAAAAA=</HashCode>
+      <FileName>Domain\CalendarSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

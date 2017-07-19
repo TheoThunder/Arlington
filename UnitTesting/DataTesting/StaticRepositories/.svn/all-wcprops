@@ -1,0 +1,55 @@
+END
+StaticPermissionRepositoryUnitTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/repos/trinitycrminternal/!svn/ver/45/trunk/UnitTesting/DataTesting/StaticRepositories/StaticPermissionRepositoryUnitTest.cs
+END
+StaticEquipmentRepositoryTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/repos/trinitycrminternal/!svn/ver/28/trunk/UnitTesting/DataTesting/StaticRepositories/StaticEquipmentRepositoryTest.cs
+END
+StaticAccountRepositoryTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/repos/trinitycrminternal/!svn/ver/38/trunk/UnitTesting/DataTesting/StaticRepositories/StaticAccountRepositoryTest.cs
+END
+StaticLeadRepositoryUnitTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/repos/trinitycrminternal/!svn/ver/28/trunk/UnitTesting/DataTesting/StaticRepositories/StaticLeadRepositoryUnitTest.cs
+END
+StaticCardRepositoryTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/trinitycrminternal/!svn/ver/33/trunk/UnitTesting/DataTesting/StaticRepositories/StaticCardRepositoryTest.cs
+END
+StaticZoneRepositoryUnitTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/repos/trinitycrminternal/!svn/ver/30/trunk/UnitTesting/DataTesting/StaticRepositories/StaticZoneRepositoryUnitTest.cs
+END
+StaticUserRepositoryTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/repos/trinitycrminternal/!svn/ver/82/trunk/UnitTesting/DataTesting/StaticRepositories/StaticUserRepositoryTest.cs
+END
+StaticUploadedFileRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/repos/trinitycrminternal/!svn/ver/41/trunk/UnitTesting/DataTesting/StaticRepositories/StaticUploadedFileRepository.cs
+END
+StaticRoleRepositoryUnitTest.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/repos/trinitycrminternal/!svn/ver/83/trunk/UnitTesting/DataTesting/StaticRepositories/StaticRoleRepositoryUnitTest.cs
+END

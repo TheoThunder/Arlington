@@ -1,0 +1,91 @@
+﻿@*This is the Authentication page where all users login.*@
+
+@model Data.Domain.User
+          
+
+@{
+    ViewBag.Title = "Login";
+}
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<div class="container">
+<div class="header">
+
+    <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  </div>
+
+
+<div class="contentlogin">
+@using (Html.BeginForm())
+{
+
+  //this commented out region is for new User sign in which was later removed
+@*<div class="col_1">
+
+@using (Html.BeginForm())
+{
+
+    @Html.ValidationSummary(true)
+    
+
+    <fieldset style="border: none;">
+    <table id = "table123" width="50%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+    <td>
+        <legend>First Time User?</legend>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName) 
+              
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+            <input type="submit" value="Sign Up" />
+        </div>
+        
+        </td>
+        
+        </tr>
+        </table>
+    </fieldset>
+}
+
+
+</div>*@
+ <div class="col_3">
+           @using (Html.BeginForm())
+           {
+    @Html.ValidationSummary(true)
+    
+
+    <fieldset style="border:none;">
+     <table id = "table123" width="50%" cellspacing="0" cellpadding="0" style="margin-left: 55px; margin-top: 20px; color:white;">
+    <h2 style="color:white; font-size: 10pt; margin-top:10px">@Model.ErrorMessage</h2>
+    <tr>
+    <td>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName, "Username:") 
+              
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+            
+        </div>
+   
+        <div class="editor-label">
+            @Html.LabelFor(model => model.newPassword, "Password :")
+            @Html.EditorFor(model => model.newPassword)
+            @Html.ValidationMessageFor(model => model.newPassword)
+            <div class="editor-field">
+            <input type="submit" value="Sign In" />
+            </div>
+        </div>
+
+        
+    </td>
+        
+    </tr>
+        </table>
+    </fieldset>
+           }
+
+        </div>
+}
+</div>
+</div>

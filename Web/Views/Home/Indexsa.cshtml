@@ -1,0 +1,67 @@
+﻿@*This is Sales Agent's Homepage*@
+
+@model Web.ViewModel.UserCreateViewModel
+@{
+    ViewBag.Title = "Indexsa";
+}
+<meta name="viewport" content="width=720, maximum-scale=1.0" />
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+            <div class="hometabsaon"><a href="#">Home</a></div>
+            <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+			<div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+            <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+             
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content" style="margin-top:100px">
+<div class="centerhome">
+      <table class="loglinks_Col1">
+                
+        <tr>
+        	<td align="bottom"><a href= "/Lead/warmleads"  ><img border="0" src="../../Content/images/Folders.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/Lead/warmleads"  >Lead/Customer Profiles</a></td>  
+        </tr>
+        
+        <tr>
+        	<td align="bottom"><a href= "/account/index"  ><img border="0" src="../../Content/images/Check-icon.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/account/index"  >Accounts</a></td>     
+        </tr>
+
+        
+        </table>
+
+        <table class="loglinks_Col2">
+ 
+@*        <tr>
+        	<td align="bottom"><a href= "/callcard/index"  ><img border="0" src="../../Content/images/PhoneCall.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/callcard/index"  >Make a direct call</a></td>        
+        </tr>*@
+                
+        <tr>
+        	<td align="bottom"><a href= "/calendar/index"  ><img border="0" src="../../Content/images/Calendar.png" alt="Pulpit rock"
+    width="80" height="80" /></a></td>
+            <td align="top"><a href= "/calendar/index"  >Calendar</a></td>        
+        </tr>
+
+        </table>
+        </div>
+        </div>
+        </div>

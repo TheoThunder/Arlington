@@ -1,0 +1,61 @@
+END
+01_CreateUsersTable.sql
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/repos/trinitycrminternal/!svn/ver/273/trunk/SQL/Table%20Creation_Alteration/01_CreateUsersTable.sql
+END
+03_CreateZonesAndZipcodesTables.sql
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/repos/trinitycrminternal/!svn/ver/273/trunk/SQL/Table%20Creation_Alteration/03_CreateZonesAndZipcodesTables.sql
+END
+CreateCardTable.sql
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/trinitycrminternal/!svn/ver/273/trunk/SQL/Table%20Creation_Alteration/CreateCardTable.sql
+END
+07_CreateAppointmentSheet.sql
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/repos/trinitycrminternal/!svn/ver/252/trunk/SQL/Table%20Creation_Alteration/07_CreateAppointmentSheet.sql
+END
+CreateLeadTable.sql
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/repos/trinitycrminternal/!svn/ver/273/trunk/SQL/Table%20Creation_Alteration/CreateLeadTable.sql
+END
+02_CreateRolesAndPermissionsTables.sql
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/repos/trinitycrminternal/!svn/ver/273/trunk/SQL/Table%20Creation_Alteration/02_CreateRolesAndPermissionsTables.sql
+END
+08_CreateEvent.sql
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/trinitycrminternal/!svn/ver/252/trunk/SQL/Table%20Creation_Alteration/08_CreateEvent.sql
+END
+CreateUploadedfile.sql
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/repos/trinitycrminternal/!svn/ver/393/trunk/SQL/Table%20Creation_Alteration/CreateUploadedfile.sql
+END
+06_CreateAccount.sql
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/repos/trinitycrminternal/!svn/ver/252/trunk/SQL/Table%20Creation_Alteration/06_CreateAccount.sql
+END
+CreateEquipmentTable.sql
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/repos/trinitycrminternal/!svn/ver/313/trunk/SQL/Table%20Creation_Alteration/CreateEquipmentTable.sql
+END

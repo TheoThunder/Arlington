@@ -1,0 +1,415 @@
+﻿@model Data.Domain.Lead
+@{ ViewBag.Title = "profile";}
+
+
+
+<script type="text/javascript">
+    //function called in the Pagination
+
+    function pageselectCallback(page_index, jq) {
+        var new_content = jQuery('#hiddenresult div.result:eq(' + page_index + ')').clone();
+        $('.Searchresult').empty().append(new_content);
+    }
+
+    // Initialize the Pagination
+    function initPagination() {
+        var num_entries = jQuery('#hiddenresult div.result').length;
+        $("#Pagination").pagination(num_entries, {
+            callback: pageselectCallback,
+            items_per_page: 1
+        });
+    }
+
+    function pageselectCallback1(page_index, jq) {
+        var new_content1 = jQuery('#invisibleresult div.appointment:eq(' + page_index + ')').clone();
+        //        $('#hiddenresult div.result').find('input, textarea, button, select').attr('disabled', 'disabled');
+        $('.Findresult').empty().append(new_content1);
+    }
+
+    function initPagination1() {
+        // count entries inside the hidden content
+        var num_entries1 = jQuery('#invisibleresult div.appointment').length;
+        // Create content inside pagination element
+        $("#Paging").pagination(num_entries1, {
+            callback: pageselectCallback1,
+            items_per_page: 1 // Show only one item per page
+        });
+    }
+
+    //function to upload the statement
+    $(function () {
+        $("#ajaxUploadForm").ajaxForm({
+            iframe: true,
+            dataType: "json",
+            beforeSubmit: function () {
+                $("#ajaxUploadForm").block({ message: '<h1><img src="/Content/busy.gif" /> Uploading file...</h1>' });
+            },
+            success: function (result) {
+                $("#ajaxUploadForm").unblock();
+                $("#ajaxUploadForm").resetForm();
+                //                $.growlUI(null, 'test');
+                $("#statement").val(result.message);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $("#ajaxUploadForm").unblock();
+                $("#ajaxUploadForm").resetForm();
+                $.growlUI(null, 'Error uploading file');
+            }
+        });
+    });
+
+
+    // disable Business Information fields
+    function disableBIFields() {
+        $("#lead_CompanyName, #lead_Contact1Title, #lead_Contact2Title, #lead_Contact1FirstName, #lead_Contact1LastName,  #lead_Contact2FirstName, #lead_Contact2LastNam,\
+         #lead_PrimaryPhoneNumber, #lead_AddtionalPhoneNumber, #lead_FaxNumber, #lead_PrimaryEmailAddress, #lead_AdditonalEmailAddress, #lead_WebsiteLink,\
+         #lead_StreetAddress1, #lead_City, #lead_ZipCode, #lead_State, #lead_AssignedAAUserId").attr('disabled', 'disabled')
+    }
+    //enable Business Information fields
+    function enableBIFiels() {
+        $("#lead_CompanyName, #lead_Contact1Title, #lead_Contact2Title, #lead_Contact1FirstName, #lead_Contact1LastName,  #lead_Contact2FirstName, #lead_Contact2LastNam,\
+         #lead_PrimaryPhoneNumber, #lead_AddtionalPhoneNumber, #lead_FaxNumber, #lead_PrimaryEmailAddress, #lead_AdditonalEmailAddress, #lead_WebsiteLink,\
+         #lead_StreetAddress1, #lead_City, #lead_ZipCode, #lead_State, #lead_AssignedAAUserId").removeAttr('disabled', 'disabled')
+    }
+
+    function disableAppointmentFields() {
+        $('#appointmentSheet_DayOfAppointment, #appointmentSheet_AppointmentDateFrom,  #appointmentSheet_AppointmentDateTo, #appointmentSheet_Location, #appointmentSheet_Street,\
+        #appointmentSheet_City, #appointmentSheet_ZipCode, #appointmentSheet_State, #appointmentSheet_Score, #appointmentSheet_Comment').attr('disabled', 'disabled');
+        $('#appointmentSheet_CurrentlyAcceptingCards, #appointmentSheet_NewSetUp, #appointmentSheet_Price, #appointmentSheet_NewEquipment, #appointmentSheet_AddingServices, #appointmentSheet_Unhappy, \
+        #appointmentSheet_SingleLocation, #appointmentSheet_HowManyLocations, #appointmentSheet_CurrentProcessor, #appointmentSheet_Volume, #appointmentSheet_Swipe, #appointmentSheet_Moto, #appointmentSheet_Internet').attr('disabled', 'disabled');
+    }
+    function enableAppointmentFields() {
+        $('#appointmentSheet_DayOfAppointment, #appointmentSheet_AppointmentDateFrom,  #appointmentSheet_AppointmentDateTo, #appointmentSheet_Location, #appointmentSheet_Street,\
+        #appointmentSheet_City, #appointmentSheet_ZipCode, #appointmentSheet_State, #appointmentSheet_Score, #appointmentSheet_Comment').removeAttr('disabled', 'disabled');
+        $('#appointmentSheet_CurrentlyAcceptingCards, #appointmentSheet_NewSetUp, #appointmentSheet_Price, #appointmentSheet_NewEquipment, #appointmentSheet_AddingServices, #appointmentSheet_Unhappy, \
+        #appointmentSheet_SingleLocation, #appointmentSheet_HowManyLocations, #appointmentSheet_CurrentProcessor, #appointmentSheet_Volume, #appointmentSheet_Swipe, #appointmentSheet_Moto, #appointmentSheet_Internet').removeAttr('disabled', 'disabled');
+    }
+
+    function hidebutton() {
+
+    }
+
+    function hideapptbutton() {
+        $('#EditAppointmentSheetSubmit').show();
+        $('#SaveAppointmentSheetSubmit').show();
+        $('#CancelAppointmentSheetSubmit').hide();
+    }
+
+    function disablecardstack() {
+        document.getElementById('disablingCardstack').style.display = 'block';
+        $('#SaveCardStackSubmit').hide();
+        $('#EditCardStackSubmit').show();
+        $('#CancelCardStackSubmit').hide();
+        $('#EditCardStackSubmit').click(function () {
+            enablecardstack()
+        });
+    }
+    function enablecardstack() {
+        document.getElementById('disablingCardstack').style.display = 'none';
+        $('#SaveCardStackSubmit').show();
+        $('#EditCardStackSubmit').hide();
+        $('#CancelCardStackSubmit').show();
+        $('#SaveCardStackSubmit').click(function () {
+            disablecardstack()
+        });
+        $('#CancelCardStackSubmit').click(function () {
+            disablecardstack()
+        });
+
+    }
+    function enableCreateAppointment() {
+        $("#SaveAppointmentSheetSubmit").click(function () {
+            var ASFormContent = $("#ASForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Lead/CreateAppointment",
+                data: ASFormContent
+                //                    success: function (msg) { alert(msg); }
+            });
+            setTimeout("initPagination1()", 3000);
+        });
+
+
+    }
+
+    function enableCreateCard() {
+        $("#card_CardType").change(function () {
+            var option = $("#card_CardType").val();
+            switch (option) {
+                case "Dnc":
+                    $("#card_TalkedToDM").hide();
+                    $("#TalkedToDMLabel").hide();
+                    $("#card_TalkedToOfficeManager").show();
+                    $("#TalkedToOfficeManagerLabel").show();
+                    $("#card_LeftVM").hide();
+                    $("#LeftVMLabel").hide();
+                    $("#card_TalkedToPerson").show();
+                    $("#TalkedToAPersonLabel").show();
+                    $("#card_TalkedToOther").show();
+                    $("#TalkedToOtherLabel").show();
+                    $("#card_AcquiredDMName").hide();
+                    $("#AcquiredDMNameLabel").hide();
+                    $("#CallBackDateLabel").hide();
+                    $("#CallBackDateInput").hide();
+                    break;
+                case "Call Back":
+                    $("#card_TalkedToDM").show();
+                    $("#TalkedToDMLabel").show();
+                    $("#card_TalkedToPerson").hide();
+                    $("#TalkedToAPersonLabel").hide();
+                    $("#card_TalkedToOfficeManager").hide();
+                    $("#TalkedToOfficeManagerLabel").hide();
+                    $("#card_LeftVM").hide();
+                    $("#LeftVMLabel").hide();
+                    $("#card_TalkedToOther").hide();
+                    $("#TalkedToOtherLabel").hide();
+                    $("#card_AcquiredDMName").show();
+                    $("#AcquiredDMNameLabel").show();
+                    $("#CallBackDateLabel").show();
+                    $("#CallBackDateInput").show();
+                    break;
+                case "Wrong#":
+                    $("#card_TalkedToPerson").show();
+                    $("#TalkedToAPersonLabel").show();
+                    $("#card_TalkedToDM").hide();
+                    $("#TalkedToDMLabel").hide();
+                    $("#card_TalkedToOfficeManager").hide();
+                    $("#TalkedToOfficeManagerLabel").hide();
+                    $("#card_LeftVM").hide();
+                    $("#LeftVMLabel").hide();
+                    $("#card_AcquiredDMName").hide();
+                    $("#AcquiredDMNameLabel").hide();
+                    $("#CallBackDateLabel").hide();
+                    $("#CallBackDateInput").hide();
+                    break;
+                case "Not Lead":
+                    $("#card_TalkedToDM").hide();
+                    $("#TalkedToDMLabel").hide();
+                    $("#card_TalkedToOfficeManager").hide();
+                    $("#TalkedToOfficeManagerLabel").hide();
+                    $("#card_LeftVM").hide();
+                    $("#LeftVMLabel").hide();
+                    $("#card_TalkedToPerson").hide();
+                    $("#TalkedToAPersonLabel").hide();
+                    $("#card_TalkedToOther").hide();
+                    $("#TalkedToOtherLabel").hide();
+                    $("#card_AcquiredDMName").hide();
+                    $("#AcquiredDMNameLabel").hide();
+                    $("#CallBackDateLabel").hide();
+                    $("#CallBackDateInput").hide();
+                    break;
+                case "No Answer":
+                    $("#card_LeftVM").show();
+                    $("#LeftVMLabel").show();
+                    $("#card_TalkedToDM").hide();
+                    $("#TalkedToDMLabel").hide();
+                    $("#card_TalkedToOfficeManager").hide();
+                    $("#TalkedToOfficeManagerLabel").hide();
+                    $("#card_TalkedToPerson").hide();
+                    $("#TalkedToAPersonLabel").hide();
+                    $("#card_TalkedToOther").hide();
+                    $("#TalkedToOtherLabel").hide();
+                    $("#card_AcquiredDMName").hide();
+                    $("#AcquiredDMNameLabel").hide();
+                    $("#CallBackDateLabel").hide();
+                    $("#CallBackDateInput").hide();
+                    break;
+                case "No Interest":
+                    $("#card_TalkedToDM").show();
+                    $("#TalkedToDMLabel").show();
+                    $("#card_TalkedToOfficeManager").show();
+                    $("#TalkedToOfficeManagerLabel").show();
+                    $("#card_LeftVM").hide();
+                    $("#LeftVMLabel").hide();
+                    $("#card_TalkedToPerson").hide();
+                    $("#TalkedToAPersonLabel").hide();
+                    $("#card_TalkedToOther").show();
+                    $("#TalkedToOtherLabel").show();
+                    $("#card_AcquiredDMName").hide();
+                    $("#AcquiredDMNameLabel").hide();
+                    $("#CallBackDateLabel").hide();
+                    $("#CallBackDateInput").hide();
+                    break;
+                case "Set Appointment":
+                    //To be implemented
+
+                    break;
+                case "Reschedule Appointment":
+                    //To be implemented
+                    break;
+                default:
+                    $("#card_TalkedToDM").hide();
+                    $("#TalkedToDMLabel").hide();
+                    $("#card_TalkedToOfficeManager").hide();
+                    $("#TalkedToOfficeManagerLabel").hide();
+                    $("#card_LeftVM").hide();
+                    $("#LeftVMLabel").hide();
+                    $("#card_TalkedToPerson").hide();
+                    $("#TalkedToAPersonLabel").hide();
+                    $("#card_TalkedToOther").hide();
+                    $("#TalkedToOtherLabel").hide();
+                    $("#card_AcquiredDMName").hide();
+                    $("#AcquiredDMNameLabel").hide();
+                    $("#CallBackDateLabel").hide();
+                    $("#CallBackDateInput").hide();
+                    break;
+            }
+            return false;
+        });
+        $("#card_CardType").change();
+        $("#SaveCardSubmit").click(function () {
+            var CSFormContent = $("#CSForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Lead/CreateCard",
+                data: CSFormContent
+                //               success: function (msg) { alert(msg); }
+            });
+            setTimeout("hidebutton()", 3000);
+            setTimeout("initPagination()", 3000);
+            setTimeout("disablecardstack()", 3000);
+        });
+    }
+
+    var BusinessInformation;
+
+    //This is where the reall stuff happens
+    $(document).ready(function () {
+        disablecardstack();
+        disableBIFields();
+        $('#SaveBIBtn').hide();
+        $('#CancelBIBtn').hide();
+        disableAppointmentFields();
+        $('#demosubmit').click(function () {
+            setTimeout("initPagination()", 3000);
+        });
+
+
+        $('#makenewcard').click(function () {
+            setTimeout("enableCreateCard()", 3000);
+        });
+
+        $('#appointsubmit').click(function () {
+            setTimeout("initPagination1()", 3000);
+        });
+
+        $('#makenewappointment').click(function () {
+            setTimeout("enableCreateAppointment()", 3000);
+        });
+
+        hidebutton();
+        $("#EditBIBtn").click(function () {
+            enableBIFiels();
+            $('#SaveBIBtn').show();
+            $('#CancelBIBtn').show();
+            $('#EditBIBtn').hide();
+            BusinessInformation = new Object;
+            BusinessInformation.TempCompanyName = $('#lead_CompanyName').val();
+            BusinessInformation.TempContact1Name = $('#lead_Contact1Name').val();
+            BusinessInformation.TempContact1Title = $('#lead_Contact1Title').val();
+            BusinessInformation.TempContact2Name = $('#lead_Contact2Name').val();
+            BusinessInformation.TempContact2Title = $('#lead_Contact2Title').val();
+            BusinessInformation.TempPrimaryPhoneNumber = $('#lead_PrimaryPhoneNumber').val();
+            BusinessInformation.TempAdditionalPhoneNumber = $('#lead_AdditionalPhoneNumber').val();
+            ////BusinessInformation.TempPhoneRadioButton = $('input[type="radio"]').val()
+            BusinessInformation.TempPhoneRadioButton = $('input[type="radio"]').val()
+            BusinessInformation.TempFaxNumber = $('#lead_FaxNumber').val();
+            BusinessInformation.TempPrimaryEmailAddress = $('#lead_PrimaryEmailAddress').val();
+            BusinessInformation.TempAdditionalEmailAddress = $('#lead_AdditionalEmailAddress').val();
+            BusinessInformation.TempWebsite = $('#lead_WebsiteLink').val();
+            BusinessInformation.TempStreetName = $('#lead_StreetAddress1').val();
+            BusinessInformation.TempCity = $('#lead_City').val();
+            BusinessInformation.TempState = $('#lead_State').val();
+            BusinessInformation.TempZip = $('#lead_ZipCode').val();
+            BusinessInformation.TempZone = $('#lead_Zone').val();
+            BusinessInformation.TempStatement = $('#lead_CompanyName').val();
+            return false;
+        });
+
+
+        $("#CancelBIBtn").click(function () {
+            $('#lead_CompanyName').val(BusinessInformation.TempCompanyName);
+            $('#lead_Contact1Title').val(BusinessInformation.TempContact1Title);
+            $('#lead_Contact1Name').val(BusinessInformation.TempContact1Name);
+            $('#lead_Contact2Title').val(BusinessInformation.TempContact2Title);
+            $('#lead_Contact2Name').val(BusinessInformation.TempContact2Name);
+            $('#lead_PrimaryPhoneNumber').val(BusinessInformation.TempPrimaryPhoneNumber);
+            $('#lead_AdditionalPhoneNumber').val(BusinessInformation.TempAdditionalPhoneNumber);
+            $('input[type="radio"]').val(BusinessInformation.TempPhoneRadioButton);
+            $('#lead_FaxNumber').val(BusinessInformation.TempFaxNumber);
+            $('#lead_PrimaryEmailAddress').val(BusinessInformation.TempPrimaryEmailAddress);
+            $('#lead_AdditionalEmailAddress').val(BusinessInformation.TempAdditionalEmailAddress);
+            $('#lead_WebsiteLink').val(BusinessInformation.TempWebsite);
+            $('#lead_StreetAddress1').val(BusinessInformation.TempStreetName);
+            $('#lead_City').val(BusinessInformation.TempCity);
+            $('#lead_State').val(BusinessInformation.TempState);
+            $('#lead_ZipCode').val(BusinessInformation.TempZip);
+            $('#lead_Zone').val(BusinessInformation.TempZone);
+            $('#lead_Statement').val();
+            disableBIFields();
+            $('#SaveBIBtn').hide();
+            $('#CancelBIBtn').hide();
+            $('#EditBIBtn').show();
+            return false;
+        });
+
+
+        $("#SaveBIBtn").click(function () {
+            var BIFormContent = $("#BIForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Lead/BusinessInformation",
+                data: BIFormContent,
+                success: function (msg) { alert(msg); }
+            });
+            disableBIFields();
+            $('#SaveBIBtn').hide();
+            $('#CancelBIBtn').hide();
+            $('#EditBIBtn').show();
+            return false;
+        });
+
+
+
+    });
+
+</script>
+<div class="container">
+    <div class="header">
+        <img border="0" src="../../Content/images/banner.png" alt="alt" />
+    </div>
+    <div class="content">
+        @*     <div id="cardstack" style="top: 580px">
+            This is a place holder and it holds place for something to be held
+        </div>*@
+        <div id="cardstack">
+            @{Html.RenderAction("~/lead/AllCardsForLead");}
+        </div>
+        @{ 
+            Html.RenderAction("~lead/BusinessInformation");
+            //Html.RenderAction("CreateAppointment");
+            //Html.RenderAction("Index", "Account");
+            //Html.RenderAction("AppointmentSheet");
+                //@Ajax.ActionLink("Make Phone Call", "CreateCard", new {  Model.LeadId}, );
+        }
+        <div id="appointmentstack">
+            @{Html.RenderAction("AllAppointmentsForLead");}</div>
+        </div>
+    <div class="sidemenu">
+        <div class="searbutton">
+            Search Button
+        </div>
+        <div class="callbutton">
+                <br />@Ajax.ActionLink(" ", "CreateCard", "Lead", new { Model.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "cardstack" }, new { @Id = "makenewcard" })
+                <br />@Ajax.ActionLink(" .. ", "AllCardsForLead", "Lead", new { Model.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "cardstack" }, new { @Id = "SaveCardSubmit" })
+        </div>
+        @Html.HiddenFor(model => model.LeadId)
+        <div class="calendarbutton">
+           
+            Calendar
+
+            <br /> @Ajax.ActionLink(" ", "CreateAppointment", "Lead", new { Model.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "appointmentstack" }, new { @Id = "makenewappointment" })
+                @Ajax.ActionLink(" ..", "AllAppointmentsForLead", "Lead", new { Model.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "appointmentstack" }, new { @Id = "SaveAppointmentSheetSubmit" })
+        </div>
+    </div>
+</div>

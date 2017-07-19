@@ -1,0 +1,181 @@
+﻿@model Web.ViewModel.AllCardsViewModel     
+@{
+    ViewBag.Title = "AllCardsForLead";
+    
+ }
+
+<!-- Container element for all the Elements that are to be paginated -->
+ 
+      
+<div class="cardstack" >
+    <table class="title">
+        <tr>
+            <td>
+                &nbsp;Call Record
+            </td>
+        </tr>
+    </table>
+    <div id="disablingCardstack"></div> 
+    
+    <div class="CScard">
+        <br style="clear: both;" />
+       
+  @using (Html.BeginForm("AllCardsForLead", "Lead", FormMethod.Post, new { id = "AllCardsForm" }))
+  {
+        <div class ="Searchresult">
+        @if (Model.cards == null)
+        {
+            <h2>There are no cards at this time</h2>
+            
+        }
+        else
+        {
+            <h2> Cards Loading ...</h2>
+        }
+
+        </div>
+       
+             
+
+                       
+  }
+  @Html.HiddenFor(model => model.UserName)
+                          
+        <div id="hiddenresult" style="display: none;">
+            @foreach (var card in Model.cards)
+            {          
+             
+                <div class="result">
+                    <ul class="cardinfo">
+                     @Html.HiddenFor(model => model.user.UserId)
+                     @Html.HiddenFor(model => card.CardId)
+                     @Html.HiddenFor(model => card.CreatorId) 
+                     @Html.HiddenFor(model => card.CreatorName)
+                     @Html.HiddenFor(model => card.CreatedOn)
+                     @Html.HiddenFor(model => card.CardType)
+                     @Html.HiddenFor(model => model.user.UserName)
+                        <li>@*Appointment Agent : @Html.DisplayFor(model => model.lead.AssignedAAUserId)*@ Appointment
+                            Agent : @Html.DisplayFor(model => card.CreatorName)
+
+                        </li>
+                        <li>@Html.DisplayFor(model => card.CreatedOn)<br />
+                        </li>
+                        <li>
+                            <br />
+                            Call Type:
+                            @*@Html.DropDownListFor(model => card.CardType, new SelectList(Model.callTypes), new { @class = "cardDropDown"})*@
+                            @Html.DisplayFor(model => card.CardType)
+                        </li>
+                    </ul>
+                    <table class="cbinfo" type = "hidden">
+                        @if (card.CardType == "Call Back")
+                        {
+                             <tr id = "CallBackDateli">
+                                <td colspan="2" align="right">
+                                    Call Back Date:
+                                </td>
+                                @* might need some change since later due to date format that will be decided 	*@
+                                <td colspan="2">@Html.TextBoxFor(model => card.CallBackDate) 
+                                </td>
+                            </tr>
+                        }
+                        @if (card.TalkedToDM != false)
+                        {
+                            <tr id = "TalkedToDMli">
+                                <td align="right">
+                                    @Html.CheckBoxFor(model => card.TalkedToDM)
+                                </td>
+                                <td>    
+                                    Talked to DM
+                                </td>
+                            </tr>
+                        }
+                        @if (card.AcquiredDMName != false)
+                        {
+                           <tr id= "AcquiredDMNameli" >
+                            <td align="right">
+                                @Html.CheckBoxFor(model => card.AcquiredDMName)
+                            </td>
+                            <td>
+                                Acquired DM
+                            </td>
+                           </tr>
+                        }
+                        
+                        @if (card.TalkedToOfficeManager != false)
+                        {
+                            <tr id = "TalkedToOfficeManagerli" >
+                                <td align="right">
+                                    @Html.CheckBoxFor(model => card.TalkedToOfficeManager) </td>
+                                <td>
+                                    Talked To Office Manager
+                                </td>
+                            </tr>
+                        }
+                        @if (card.TalkedToOther != false)
+                        {
+                            <tr class = "TalkedToOtherli" >
+                                <td align="right">
+                                    @Html.CheckBoxFor(model => card.TalkedToOther)
+                                </td>
+                                <td>
+                                    Talked To Other
+                                </td>
+                            </tr>
+                        }
+                         @if (card.NoInterestChk != false)
+                         {
+                            <tr class = "NoInterest">
+                                <td align="right">@Html.CheckBoxFor(model => card.NoInterestChk)</td>
+                                <td >Not Interested: </td>
+                                <td>
+                                     @Html.DropDownListFor(model => card.NoInterestRea, new SelectList(Model.noInterest, card.NoInterestRea))
+                                </td>
+                            </tr>
+                         }
+                        
+                        @if (card.TalkedToPerson != false)
+                        {
+                            <tr class = "TalkedToAPersonli">
+                                <td align="right">
+                                    @Html.CheckBoxFor(model => card.TalkedToPerson)
+                                </td>
+                                <td>
+                                    Wrong #
+                                </td>
+                            </tr>
+                        }
+                        @if (card.LeftVM != false)
+                        {
+                            <tr id = "LeftVMli">
+                                <td align="right">
+                                    @Html.CheckBoxFor(model => card.LeftVM)
+                                </td>    
+                                <td>
+                                    Left VM
+                                </td>            
+                            </tr>
+                        }
+                    </table>
+                    <ul class="csupinfo">
+                        <li>Last Updated :@Html.DisplayFor(model => card.LastUpdated)
+                        </li>
+                        <li style="text-align: left"> Comments: </li>
+                        <li>
+                            @Html.TextAreaFor(model => card.Comment, new { style = "height:110px ; width:270px"})
+                        </li>
+                        @Html.HiddenFor(model => card.ParentLeadId)
+                    </ul>
+                </div>             
+           
+       } </div> 
+    </div>
+
+    <div class="searchcard">
+        <div id="Pagination">
+        </div>
+ 
+    </div>
+</div>
+
+  

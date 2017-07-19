@@ -1,0 +1,92 @@
+﻿
+<table id="MonthlyTable" class = "display">
+
+    <thead >
+    <tr><th colspan = "6"> MONTHLY SUMMARY</th></tr>
+    <tr>
+            <th>
+                Month
+            </th>
+            <th>
+                Accounts
+            </th>
+
+        </tr>
+           
+    </thead>
+  
+          
+    <tbody>
+    @foreach (var item in Model.MonthlyReports)
+        {
+         
+            
+            <tr>
+                <td>
+                   @item.Month -  @item.Year
+                      
+                </td>
+                <td>
+                    @item.MonthlyAccounts
+                </td>
+                
+            </tr>
+        }
+
+            <tr>
+                <td>
+                  <b>@Model.TotalMonthlyReport.Month</b>
+                      
+               </td>
+                <td>
+                   <b>@Model.TotalMonthlyReport.MonthlyAccounts</b>
+                </td>
+            </tr>
+    </tbody>
+        
+        
+</table>
+
+<script type="text/javascript">
+
+
+    var oTable2 = $('#MonthlyTable').dataTable({
+        "bScrollInfinite": true,
+        "bScrollCollapse": true,
+        "sScrollY": "400px",
+        "bFilter": false,
+        "bSort": false,
+        "bInfo": false,
+        "bAutoWidth": true,
+        "bLengthChange": false,
+        "sDom": 'T<"clear">lfrtip',
+        "oTableTools": {
+            "sSwfPath": "/Content/swf/copy_cvs_xls_pdf.swf"
+
+
+        },
+        "fnInitComplete": function () {
+            var tableWrapper = $('#MonthlyTable' + '_wrapper');
+
+            //remove widths that shouldn't be there on the datatable
+            tableWrapper.css('width', '');
+            tableWrapper.find('.dataTables_scrollHead').css('width', '');
+            tableWrapper.find('.dataTables_scrollHeadInner').css('width', '');
+            tableWrapper.find('.dataTables_scrollHeadInner').find('table').css('width', '');
+
+            var tableDataContent = tableWrapper.find('.dataTables_scrollBody')[0];
+            var tableHasScrollBar = (tableDataContent.scrollHeight > tableDataContent.clientHeight);
+
+            //fixes header aligment issues in all major browsers
+            if (tableHasScrollBar)
+                tableWrapper.find('.dataTables_scrollHead').css('margin-right', '15px');
+
+            //fixes table data stretchyness in <IE8
+            if (navigator.appVersion.indexOf("MSIE 6") != -1 || navigator.appVersion.indexOf("MSIE 7") != -1) {
+                $('#' + tableId).css('width', '');
+                tableWrapper.find('.dataTables_scrollBody').css('overflow-x', 'hidden');
+            }
+        }
+    });
+    
+    </script>

@@ -1,0 +1,9 @@
+﻿@model List<Data.Domain.UploadedFile>
+
+<select id="fileList" >
+                <option value="0">Select File to view</option>
+                @foreach (var file in Model)
+                {
+                    <option value="@Url.Content(file.FilePath)">@file.FileName</option>
+                }
+            </select>

@@ -1,0 +1,26 @@
+﻿@model Data.Domain.Lead
+
+@{
+    ViewBag.Title = "Call";
+}
+
+<h2>Call</h2>
+
+<fieldset>
+        <legend>Business Information</legend>
+        Company Name 
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CompanyName)
+            @Html.ValidationMessageFor(model => model.CompanyName)
+        </div>
+         Contact Name 
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CompanyName)
+            @Html.ValidationMessageFor(model => model.CompanyName)
+        </div>
+@*         Assigned AA 
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AssignedAA)
+            @Html.ValidationMessageFor(model => model.AssignedAA)
+        </div>*@
+</fieldset>

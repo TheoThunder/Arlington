@@ -1,0 +1,227 @@
+﻿@model Web.ViewModel.CallCardViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<script src="@Url.Content("~/Scripts/jquery-1.4.4js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#calcfield").focus();
+    });
+
+    onload = function () { attachHandlers(); }
+
+    function attachHandlers() {
+        var the_nums = document.getElementsByName("number");
+        for (var i = 0; i < the_nums.length; i++) { the_nums[i].onclick = inputNumbers; }
+    }
+
+    function inputNumbers() {
+        var the_field = document.getElementById('calcfield');
+        var the_value = this.value;
+        switch (the_value) {
+            case 'Call':
+                the_field.value = Number(the_field.value);
+                $.ajax({
+                    type: "POST",
+                    url: "/CallCard/Calling",
+                    data: "text=" + the_field.value,
+                    success: function(result){
+                        alert(result); 
+                        var left = (screen.width / 2) - (400 / 2);
+                        var top = (screen.height / 2) - (400 / 2);
+                        window.open("https://192.168.2.89/main?cmd=new_switchboard", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + 400 + ', height=' + 400 + ', top=' + top + ', left=' + left);
+                    }
+                });
+
+            break;
+        case 'End Call':
+            the_field.value = Number(the_field.value);
+            $.ajax({
+                type: "POST",
+                url: "/CallCard/EndCall",
+                data: "text=" + the_field.value,
+                success: function (result) {
+                    alert(result);
+                    var left = (screen.width / 2) - (400/ 2);
+                    var top = (screen.height / 2) - (400 / 2);
+                    window.open("https://192.168.2.89/main?cmd=new_switchboard", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + 400 + ', height=' + 400 + ', top=' + top + ', left=' + left);
+                }
+            });
+
+            break;
+            default: document.getElementById("calcfield").value += the_value;
+                break;
+        }
+        document.getElementById('calcfield').focus();
+        return true;
+    }
+
+   
+    
+    function getValue() {
+        alert(document.getElementById('calcfield').value);
+        document.getElementById('calcfield').focus();
+        return false;
+    }
+
+</script>
+
+<style type="text/css">
+
+.btns{
+ 	background: -moz-linear-gradient(top, rgba(13,40,68,0.8) 1%, rgba(13,40,68,0.91) 11%, rgba(15,45,78,1) 19%, rgba(22,66,119,1) 50%, rgba(17,48,86,1) 81%, rgba(15,42,76,0.89) 91%, rgba(15,42,76,0.8) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(13,40,68,0.8)), color-stop(11%,rgba(13,40,68,0.91)), color-stop(19%,rgba(15,45,78,1)), color-stop(50%,rgba(22,66,119,1)), color-stop(81%,rgba(17,48,86,1)), color-stop(91%,rgba(15,42,76,0.89)), color-stop(100%,rgba(15,42,76,0.8)));
+background: -webkit-linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+background: -o-linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+background: -ms-linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0d2844', endColorstr='#cc0f2a4c',GradientType=0 );
+background: linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    width: 67px;
+    height: 50px;
+    border-radius: 3px 3px 3px 3px;
+}
+.btns1{
+ 	background: -moz-linear-gradient(top, rgba(13,40,68,0.8) 1%, rgba(13,40,68,0.91) 11%, rgba(15,45,78,1) 19%, rgba(22,66,119,1) 50%, rgba(17,48,86,1) 81%, rgba(15,42,76,0.89) 91%, rgba(15,42,76,0.8) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(13,40,68,0.8)), color-stop(11%,rgba(13,40,68,0.91)), color-stop(19%,rgba(15,45,78,1)), color-stop(50%,rgba(22,66,119,1)), color-stop(81%,rgba(17,48,86,1)), color-stop(91%,rgba(15,42,76,0.89)), color-stop(100%,rgba(15,42,76,0.8)));
+background: -webkit-linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+background: -o-linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+background: -ms-linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0d2844', endColorstr='#cc0f2a4c',GradientType=0 );
+background: linear-gradient(top, rgba(13,40,68,0.8) 1%,rgba(13,40,68,0.91) 11%,rgba(15,45,78,1) 19%,rgba(22,66,119,1) 50%,rgba(17,48,86,1) 81%,rgba(15,42,76,0.89) 91%,rgba(15,42,76,0.8) 100%);
+    
+    color: White;
+    font-size: 12px;
+    font-weight: bold;
+    width: 207px;
+    height: 50px;
+    border-radius: 3px 3px 3px 3px;
+
+}
+.number1
+{
+    Color: White;
+    font-size: 18px;
+    width: 220px;
+    background:transparent;
+    border:none;
+    text-align: center;
+    font-weight: bold;
+}
+.kpad
+{
+   background: -moz-linear-gradient(top, rgba(21,61,109,0.8) 1%, rgba(21,61,109,0.91) 11%, rgba(23,67,120,1) 19%, rgba(31,91,165,1) 50%, rgba(23,66,123,1) 81%, rgba(21,58,109,0.89) 91%, rgba(21,58,109,0.8) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(21,61,109,0.8)), color-stop(11%,rgba(21,61,109,0.91)), color-stop(19%,rgba(23,67,120,1)), color-stop(50%,rgba(31,91,165,1)), color-stop(81%,rgba(23,66,123,1)), color-stop(91%,rgba(21,58,109,0.89)), color-stop(100%,rgba(21,58,109,0.8)));
+background: -webkit-linear-gradient(top, rgba(21,61,109,0.8) 1%,rgba(21,61,109,0.91) 11%,rgba(23,67,120,1) 19%,rgba(31,91,165,1) 50%,rgba(23,66,123,1) 81%,rgba(21,58,109,0.89) 91%,rgba(21,58,109,0.8) 100%);
+background: -o-linear-gradient(top, rgba(21,61,109,0.8) 1%,rgba(21,61,109,0.91) 11%,rgba(23,67,120,1) 19%,rgba(31,91,165,1) 50%,rgba(23,66,123,1) 81%,rgba(21,58,109,0.89) 91%,rgba(21,58,109,0.8) 100%);
+background: -ms-linear-gradient(top, rgba(21,61,109,0.8) 1%,rgba(21,61,109,0.91) 11%,rgba(23,67,120,1) 19%,rgba(31,91,165,1) 50%,rgba(23,66,123,1) 81%,rgba(21,58,109,0.89) 91%,rgba(21,58,109,0.8) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc153d6d', endColorstr='#cc153a6d',GradientType=0 );
+background: linear-gradient(top, rgba(21,61,109,0.8) 1%,rgba(21,61,109,0.91) 11%,rgba(23,67,120,1) 19%,rgba(31,91,165,1) 50%,rgba(23,66,123,1) 81%,rgba(21,58,109,0.89) 91%,rgba(21,58,109,0.8) 100%);
+    border: solid 2px #1E5999;
+}
+</style>
+
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+                @if (Model.user.AssignedRoleId == 1)
+                 {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("AppointmentQueue", "Lead", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+                 }
+             @if (Model.user.AssignedRoleId == 2)
+             {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("AppointmentQueue", "Lead", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+             }
+               @if (Model.user.AssignedRoleId == 3)
+               {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li>  
+                    <li><a href="#">Appointments</a></li>
+   				  </ul></div>
+                <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+                    <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+               }
+               
+			
+               
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+
+<form name="CalcForm" onsubmit="getValue()" AUTOCOMPLETE="OFF">
+
+
+<div id="keypad" class="kpad" style="width:17%; margin-top:78px;  margin-left:auto; margin-right:auto">
+    <div style="margin-left:10px; margin-top: 20px">
+     <input type="text" class="number1" name="calcvalues" id="calcfield" value="" >
+    </div>
+
+
+    <br />
+    <div id="row1" style="margin-left:15px; margin-bottom: 3px;">
+     <input type="button" name="number" value="1" id="_1" class="btns" style="border:none;">
+     <input type="button" name="number" value="2" id="_2" class="btns" style="border:none;">
+     <input type="button" name="number" value="3" id="_3" class="btns" style="border:none;">
+    </div>
+  
+
+    
+    <div id="row2" style="margin-left:15px; margin-bottom: 3px;">
+     <input type="button" name="number" value="4" id="_4" class="btns" style="border:none;">
+     <input type="button" name="number" value="5" id="_5" class="btns" style="border:none;">
+     <input type="button" name="number" value="6" id="_6" class="btns" style="border:none;">
+    </div>
+
+
+    
+    <div id="row3" style="margin-left:15px; margin-bottom: 3px;">
+     <input type="button" name="number" value="7" id="_7" class="btns" style="border:none;">
+     <input type="button" name="number" value="8" id="_8" class="btns" style="border:none;">
+     <input type="button" name="number" value="9" id="_9" class="btns" style="border:none;">
+    </div>
+
+
+    
+    <div id="row4" style="margin-left:15px; margin-bottom: 3px;">
+     <input type="button" name="number" value="Call" class="btns" id="Call"  style="border:none;">
+     <input type="button" name="number" value="0" id="_0" class="btns" style="border:none;">
+     <input type="button" name="number" value="End Call" id="chgsign" class="btns" style="border:none;">
+    </div>
+
+
+    <br />
+    <div id= "row5" style="margin-left:15px; padding-bottom: 10px">
+    <input type="reset" class ="btns1" value = "Reset" style="border:none">
+    </div>
+</div>
+</form>
+</div>
+</div>
+
+

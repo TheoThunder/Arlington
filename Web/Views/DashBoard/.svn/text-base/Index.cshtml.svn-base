@@ -1,0 +1,177 @@
+﻿@model Web.ViewModel.DashboardViewModel
+@{
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript" src="@Url.Content("~/VisiFire/Visifire2.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery-1.6.1.min.js")"></script>
+<script type="text/javascript">
+    // Returns XmlHttp object
+    function GetXMLHttpObj() {
+        var objXmlHttp; // XMLHttpRequest object
+        try {
+            // Firefox, Opera 8.0+, Safari
+            objXmlHttp = new XMLHttpRequest();
+        }
+        catch (e) {
+            // Internet Explorer
+            try {
+                objXmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    objXmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {
+                    alert("Your browser does not support AJAX!");
+                    return null;
+                }
+            }
+        }
+        return objXmlHttp;
+    }
+    // Loads Visifire Chart
+    //var xmlHttp1 = GetXMLHttpObj();
+    //var xmlHttp2 = GetXMLHttpObj();
+    //var xmlHttp3 = GetXMLHttpObj();
+    var aw = screen.availWidth - 20;
+    var ah = 500//screen.availHeight;
+    var pos = 0;
+    var vChart1 = new Visifire2('@Url.Content("~/Visifire/SL.VisiFire.Charts.xap")', "MyChart1", aw, ah * 0.5);
+    var vChart2 = new Visifire2('@Url.Content("~/Visifire/SL.VisiFire.Charts.xap")', "MyChart2", aw * 0.70, ah * 0.5);
+    var vChart3 = new Visifire2('@Url.Content("~/Visifire/SL.VisiFire.Charts.xap")', "MyChart3", aw * 0.30, ah * 0.5);
+    function update() {
+        vChart1.setDataUri("Dashboard" + "?text=GetXML1&aw=" + aw + "&ah=" + ah + "&pos=" + pos);
+        vChart1.render("VisifireChart1")
+        vChart2.setDataUri("Dashboard" + "?text=GetXML2&aw=" + aw + "&ah=" + ah + "&pos=" + pos);
+        vChart2.render("VisifireChart2")
+        /*vChart1.preLoad = function (args) {
+            if (args.length > 0) {
+                chart = args[0];   // Chart reference.
+                vChart1.setDataUri("UpdateDashboard" + "?text=GetXML1&aw=" + aw + "&ah=" + ah);
+            }
+        }
+        vChart1.render("VisifireChart1")*/
+        pos = pos + 1;
+        setTimeout(update, 60000);
+    }
+    function onLoad() {
+        vChart1.setDataUri("Dashboard" + "?text=GetXML1&aw=" + aw + "&ah=" + ah + "&pos=" + pos);
+        vChart1.render("VisifireChart1")
+        vChart2.setDataUri("Dashboard" + "?text=GetXML2&aw=" + aw + "&ah=" + ah + "&pos=" + pos);
+        vChart2.render("VisifireChart2")
+        vChart3.setDataUri("Dashboard" + "?text=GetXML3&aw=" + aw + "&ah=" + ah + "&pos=" + pos);
+        vChart3.render("VisifireChart3")
+        /*$(document).ready(function onLoad() {
+        $.when(vChart1.setDataUri("Dashboard" + "?text=GetXML1&aw=" + aw + "&ah=" + ah + "&pos=" + pos)).done(
+            vChart1.render("VisifireChart1"),
+            $.when(vChart2.setDataUri("Dashboard" + "?text=GetXML2&aw=" + aw + "&ah=" + ah + "&pos=" + pos)).done(
+                vChart2.render("VisifireChart2"),
+                $.when(vChart3.setDataUri("Dashboard" + "?text=GetXML3&aw=" + aw + "&ah=" + ah + "&pos=" + pos)).done(
+                    vChart3.render("VisifireChart3"),
+                    pos = pos + 1,
+                    setTimeout(onLoad, 60000))));*/
+        /*xmlHttp1.onreadystatechange = function () {
+            if (xmlHttp1.readyState == 4) {
+                
+                vChart1.setDataXml(xmlHttp1.responseText);
+                vChart1.render("VisifireChart1");
+            }
+        }
+        // Sending request
+        xmlHttp1.open("GET", "Dashboard" + "?text=GetXML1&aw=" + aw + "&ah=" + ah, true);
+        xmlHttp1.send(null);
+        xmlHttp2.onreadystatechange = function () {
+            if (xmlHttp2.readyState == 4) {
+                vChart2.setDataXml(xmlHttp2.responseText);
+                vChart2.render("VisifireChart2");
+            }
+        }
+        // Sending request
+        xmlHttp2.open("GET", "Dashboard" + "?text=GetXML2&aw=" + aw + "&ah=" + ah, true);
+        xmlHttp2.send(null);
+        xmlHttp3.onreadystatechange = function () {
+            if (xmlHttp3.readyState == 4) {
+                vChart3.setDataXml(xmlHttp3.responseText);
+                vChart3.render("VisifireChart3");
+            }
+        }
+        // Sending request
+        xmlHttp3.open("GET", "Dashboard" + "?text=GetXML3&aw=" + aw + "&ah=" + ah, true);
+        xmlHttp3.send(null);*/
+        pos = pos + 1;
+        setTimeout(update, 60000);
+    }
+</script>
+<style type="text/css">
+
+#VisifireChart1
+#VisifireChart2
+#VisifireChart3
+
+</style>
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>
+@if (Model.user.UserName != "Display.Dashboard")
+{
+             if (Model.user.AssignedRoleId == 1)
+			 {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                 <div class="dashbon"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+			 }
+             if (Model.user.AssignedRoleId == 2)
+			 {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashbon"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+			 }
+             if (Model.user.AssignedRoleId == 3)
+			   {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                   <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+                <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+			   }
+               if (Model.user.AssignedRoleId == 4)
+			   {
+                   <div class="hometabaa"><a href="@Url.Action("Index", "Home")">Home</a></div>
+			        <div class="todotabaa"><a href="#">To Do List</a>
+                  <ul class="todolistaa" >
+   				    <li><a href="@Url.Action("ColdLeads", "Lead")">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+   				  </ul></div>
+			   }
+            
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+}
+ </div>
+<div class="content">
+<body onload="onLoad()">
+    <div id="VisifireChart1" style="background:#DAD7C6; position:relative; float:left; width:100%">
+    </div>
+    <div id="VisifireChart2" style="background:#DAD7C6; position:relative; float:left; width:70%">
+    </div>
+    <div id="VisifireChart3" style="background:#DAD7C6; position:relative; float:left; width:30%">
+    </div>
+</body>
+</div>
+</div>
+
+<!--<h2>Index</h2>-->

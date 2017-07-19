@@ -1,0 +1,67 @@
+END
+Equipment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/trinitycrminternal/!svn/ver/98/trunk/Data/Domain/Equipment.cs
+END
+UploadedFile.cs
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/trinitycrminternal/!svn/ver/290/trunk/Data/Domain/UploadedFile.cs
+END
+Zone.cs
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/trinitycrminternal/!svn/ver/98/trunk/Data/Domain/Zone.cs
+END
+TicketHistory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/repos/trinitycrminternal/!svn/ver/455/trunk/Data/Domain/TicketHistory.cs
+END
+UserZone.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/trinitycrminternal/!svn/ver/426/trunk/Data/Domain/UserZone.cs
+END
+Role.cs
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/trinitycrminternal/!svn/ver/87/trunk/Data/Domain/Role.cs
+END
+ZipCodes.cs
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/trinitycrminternal/!svn/ver/323/trunk/Data/Domain/ZipCodes.cs
+END
+LeadAccessRecord.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/trinitycrminternal/!svn/ver/60/trunk/Data/Domain/LeadAccessRecord.cs
+END
+CalendarSettings.cs
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/repos/trinitycrminternal/!svn/ver/60/trunk/Data/Domain/CalendarSettings.cs
+END
+ImportedLead.cs
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/repos/trinitycrminternal/!svn/ver/264/trunk/Data/Domain/ImportedLead.cs
+END
+Permission.cs
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/repos/trinitycrminternal/!svn/ver/87/trunk/Data/Domain/Permission.cs
+END

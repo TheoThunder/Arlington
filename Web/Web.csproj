@@ -1,0 +1,663 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7BB6F928-E1A2-4F5D-81A6-95904F925141}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Web</RootNamespace>
+    <AssemblyName>Web</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Content\date_picker_jui.css</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.1.1\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\RelatedLibraries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\RelatedLibraries\Ninject.Web.Mvc\lib\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc">
+      <HintPath>..\RelatedLibraries\Ninject.Web.Mvc\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="SLVisifire.Charts, Version=2.2.3.0, Culture=neutral, PublicKeyToken=e1555b029ff71bd3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RelatedLibraries\SLVisifire.Charts.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\AAPSReportController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AppointmentQueueController.cs" />
+    <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
+    <Compile Include="Controllers\CallCardController.cs" />
+    <Compile Include="Controllers\DashBoardController.cs" />
+    <Compile Include="Controllers\GroupPPReportController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImportLeadController.cs" />
+    <Compile Include="Controllers\ImportLeadListController.cs" />
+    <Compile Include="Controllers\LeadController.cs" />
+    <Compile Include="Controllers\LeadListController.cs" />
+    <Compile Include="Controllers\LeadQueueController.cs" />
+    <Compile Include="Controllers\MonthlyVolumeController.cs" />
+    <Compile Include="Controllers\ReportListController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\RescheduleController.cs" />
+    <Compile Include="Controllers\SAPSReportController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Controllers\TicketReportController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserListController.cs" />
+    <Compile Include="Controllers\ZoneController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\FileUploadJsonResult.cs" />
+    <Compile Include="Infrastructure\Authentication\TrinityMemshipProvider.cs" />
+    <Compile Include="Infrastructure\Authentication\TrinityPrincipal.cs" />
+    <Compile Include="Infrastructure\Authentication\TrinityRoleProvider.cs" />
+    <Compile Include="Infrastructure\Ninject\PGRepositoryModule.cs" />
+    <Compile Include="Infrastructure\Ninject\GenericModule.cs" />
+    <Compile Include="Infrastructure\Ninject\StaticRepositoryModule.cs" />
+    <Compile Include="Models\AAPSReportViewModel.cs" />
+    <Compile Include="Models\AccountInformationViewModel.cs" />
+    <Compile Include="Models\AllAppointmentsViewModel.cs" />
+    <Compile Include="Models\AllCardsViewModel.cs" />
+    <Compile Include="Models\AppointmentSheetViewModel.cs" />
+    <Compile Include="Models\BusinessInformationViewModel.cs" />
+    <Compile Include="Models\CalendarEventViewModel.cs" />
+    <Compile Include="Models\CallBackViewModel.cs" />
+    <Compile Include="Models\CallCardViewModel.cs" />
+    <Compile Include="Models\CardStackViewModel.cs" />
+    <Compile Include="Models\ColdLeadsViewModel.cs" />
+    <Compile Include="Models\DashboardViewModel.cs" />
+    <Compile Include="Models\ErrorViewModel.cs" />
+    <Compile Include="Models\FollowUpViewModel.cs" />
+    <Compile Include="Models\GroupPPReportViewModel.cs" />
+    <Compile Include="Models\ImportLeadViewModel.cs" />
+    <Compile Include="Models\LeadListViewModel.cs" />
+    <Compile Include="Models\LeadQueueViewModel.cs" />
+    <Compile Include="Models\MonthlyVolumeReportViewModel.cs" />
+    <Compile Include="Models\ProfileViewModel.cs" />
+    <Compile Include="Models\ReportsViewModel.cs" />
+    <Compile Include="Models\SAPSReportViewModel.cs" />
+    <Compile Include="Models\ScheduledAppointmentViewModel.cs" />
+    <Compile Include="Models\TicketAccountListViewModel.cs" />
+    <Compile Include="Models\TicketCreateViewModel.cs" />
+    <Compile Include="Models\TicketReportViewModel.cs" />
+    <Compile Include="Models\TicketViewModel.cs" />
+    <Compile Include="Models\UserCreateViewModel.cs" />
+    <Compile Include="Models\WarmLeadsViewModel.cs" />
+    <Compile Include="Models\ZoneManagementViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Abstract\ILeadProfileService.cs" />
+    <Compile Include="Services\LeadProfileService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\date_picker_jui.css" />
+    <Content Include="Content\demo.css" />
+    <Content Include="Content\demo1.css" />
+    <Content Include="Content\demo_page.css" />
+    <Content Include="Content\demo_table.css" />
+    <Content Include="Content\demo_table_jui.css" />
+    <Content Include="Content\fileuploader.css" />
+    <Content Include="Content\fullcalendar.css" />
+    <Content Include="Content\images\add group icon.png" />
+    <Content Include="Content\images\Add-icon.png" />
+    <Content Include="Content\images\Attach-icon.png" />
+    <Content Include="Content\images\background.png" />
+    <Content Include="Content\images\back_disabled.jpg" />
+    <Content Include="Content\images\back_enabled.jpg" />
+    <Content Include="Content\images\Banner.png" />
+    <Content Include="Content\images\bar1.png" />
+    <Content Include="Content\images\browse-icon-list.gif" />
+    <Content Include="Content\images\busy.gif" />
+    <Content Include="Content\images\CALENDAR-ICON.gif" />
+    <Content Include="Content\images\Calendar.png" />
+    <Content Include="Content\images\calendar2.jpg" />
+    <Content Include="Content\images\calendar_1.jpg" />
+    <Content Include="Content\images\call icon.png" />
+    <Content Include="Content\images\CallCard.png" />
+    <Content Include="Content\images\ChartPie.png" />
+    <Content Include="Content\images\Check-icon.png" />
+    <Content Include="Content\images\collection_account_icon.jpg" />
+    <Content Include="Content\images\color.png" />
+    <Content Include="Content\images\colorpicker.png" />
+    <Content Include="Content\images\copy.png" />
+    <Content Include="Content\images\copy_hover.png" />
+    <Content Include="Content\images\create_account_icon.gif" />
+    <Content Include="Content\images\csv.png" />
+    <Content Include="Content\images\csv_hover.png" />
+    <Content Include="Content\images\ctick.png" />
+    <Content Include="Content\images\cursor-icon.jpg" />
+    <Content Include="Content\images\dashboard_logo.gif" />
+    <Content Include="Content\images\Delete-icon.png" />
+    <Content Include="Content\images\delete.jpg" />
+    <Content Include="Content\images\dtick.png" />
+    <Content Include="Content\images\EdAcct.png" />
+    <Content Include="Content\images\edit-delete-icon.png" />
+    <Content Include="Content\images\edit-icon.png" />
+    <Content Include="Content\images\editp.png" />
+    <Content Include="Content\images\etick.png" />
+    <Content Include="Content\images\Events.png" />
+    <Content Include="Content\images\favicon.ico" />
+    <Content Include="Content\images\Folders.png" />
+    <Content Include="Content\images\forward_disabled.jpg" />
+    <Content Include="Content\images\forward_enabled.jpg" />
+    <Content Include="Content\images\graybar.jpg" />
+    <Content Include="Content\images\Green.png" />
+    <Content Include="Content\images\grid.gif" />
+    <Content Include="Content\images\Happy Hour-icon.gif" />
+    <Content Include="Content\images\HPtemplate-01.png" />
+    <Content Include="Content\images\HPtemplate-02.png" />
+    <Content Include="Content\images\HPtemplate-03.png" />
+    <Content Include="Content\images\HPtemplate-04.png" />
+    <Content Include="Content\images\HPtemplate-05.png" />
+    <Content Include="Content\images\HPtemplate-06.png" />
+    <Content Include="Content\images\HPtemplate-07.png" />
+    <Content Include="Content\images\HPtemplate-08.png" />
+    <Content Include="Content\images\HPtemplate-09.png" />
+    <Content Include="Content\images\HPtemplate.png" />
+    <Content Include="Content\images\icon call.png" />
+    <Content Include="Content\images\icon_birthday.gif" />
+    <Content Include="Content\images\IgnoreCall.png" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\Logintemplate-01.png" />
+    <Content Include="Content\images\meta100.png" />
+    <Content Include="Content\images\MNApp.png" />
+    <Content Include="Content\images\NewAcc.png" />
+    <Content Include="Content\images\pbar-ani.gif" />
+    <Content Include="Content\images\pdf.png" />
+    <Content Include="Content\images\pdf_hover.png" />
+    <Content Include="Content\images\PhoneCall.png" />
+    <Content Include="Content\images\print.png" />
+    <Content Include="Content\images\print_hover.png" />
+    <Content Include="Content\images\profilesicon.png" />
+    <Content Include="Content\images\profileviewattac.png" />
+    <Content Include="Content\images\profileviewbut.png" />
+    <Content Include="Content\images\Red.png" />
+    <Content Include="Content\images\SaveApp.png" />
+    <Content Include="Content\images\SaveCard.png" />
+    <Content Include="Content\images\Setting-icon.png" />
+    <Content Include="Content\createuser.css" />
+    <Content Include="Content\images\Settings.png" />
+    <Content Include="Content\images\sort_asc.png" />
+    <Content Include="Content\images\sort_asc_disabled.png" />
+    <Content Include="Content\images\sort_both.png" />
+    <Content Include="Content\images\sort_desc.png" />
+    <Content Include="Content\images\sort_desc_disabled.png" />
+    <Content Include="Content\images\tickets128.png" />
+    <Content Include="Content\images\time-zones.htm_txt_usa.gif" />
+    <Content Include="Content\images\transparentpixel.gif" />
+    <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\images\upcoming-events.jpg" />
+    <Content Include="Content\images\Users.png" />
+    <Content Include="Content\images\Yellow.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery.fileupload-ui.css" />
+    <Content Include="Content\jquery.managercalendar - Copy.css" />
+    <Content Include="Content\jquery.weekcalendar.css" />
+    <Content Include="Content\pagination.css" />
+    <Content Include="Content\reset.css" />
+    <Content Include="Content\swf\copy_cvs_xls.swf" />
+    <Content Include="Content\swf\copy_cvs_xls_pdf.swf" />
+    <Content Include="Content\TableTools_JUI.css" />
+    <Content Include="Content\timePicker.css" />
+    <Content Include="css\colorpicker\colorpicker.css" />
+    <Content Include="css\colorpicker\images\blank.gif" />
+    <Content Include="css\colorpicker\images\colorpicker_background.png" />
+    <Content Include="css\colorpicker\images\colorpicker_hex.png" />
+    <Content Include="css\colorpicker\images\colorpicker_hsb_b.png" />
+    <Content Include="css\colorpicker\images\colorpicker_hsb_h.png" />
+    <Content Include="css\colorpicker\images\colorpicker_hsb_s.png" />
+    <Content Include="css\colorpicker\images\colorpicker_indic.gif" />
+    <Content Include="css\colorpicker\images\colorpicker_overlay.png" />
+    <Content Include="css\colorpicker\images\colorpicker_rgb_b.png" />
+    <Content Include="css\colorpicker\images\colorpicker_rgb_g.png" />
+    <Content Include="css\colorpicker\images\colorpicker_rgb_r.png" />
+    <Content Include="css\colorpicker\images\colorpicker_select.gif" />
+    <Content Include="css\colorpicker\images\colorpicker_submit.png" />
+    <Content Include="css\colorpicker\images\custom_background.png" />
+    <Content Include="css\colorpicker\images\custom_hex.png" />
+    <Content Include="css\colorpicker\images\custom_hsb_b.png" />
+    <Content Include="css\colorpicker\images\custom_hsb_h.png" />
+    <Content Include="css\colorpicker\images\custom_hsb_s.png" />
+    <Content Include="css\colorpicker\images\custom_indic.gif" />
+    <Content Include="css\colorpicker\images\custom_rgb_b.png" />
+    <Content Include="css\colorpicker\images\custom_rgb_g.png" />
+    <Content Include="css\colorpicker\images\custom_rgb_r.png" />
+    <Content Include="css\colorpicker\images\custom_submit.png" />
+    <Content Include="css\colorpicker\images\select.png" />
+    <Content Include="css\colorpicker\images\select2.png" />
+    <Content Include="css\colorpicker\images\slider.png" />
+    <Content Include="css\colorpicker\layout.css" />
+    <Content Include="css\frontierCalendar\images\bw-tree.jpg" />
+    <Content Include="css\frontierCalendar\images\dayCellCurrentMonth.png" />
+    <Content Include="css\frontierCalendar\images\dayCellOtherMonth.png" />
+    <Content Include="css\frontierCalendar\images\dayCellToday.png" />
+    <Content Include="css\frontierCalendar\jquery-frontier-cal-1.3.2.css" />
+    <Content Include="css\jquery-ui\flick\images\ui-anim_basic_16x16.gif" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_flat_0_eeeeee_40x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_flat_55_ffffff_40x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_highlight-soft_100_f6f6f6_1x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_highlight-soft_25_0073ea_1x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-bg_highlight-soft_50_dddddd_1x100.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-icons_0073ea_256x240.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-icons_454545_256x240.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-icons_666666_256x240.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-icons_ff0084_256x240.png" />
+    <Content Include="css\jquery-ui\flick\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="css\jquery-ui\flick\jquery-ui-1.8.2.custom.css" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="css\jquery-ui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="css\jquery-ui\smoothness\jquery-ui-1.8.1.custom.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="js\colorpicker\colorpicker.js" />
+    <Content Include="js\colorpicker\eye.js" />
+    <Content Include="js\colorpicker\layout.js" />
+    <Content Include="js\colorpicker\utils.js" />
+    <Content Include="js\frontierCalendar\jquery-frontier-cal-1.3.2.js" />
+    <Content Include="js\frontierCalendar\jquery-frontier-cal-1.3.2.min.js" />
+    <Content Include="js\jquery-core\jquery-1.4.2-ie-fix.js" />
+    <Content Include="js\jquery-core\jquery-1.4.2-ie-fix.min.js" />
+    <Content Include="js\jquery-core\jquery-1.4.2.js" />
+    <Content Include="js\jquery-core\jquery-1.4.2.min.js" />
+    <Content Include="js\jquery-core\README-IE-FIX.TXT" />
+    <Content Include="js\jquery-qtip-1.0.0-rc3140944\jquery.qtip-1.0.0-rc3.min.js" />
+    <Content Include="js\jquery-qtip-1.0.0-rc3140944\jquery.qtip-1.0.js" />
+    <Content Include="js\jquery-qtip-1.0.0-rc3140944\jquery.qtip-1.0.min.js" />
+    <Content Include="js\jquery-ui\flick\jquery-ui-1.8.2.custom.min.js" />
+    <Content Include="js\jquery-ui\smoothness\jquery-ui-1.8.1.custom.min.js" />
+    <Content Include="js\lib\jshashtable-2.1.js" />
+    <Content Include="Scripts\css\colorpicker\colorpicker.css" />
+    <Content Include="Scripts\css\colorpicker\images\blank.gif" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_background.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_hex.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_hsb_b.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_hsb_h.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_hsb_s.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_indic.gif" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_overlay.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_rgb_b.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_rgb_g.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_rgb_r.png" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_select.gif" />
+    <Content Include="Scripts\css\colorpicker\images\colorpicker_submit.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_background.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_hex.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_hsb_b.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_hsb_h.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_hsb_s.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_indic.gif" />
+    <Content Include="Scripts\css\colorpicker\images\custom_rgb_b.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_rgb_g.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_rgb_r.png" />
+    <Content Include="Scripts\css\colorpicker\images\custom_submit.png" />
+    <Content Include="Scripts\css\colorpicker\images\select.png" />
+    <Content Include="Scripts\css\colorpicker\images\select2.png" />
+    <Content Include="Scripts\css\colorpicker\images\slider.png" />
+    <Content Include="Scripts\css\colorpicker\layout.css" />
+    <Content Include="Scripts\css\frontierCalendar\images\bw-tree.jpg" />
+    <Content Include="Scripts\css\frontierCalendar\images\dayCellCurrentMonth.png" />
+    <Content Include="Scripts\css\frontierCalendar\images\dayCellOtherMonth.png" />
+    <Content Include="Scripts\css\frontierCalendar\images\dayCellToday.png" />
+    <Content Include="Scripts\css\frontierCalendar\jquery-frontier-cal-1.3.2.css" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-anim_basic_16x16.gif" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_flat_0_eeeeee_40x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_flat_55_ffffff_40x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_highlight-soft_100_f6f6f6_1x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_highlight-soft_25_0073ea_1x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-bg_highlight-soft_50_dddddd_1x100.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-icons_0073ea_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-icons_454545_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-icons_666666_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-icons_ff0084_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\flick\jquery-ui-1.8.2.custom.css" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Scripts\css\jquery-ui\smoothness\jquery-ui-1.8.1.custom.css" />
+    <Content Include="Scripts\demo.js" />
+    <Content Include="Scripts\fileuploader.js" />
+    <Content Include="Scripts\fullcalendar.js" />
+    <Content Include="Scripts\DataTablesClone.js" />
+    <Content Include="Scripts\fullcalendar.min.js" />
+    <Content Include="Scripts\jquery-1.6.1.min.js" />
+    <Content Include="Scripts\jquery.autotab-1.1b.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.colorPicker.js" />
+    <Content Include="Scripts\jquery.dataTables.js" />
+    <Content Include="Scripts\jquery.fileupload-ui.js" />
+    <Content Include="Scripts\jquery.fileupload.js" />
+    <Content Include="Scripts\jquery.form.js" />
+    <Content Include="Scripts\jquery.jeditable.js" />
+    <Content Include="Scripts\jquery.managercalendar.js" />
+    <Content Include="Scripts\jquery.maskedinput-1.2.2.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="Scripts\jquery.pagination.js" />
+    <Content Include="Scripts\jquery.timePicker.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.weekcalendar.js" />
+    <Content Include="Scripts\js\colorpicker\colorpicker.js" />
+    <Content Include="Scripts\js\colorpicker\eye.js" />
+    <Content Include="Scripts\js\colorpicker\layout.js" />
+    <Content Include="Scripts\js\colorpicker\utils.js" />
+    <Content Include="Scripts\js\frontierCalendar\jquery-frontier-cal-1.3.2.js" />
+    <Content Include="Scripts\js\frontierCalendar\jquery-frontier-cal-1.3.2.min.js" />
+    <Content Include="Scripts\js\jquery-core\jquery-1.4.2-ie-fix.js" />
+    <Content Include="Scripts\js\jquery-core\jquery-1.4.2-ie-fix.min.js" />
+    <Content Include="Scripts\js\jquery-core\jquery-1.4.2.js" />
+    <Content Include="Scripts\js\jquery-core\jquery-1.4.2.min.js" />
+    <Content Include="Scripts\js\jquery-core\README-IE-FIX.TXT" />
+    <Content Include="Scripts\js\jquery-qtip-1.0.0-rc3140944\jquery.qtip-1.0.0-rc3.min.js" />
+    <Content Include="Scripts\js\jquery-qtip-1.0.0-rc3140944\jquery.qtip-1.0.js" />
+    <Content Include="Scripts\js\jquery-qtip-1.0.0-rc3140944\jquery.qtip-1.0.min.js" />
+    <Content Include="Scripts\js\jquery-ui\flick\jquery-ui-1.8.2.custom.min.js" />
+    <Content Include="Scripts\js\jquery-ui\smoothness\jquery-ui-1.8.1.custom.min.js" />
+    <Content Include="Scripts\js\lib\jshashtable-2.1.js" />
+    <Content Include="Scripts\mColorPicker.js" />
+    <Content Include="Scripts\TableTools.js" />
+    <Content Include="Scripts\ZeroClipboard.js" />
+    <Content Include="Views\Lead\AllAppointmentsForLead.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="VisiFire\SL.Visifire.Charts.xap" />
+    <Content Include="VisiFire\Visifire2.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Web.Test.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Lead\EditCard.cshtml" />
+    <Content Include="Views\Lead\_FileList.cshtml" />
+    <None Include="_bin_deployableAssemblies\Microsoft.Web.Infrastructure.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.WebPages.Deployment.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Razor.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Helpers.dll" />
+    <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\" />
+    <Folder Include="ClientBin\" />
+    <Folder Include="Content\themes\" />
+    <Folder Include="js\weekcalendar\" />
+    <Folder Include="Scripts\App_LocalResources\" />
+    <Folder Include="uploads\" />
+    <Folder Include="Views\Nav\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{A6422D1A-3BF8-4B1F-A56D-D7722BDF8C91}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{DD5888CF-8570-4A82-8C2F-0F16040584AA}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lead\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Lead\ColdLeads.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Auth\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\SalesGenie_Imported_-_Cold_Leads.csv" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
+    <Content Include="Views\Lead\Call.cshtml" />
+    <Content Include="Views\Lead\profile.cshtml" />
+    <Content Include="Views\Lead\BusinessInformation.cshtml" />
+    <Content Include="Views\User\Deleted.cshtml" />
+    <Content Include="Views\Lead\AllCardsForLead.cshtml" />
+    <Content Include="Views\Lead\AppointmentSheet.cshtml" />
+    <Content Include="Views\Lead\CreateCard.cshtml" />
+    <Content Include="Views\Account\Create.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Home\indexaa.cshtml" />
+    <Content Include="Views\Home\Indexsa.cshtml" />
+    <Content Include="Views\Lead\CreateAppointment.cshtml" />
+    <Content Include="Views\ImportLead\Index.cshtml" />
+    <Content Include="Views\Lead\FollowUp.cshtml" />
+    <Content Include="Views\Lead\AppointmentQueue.cshtml" />
+    <Content Include="Views\Home\Indexad.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Lead\AllAccountsForLead.cshtml" />
+    <Content Include="Views\LeadQueue\Index.cshtml" />
+    <Content Include="Views\LeadQueue\Profile.cshtml" />
+    <Content Include="Views\Calendar\Calendar.cshtml" />
+    <Content Include="Views\Account\AccountInformation.cshtml" />
+    <Content Include="Views\AppointmentQueue\Index.cshtml" />
+    <Content Include="Views\Lead\CallBack.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\LeadList\Index.cshtml" />
+    <Content Include="Views\Lead\CallProfile.cshtml" />
+    <Content Include="Views\AAPSReport\Index.cshtml" />
+    <Content Include="Views\Lead\WarmLeads.cshtml" />
+    <Content Include="Views\Lead\ScheduledAppointment.cshtml" />
+    <Content Include="Views\Ticket\Index.cshtml" />
+    <Content Include="Views\Ticket\Details.cshtml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Lead\CreateProfile.cshtml" />
+    <Content Include="Views\Lead\Reschedule.cshtml" />
+    <Content Include="Views\Home\Indexcsr.cshtml" />
+    <Content Include="Views\Ticket\Create.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Ticket\AccountList.cshtml" />
+    <Content Include="Views\DashBoard\Index.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\AAPSReport\TotalSummary.cshtml" />
+    <Content Include="Views\AAPSReport\MonthlySummary.cshtml" />
+    <Content Include="Views\SAPSReport\Index.cshtml" />
+    <Content Include="Views\SAPSReport\MonthlySummary.cshtml" />
+    <Content Include="Views\SAPSReport\TotalSummary.cshtml" />
+    <Content Include="Views\TicketReport\Index.cshtml" />
+    <Content Include="Views\TicketReport\MonthlySummary.cshtml" />
+    <Content Include="Views\GroupPPReport\Index.cshtml" />
+    <Content Include="Views\GroupPPReport\MonthlyPerformance.cshtml" />
+    <Content Include="Views\GroupPPReport\WeeklyPerformance.cshtml" />
+    <Content Include="Views\GroupPPReport\SalesAgentPerformance.cshtml" />
+    <Content Include="Views\ReportList\Index.cshtml" />
+    <Content Include="Views\MonthlyVolume\Index.cshtml" />
+    <Content Include="Views\CallCard\Index.cshtml" />
+    <Content Include="Views\MonthlyVolume\MonthlySummary.cshtml" />
+    <Content Include="Views\MonthlyVolume\TotalSummary.cshtml" />
+    <None Include="js\jquery-qtip-1.0.0-rc3140944\INSTALL" />
+    <None Include="js\jquery-qtip-1.0.0-rc3140944\LICENSE" />
+    <None Include="js\jquery-qtip-1.0.0-rc3140944\REQUIREMENTS" />
+    <None Include="Scripts\js\jquery-qtip-1.0.0-rc3140944\INSTALL" />
+    <None Include="Scripts\js\jquery-qtip-1.0.0-rc3140944\LICENSE" />
+    <None Include="Scripts\js\jquery-qtip-1.0.0-rc3140944\REQUIREMENTS" />
+    <Content Include="Views\Calendar\ManCalendar.cshtml" />
+    <Content Include="Views\Lead\CardStack.cshtml" />
+    <Content Include="Views\Ticket\CreateNew.cshtml" />
+    <Content Include="Views\AAPSReport\AppointmentSummary.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Zone\Index.cshtml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>52407</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

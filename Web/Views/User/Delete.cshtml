@@ -1,0 +1,18 @@
+﻿@model Data.Domain.User
+
+@{
+    ViewBag.Title = "Delete" ;
+}
+
+<h2>Delete @Model.UserName</h2>
+
+<h3>Are you sure you want to delete @Model.UserName?</h3>
+
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
+
+

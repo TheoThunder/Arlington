@@ -1,0 +1,221 @@
+﻿@model Web.ViewModel.LeadListViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("../../Content/demo_page.css")" rel="Stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<script src = "@Url.Content("~/Scripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src = "@Url.Content("~/Scripts/jquery.jeditable.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#LeadsTable').dataTable({
+            "sPaginationType": "full_numbers"
+        });
+        oTable1 = $('#LeadsTable').dataTable();
+        $('#myselect').change(function () { oTable1.fnFilter($(this).val(), 6, false) && ($('#ZoneList2').val(), 4, false); });
+        $('#ZoneList2').change(function () { oTable1.fnFilter($(this).val(), 4, false) && ($('#myselect').val(), 6, false); });
+        $('#AssignedAA').change(function () {
+            if ($('#AssignedAA option:selected').text() == "All")
+                oTable1.fnFilter($('#AssignedAA').val(), 8, false);
+            else
+                oTable1.fnFilter($('#AssignedAA option:selected').text(), 8, false);
+        });
+
+        //$('#ZoneList2').change(function () { oTable1.fnFilter($(this).val()); });
+    });
+</script>
+
+<div class="container">
+<div class="header">
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+                @if (Model.user.AssignedRoleId == 1)
+                {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+                }
+             @if (Model.user.AssignedRoleId == 2)
+             {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+             }
+               @if (Model.user.AssignedRoleId == 3)
+               {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                   <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+                <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+               }
+               
+			@if (Model.user.AssignedRoleId == 5)
+               {
+                   <div class="hometabsa"><a href="/home/indexcsr"> Home</a></div>
+                   <div class="tickettabon"><a href="/ticket/index">Tickets</a></div>
+			
+               }
+                
+            <div class="logout"><a href="/auth/login">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >  
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+
+</div>
+<div class="content">
+<div style="float:left; font-size:8pt; margin-top:-50px">Profiles - @DateTime.Today.ToShortDateString()</div>
+
+
+<div style="position:relative; margin-left:auto; margin-right:auto; width: 65%;">
+ 
+ @using (Html.BeginForm("Index", "LeadList", FormMethod.Post, new { id = "DropDown" }))
+ {
+
+             @Html.ValidationSummary(true)
+                 <table style = "left:10px; top:80px; width:auto">
+                        <tr>
+                        <td>
+                        View: 
+                        </td>
+                        <td>
+                       @*@Html.DropDownListFor(model => model.lead.Status, new SelectList(Model.leadstatuslist), new { @id = "myselect" })*@
+                        <select id="myselect" style = "width:100px" >
+                        <option value=" ">All</option>
+                        <option value="Warm Lead">Warm Leads</option>
+                        <option value="customer" >Customers</option>
+                        </select>
+                        </td>
+                        </tr>
+                        <tr>
+                             <td align="left">Zones: </td>                   
+                             <td colspan="2" align="left">@Html.DropDownList("ZoneList2", new SelectList(Model.ZoneDropdown, "ZoneNumber"), "All", new { style = "width:100px" })</td>
+                        </tr>
+            
+                        <tr>
+                             <td align="left">Assigned AA: </td>                   
+                             <td colspan="2" align="left">@Html.DropDownList("AssignedAA", Model.AssignedAAList, "All", new { style = "width:150px" } )</td>
+                        </tr>
+                         
+                </table>
+ }
+   @* @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+    {*@
+    <div class="newemployee" style="position:relative;float:right;">
+    
+        <a href="@Url.Action("CreateProfile", "Lead")">Create Profile</a>
+    
+    </div>
+    @*}*@
+
+@*<div class="newemployee">
+    @Html.ActionLink("Create New", "Create")
+</div>*@
+<table id="LeadsTable" class="display" style= "border:1px solid #000">
+<thead>
+    <tr>
+        <th>
+            Company
+        </th>
+        <th>
+            City
+        </th>
+        <th>
+            State
+        </th>
+        <th>
+            Zip Code
+        </th>
+        <th>
+            Zone
+        </th>
+        <th>
+            Phone
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+        # of Accounts
+        </th>
+        <th>
+        Assigned AA
+        </th>
+
+        @if (Model.user.AssignedRoleId == 3)
+        {
+        <th>
+        </th>
+        }
+        <th>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Allleads)
+{
+    
+    <tr>
+     
+        <td>
+            @item.CompanyName
+        </td>
+        <td>
+            @item.City
+        </td>
+        <td>
+            @item.State
+        </td>
+        <td>
+            @item.ZipCode
+        </td>
+        <td>
+            @item.ZoneNumber
+        </td>
+        <td>
+            @item.PrimaryPhoneNumber
+        </td>
+        <td>
+            @item.Status
+        </td>
+        <td>
+            @item.accounts
+        </td>
+        <td>
+              @item.AssignedAA.FirstName @item.AssignedAA.LastName
+        </td>
+
+       @if (Model.user.AssignedRoleId == 3)
+       {
+            <td>
+             
+                <a href= '@Url.Action("CallProfile", "Lead", new { item.LeadId })' >
+                <img src="../../Content/images/CallCard.png" /></a>
+             </td>}
+                <td align="center">
+           
+                
+                        <div class="viewprof" style="margin: 0 auto"><a href= '@Url.Action("Profile", "Lead", new { item.LeadId }) '>View Profile</a></div>                
+                
+            </td>
+    </tr>
+    
+}</tbody>
+
+</table>
+</div>
+</div>
+</div>

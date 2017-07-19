@@ -1,0 +1,201 @@
+﻿@model Web.ViewModel.AppointmentSheetViewModel
+@{
+    ViewBag.Title = "AppointmentSheet";
+}
+
+
+@*you might need to change whats below with just AppointmentSheet instead of CreateAppointmentSheet*@
+
+    <div class="apptsheet" id = "apptsheet">
+    @using (Html.BeginForm("CreateAppointment", "Lead", FormMethod.Post, new { id = "ASForm" }))
+{
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Appointment Sheets
+                </td>
+            </tr>
+        </table>
+        <div class="ascard">
+
+            <table class="apptdate">
+                <tr>
+                    <td colspan="2" align="left">
+                        Appointment Agent :
+                    </td>
+                     <td align="left">
+                        @Html.DisplayFor(model => model.user.FirstName)
+
+                        @Html.HiddenFor(model => model.user.UserId)
+                        @Html.HiddenFor(model => model.user.FirstName)
+                        @Html.HiddenFor(model => model.appointmentSheet.CreatorId)
+                        @Html.HiddenFor(model => model.appointmentSheet.Event_Reference)
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="left">
+                        Date Set :
+                    </td>
+                    <td align="left">
+                        @Html.DisplayFor(model => model.appointmentSheet.CreatedAt)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="left">
+                        Last Updated :
+                    </td>
+                    <td align="left">@Html.DisplayFor(model => model.appointmentSheet.LastUpdated)
+                    </td>
+                </tr>
+            </table>
+            <table class="appttime">
+                <tr>
+                    <td align="left" colspan="2">
+                        Appt Day:
+                        
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.appointmentSheet.DayOfAppointment, new { size = "6" })
+                    </td>
+                     <td align="bottom">
+
+                            </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        From:
+                    </td>
+                    <td colspan="2" align="left">
+                        @Html.EditorFor(model => model.appointmentSheet.AppointmentDateFrom, new { size = "5" })
+                    </td>
+
+                </tr>
+                <tr>
+                    <td align="left">
+                        To:
+                    </td>
+                    <td colspan="2"align="left">
+                        @Html.EditorFor(model => model.appointmentSheet.AppointmentDateTo , new { size = "5" })
+                    </td>
+                </tr>
+            </table>
+             <table style = "left:12px; top:149px; width:auto ; position:absolute" >
+                <tr>
+                    <td>
+                        Location:
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.appointmentSheet.Location, new SelectList(Model.locations))
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        Street:
+                    </td>
+                    <td align="left">
+                        @Html.EditorFor(model => model.appointmentSheet.Street, new { size = "2" })
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        City:
+                    </td>
+                    <td align="left">@Html.TextBoxFor(model => model.appointmentSheet.City, new { size = "7" })
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        State:
+                    </td>
+                    <td align="left">
+                        @Html.DropDownListFor(model => model.appointmentSheet.State, new SelectList(Model.states))
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        Zip:
+                    </td>
+                    <td align="left">
+                        @Html.TextBoxFor(model => model.appointmentSheet.ZipCode, new { size = "7" })
+                    </td>
+                </tr>
+            </table>
+            <div style="position: absolute; left: 260px; top: 15px; width: 150px">
+                Appointment Agenda:
+            </div>
+            <div class="asaachbox">
+                <ul style="position: absolute; top: 25px; left: 0px; list-style: none; text-align: left">
+                    <li>
+                        @Html.CheckBoxFor(model => model.appointmentSheet.Price)
+                        Price </li>
+                    <li>
+                        @Html.CheckBoxFor(model => model.appointmentSheet.NewEquipment)
+                        New Equipment </li>
+                    <li>
+                        @Html.CheckBoxFor(model => model.appointmentSheet.AddingServices)
+                        Adding Services </li>
+                    <li>
+                        @Html.CheckBoxFor(model => model.appointmentSheet.Unhappy)
+                        Unhappy with current provider </li>
+                         <li>&nbsp;&nbsp;Processor:
+                        @Html.DropDownListFor(model => model.appointmentSheet.CurrentProcessor, new SelectList(Model.processors), "Select", new { style = "width:150px" })
+                    </li>
+                    <li>&nbsp;&nbsp;Volume $ &nbsp;&nbsp; @Html.DropDownListFor(model => model.appointmentSheet.Volume, new SelectList(Model.volumes), new { style = "width:150px" })
+                    </li>
+                </ul>
+                <ul style="position: absolute; top: 25px; left: 135px; list-style: none; text-align: left">
+                    <li>
+                        @Html.RadioButtonFor(model => model.appointmentSheet.SingleLocation, false)
+                        Multi-Location </li>
+                   How Many? @Html.TextBoxFor(model => model.appointmentSheet.HowManyLocations, new { size = "1" })
+                </ul>
+               
+            </div>
+            <div style="position: absolute; left: 542px; top: 15px; width: 100px">
+                Sales Profile:
+            </div>
+            <div class="SProfchbox">
+                @Html.CheckBoxFor(model => model.appointmentSheet.Swipe) Swipe<br>
+                @Html.CheckBoxFor(model => model.appointmentSheet.Moto) Moto<br>
+                @Html.CheckBoxFor(model => model.appointmentSheet.Internet) Internet<br>
+            </div>
+            <ul class="sali">
+                @if (Model.user.AssignedRoleId == 1 || Model.user.AssignedRoleId == 2)
+                {
+                <li>SA:
+                <td align = "left">@Html.DropDownListFor(model => model.appointmentSheet.AssignedSalesAgent,  Model.SAUsersDropdown, "select")
+                </td>
+                </li>
+                }
+                @if (Model.user.AssignedRoleId == 3 || Model.user.AssignedRoleId == 4)
+                {@Html.HiddenFor(model => model.appointmentSheet.AssignedSalesAgent)}
+                                                                                
+                @*                                                                    
+                <li>Score: @Html.DropDownListFor(model => model.appointmentSheet.Score, new SelectList(Model.scores), "Select")
+                </li>*@
+                
+            </ul>
+            <div style="position: absolute; left: 260px; top: 190px; width: 180px; height: 110px">
+                Comments:<br>
+                    @Html.TextAreaFor(model => model.appointmentSheet.Comment, new { style = "width:400px" })
+                </br>
+                @*<input type="submit" name="editAppointmentSheetSubmit" id="EditAppointmentSheetSubmit"
+                    value="Edit" />
+                <input type="submit" name="saveAppointmentSheetSubmit" id="SaveAppointmentSheetSubmit"
+                    value="Save" />
+                <input type="submit" name="cancelAppointmentSheetSubmit" id="CancelAppointmentSheetSubmit"
+                    value="Cancel" />*@
+            </div>
+            @*<div style="position: absolute; left: 750px; top: 210px; width: 150px; height: 100px">
+                <a href="#" class="newacc">
+                    <img src="../../Content/images/MNApp.png" style="border: none" alt="" /></a>
+            </div>*@
+            <div style="position: absolute; left: 750px; top: 30px; width: 150px; height: 50px">
+                @Html.HiddenFor(model => model.appointmentSheet.ParentLeadId)
+                @Html.HiddenFor(model => model.appointmentSheet.AppointmentSheetId)
+            </div>
+        </div>
+ }   
+ </div>

@@ -1,0 +1,37 @@
+END
+StaticRoleRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/trinitycrminternal/!svn/ver/83/trunk/Data/Repositories/Static/StaticRoleRepository.cs
+END
+StaticCardRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/repos/trinitycrminternal/!svn/ver/98/trunk/Data/Repositories/Static/StaticCardRepository.cs
+END
+StaticPermissionRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/repos/trinitycrminternal/!svn/ver/46/trunk/Data/Repositories/Static/StaticPermissionRepository.cs
+END
+StaticEventRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/repos/trinitycrminternal/!svn/ver/379/trunk/Data/Repositories/Static/StaticEventRepository.cs
+END
+StaticZoneRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/repos/trinitycrminternal/!svn/ver/356/trunk/Data/Repositories/Static/StaticZoneRepository.cs
+END
+StaticUploadedFileRepository.cs
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/repos/trinitycrminternal/!svn/ver/41/trunk/Data/Repositories/Static/StaticUploadedFileRepository.cs
+END

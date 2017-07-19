@@ -1,0 +1,957 @@
+﻿@model Web.ViewModel.ProfileViewModel
+@{ ViewBag.Title = "profile";}
+   @* <script src="../../Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type = "text/javascript"></script>
+   @* <script src="@Url.Content("~/Scripts/MicrosoftAjax.js")" type = "text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")" type = "text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script src="../../Scripts/fileuploader.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-ui.js" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.maskedinput-1.2.2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.autotab-1.1b.js")" type="text/javascript"></script>
+<script type="text/javascript" src="../../Scripts/jquery.pagination.js"></script>
+<script src="@Url.Content("~/Scripts/jquery.form.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/jquery-ui.css")" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="../../Content/pagination.css" />
+<link rel="stylesheet" href="../../Content/demo.css" />
+<link rel="stylesheet" href="../../Content/demo1.css" />
+<link href="../../Content/fileuploader.css" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/fullcalendar.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/fullcalendar.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/date_picker_jui.css")" rel="stylesheet" type="text/css" />
+
+
+
+<style type="text/css">
+    #TalkedToOtherli
+    {
+        display: none;
+    }
+    #TalkedToOfficeManagerli
+    {
+        display: none;
+    }
+    #TalkedToDMli
+    {
+        display: none;
+    }
+    #AcquiredDMNameli
+    {
+        display: none;
+    }
+    #TalkedToAPersonli
+    {
+        display: none;
+    }
+    #LeftVMli
+    {
+        display: none;
+    }
+    #CallBackDateli
+    {
+        display: none;
+    }
+    #appointbuttoncreate
+    {
+      
+        display:block;
+     }
+     #appointbutton1
+     {
+         display:none;
+     }
+     
+     #calendar {
+		width: 700px;
+		margin: 0 auto;
+		z-index: 999999;
+		}
+		
+
+</style> 
+
+
+<script type="text/javascript" language="javascript">
+
+    var G = jQuery.noConflict();
+
+    function zeroPad(num) {
+        var numZeropad = num + '';
+        while (numZeropad.length < 2) {
+            numZeropad = "0" + numZeropad;
+        }
+        return numZeropad;
+    }
+    G(document).ready(function () {
+        //        G('#datepicker').datepicker({
+        //            inline: true,
+        //            onSelect: function (dateText, inst) {
+        //                var d = new Date(dateText);
+        //                G('#calendar').fullCalendar('gotoDate', d);
+        //                selectedDate = d;
+        //            }
+        //        });
+        G('#calendar').dialog({
+            modal: true,
+            height: 420,
+            autoOpen: false,
+            width: 800
+
+        });  // the size of the dialog box is set 
+
+        var leadId = G("#lead_LeadId").val();
+
+        //check it out
+        //var randomNbr = 16;
+
+        G('#button').click(function () {
+            G('#calendar').dialog('open');
+
+            G.ajax({
+                type: "POST",
+                url: "/Calendar/sendLeadId",
+                data: "values=" + leadId
+            });
+            // prevent the default action, e.g., following a link
+
+            return false;
+        });
+
+
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        G('#calendar').fullCalendar({
+            
+            editable: false,
+            height: 650,
+            contentheight: 300,
+            allDaySlot: false,
+            slotMinutes: 75,
+            minTime: '9:00',
+            maxTime: '5:00pm',
+            weekends: false,
+            
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'agendaWeek'
+                //right: 'month,agendaWeek,agendaDay'
+            },
+
+            eventClick: function (calEvent, jsEvent, view) {
+
+                var now = new Date();
+
+                //alert(now.getTime());
+                //alert(calEvent.start.getTime());
+
+                var one_day_mil = 1000 * 60 * 60 * 24;
+
+                var todaymil = now.getTime();
+                var calmil = calEvent.start.getTime();
+
+                var no_of_days = (calmil - todaymil) / one_day_mil;
+
+                calEvent.background = 'red';
+                //calEvent.availableSAs = calEvent.availableSAs - 1;
+                calEvent.availableSAs = calEvent.availableSAs;
+                calEvent.title = calEvent.availableSAs;
+                calEvent.timeSlotStart = calEvent.start.getFullYear() + '-' + zeroPad(calEvent.start.getMonth() + 1) + '-' + zeroPad(calEvent.start.getDate()) + 'T' + zeroPad(calEvent.start.getHours()) + ':' + zeroPad(calEvent.start.getMinutes()) + ':00';
+                calEvent.timeSlotEnd = calEvent.end.getFullYear() + '-' + zeroPad(calEvent.end.getMonth() + 1) + '-' + zeroPad(calEvent.end.getDate()) + 'T' + zeroPad(calEvent.end.getHours()) + ':' + zeroPad(calEvent.end.getMinutes()) + ':00';
+
+
+                if (no_of_days <= 14) {
+                    //To be modifed due to getHour.Gethours
+                    G('#appointmentSheet_AppointmentDateFrom').val(calEvent.start.getHours() + ":" + zeroPad(calEvent.start.getMinutes()));
+                    G('#appointmentSheet_AppointmentDateTo').val(calEvent.end.getHours() + ":" + zeroPad(calEvent.end.getMinutes()));
+                    G('#appointmentSheet_DayOfAppointment').val(zeroPad(calEvent.start.getMonth() + 1) + "-" + zeroPad(calEvent.start.getDate()) + "-" + calEvent.start.getFullYear());
+                    G('#calendar').dialog('close');
+
+                    G.ajax({
+                        type: "POST",
+                        url: "/Calendar/updateTimeSlot/",
+                        data: calEvent
+                    }); // End of Ajax call
+                }
+                else {
+                    alert("Appointments cannot be set later than 14 days ");
+                    G('#calendar').dialog('close');
+                }
+                //$('#calendar').dialog('close');
+
+                return false;
+            }, //End of event click
+
+            events: "/Calendar/GetEventsPopup/"
+
+        }); // End of full calender
+    }); 
+</script>
+
+    
+<script type="text/javascript">
+
+    var U = jQuery.noConflict();
+
+    var BusinessInformation;
+
+    //function called in the Pagination
+    function pageselectCallback(page_index, jq) {
+        var new_content = jQuery('#hiddenresult div.result:eq(' + page_index + ')').clone();
+        U('.Searchresult').empty().append(new_content);
+    }
+
+    // Initialize the Pagination
+    function initPagination() {
+        var num_entries = jQuery('#hiddenresult div.result').length;
+        U("#Pagination").pagination(num_entries, {
+            current_page: (num_entries - 1),
+            callback: pageselectCallback,
+            items_per_page: 1
+        });
+    }
+
+    function pageselectCallback1(page_index, jq) {
+        var new_content1 = jQuery('#invisibleresult div.appointment:eq(' + page_index + ')').clone();
+        U('.Findresult').empty().append(new_content1);
+    }
+
+    function initPagination1() {
+        // count entries inside the hidden content
+        var num_entries1 = jQuery('#invisibleresult div.appointment').length;
+        // Create content inside pagination element
+        U("#Paging").pagination(num_entries1, {
+            current_page: (num_entries1 - 1), //Show the last updated page
+            callback: pageselectCallback1,
+            items_per_page: 1
+        });
+    }
+
+
+    function disableBIFields() {
+        U("#lead_CompanyName, #lead_Contact1Title, #lead_Contact2Title, #lead_Contact1FirstName, #lead_Contact1LastName,  #lead_Contact2FirstName, #lead_Contact2LastName,\
+         #lead_PrimaryPhoneNumber, #lead_AddtionalPhoneNumber, #lead_FaxNumber, #lead_PrimaryEmailAddress, #lead_AdditonalEmailAddress, #lead_WebsiteLink,\
+         #lead_StreetAddress1, #lead_City, #lead_ZipCode, #lead_State, #lead_AssignedAAUserId, #lead_ZoneNumber").attr('disabled', 'disabled')
+        U('#SaveBIBtn').hide();
+        U('.qq-upload-button').hide();
+        U('#EditBIBtn').show();
+    }
+
+    function enableBIFiels() {
+        U("#lead_CompanyName, #lead_Contact1Title, #lead_Contact2Title, #lead_Contact1FirstName, #lead_Contact1LastName,  #lead_Contact2FirstName, #lead_Contact2LastName,\
+         #lead_PrimaryPhoneNumber, #lead_AddtionalPhoneNumber, #lead_FaxNumber, #lead_PrimaryEmailAddress, #lead_AdditonalEmailAddress, #lead_WebsiteLink,\
+         #lead_StreetAddress1, #lead_City, #lead_ZipCode, #lead_State, #lead_AssignedAAUserId, #lead_ZoneNumber, #fileList").removeAttr('disabled', 'disabled')
+        U('#EditBIBtn').hide();
+        U('.qq-upload-button').show();
+        U('#SaveBIBtn').show();
+    }
+
+
+    function displaymakeappt() {
+        document.getElementById('appointbuttoncreate').style.display = "block";
+        document.getElementById('appointbutton1').style.display = "none";
+        document.getElementById('disablingappointmentsheet').style.display = "block";
+        document.getElementById('button').style.display = "none";
+        U('#EditAppointmentSheetSubmit').show();
+    }
+    function displaymakenewappt() {
+        document.getElementById('appointbuttoncreate').style.display = "block";
+        document.getElementById('appointbutton1').style.display = "none";
+        document.getElementById('button').style.display = "none";
+        U('#EditAppointmentSheetSubmit').show();
+    }
+    function displaysaveappt() {
+        document.getElementById('appointbutton1').style.display = "block";
+        document.getElementById('appointbutton1').style.opacity = "0.99";
+        document.getElementById('button').style.display = "block";
+        document.getElementById('appointbuttoncreate').style.display = "none";
+        document.getElementById('disablingappointmentsheet').style.display = "none";
+        U('#EditAppointmentSheetSubmit').hide();
+    }
+    function displaysavenewappt() {
+        document.getElementById('appointbutton1').style.display = "block";
+        document.getElementById('appointbutton1').style.opacity = "0.01";
+        document.getElementById('appointbuttoncreate').style.display = "none";
+        document.getElementById('button').style.display = "block";
+
+        U('#EditAppointmentSheetSubmit').hide();
+    }
+    function displaysavenewappt1() {
+        document.getElementById('appointbutton1').style.display = "block";
+        document.getElementById('appointbutton1').style.opacity = "0.01";
+        document.getElementById('appointbuttoncreate').style.display = "none";
+        document.getElementById('disablingappointmentsheet').style.display = "none";
+        document.getElementById('button').style.display = "block";
+        U('#EditAppointmentSheetSubmit').hide();
+    }
+    function displaymakecall() {
+        document.getElementById('makecallbutton').style.display = "block";
+        document.getElementById('savecallbutton1').style.display = "none";
+        U('#EditCardStackSubmit').show();
+    }
+
+    function displaysavecall() {
+        document.getElementById('makecallbutton').style.display = "none";
+        document.getElementById('savecallbutton1').style.display = "block";
+        //document.getElementById('disablingCardstack').style.display = "none";
+        U('#EditCardStackSubmit').hide();
+    }
+    function displaysavecallnewcard() {
+        document.getElementById('makecallbutton').style.display = "none";
+        document.getElementById('savecallbutton1').style.display = "block";
+        U('#EditCardStackSubmit').hide();
+    }
+
+
+    function disablecardstack() {
+        //document.getElementById('disablingCardstack').style.display = "block";
+        displaymakecall();
+        U('#EditCardStackSubmit').show();
+        U('#EditCardStackSubmit').click(function () {
+            enablecardstack();
+            displaysavecall();
+        });
+
+    }
+
+    function disablecardstack1() {
+        displaymakecall();
+        displaymakecall();
+        U('#EditCardStackSubmit').bind('click', function () {
+            enablecardstack();
+            U('#EditCardStackSubmit').unbind('click');
+        })
+    }
+
+    function disableEditAppointment() {
+        displaymakenewappt();
+        U('#EditAppointmentSheetSubmit').click(function () {
+            enableEditAppointment();
+        });
+        
+    }
+    function disableEditAppointment1() {
+        displaymakenewappt();
+    }
+
+    //lets user edit card
+    function enablecardstack() {
+        displaysavecall();
+
+        isCardSaved = false;
+
+        U('#card_CallBackDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function (input, instance) {
+                U(input).datepicker('setDate', new Date());
+            }
+        });
+
+
+       U('#fakesavecard').bind('click', function () {
+            var CSFormContent = U("#AllCardsForm").serialize();
+            var ACFLead = U("#LeadIDForm").serialize();
+            var leadstring = ACFLead.split(".");
+            U.ajax({
+                type: "POST",
+                url: "/Lead/CreateCard",
+                data: CSFormContent,
+                cache: false,
+                success: function (msg) {
+                    U.when(U("#fakesaveappointment").trigger('click'), U('#cardstack').empty(),
+                            U('#cardstack').load("/Lead/AllCardsforLead?" + leadstring[1] + " " + ".cardstack", function () { initPagination() })
+                          ).done(function () { disablecardstack1(), U('#fakesavecard').unbind('click') })
+                }
+            });
+        });
+    }
+
+
+
+    function enableEditAppointment1() {
+        displaysavenewappt1();
+        disableAptTime();
+        
+        U('#fakesaveappointment').bind('click', function () {
+            alert(U("#appointmentSheet_DayOfAppointment").val());
+         
+                enableAptTime();
+                var ASFormContent = U("#AllAppointmentsForm").serialize();
+
+                var ACFLead = U("#LeadIDForm").serialize();
+                var leadstring = ACFLead.split(".");
+                U.ajax({
+                    type: "POST",
+                    url: "/Lead/CreateAppointment",
+                    cache: false,
+                    data: ASFormContent,
+                    success: function (msg) {
+                        U.when(U('#appointmentstack').empty(),
+                                U('#appointmentstack').load("/Lead/AllAppointmentsforLead?" + leadstring[1] + " " + ".apptsheet", function () { initPagination1() })
+                                ).done(function () { disableEditAppointment1(), U('#fakesaveappointment').unbind('click') })
+                    }
+                });
+            
+        });
+    }
+
+     function enableEditAppointment() {
+         displaysaveappt();
+         disableAptTime();
+         
+         U('#fakesaveappointment').bind('click', function () {
+             enableAptTime();
+             var ASFormContent = U("#AllAppointmentsForm").serialize();
+
+             var ACFLead = U("#LeadIDForm").serialize();
+             var leadstring = ACFLead.split(".");
+             U.ajax({
+                 type: "POST",
+                 url: "/Lead/CreateAppointment",
+                 cache: false,
+                 data: ASFormContent,
+                 success: function (msg) {
+                     U.when(U('#appointmentstack').empty(),
+                                U('#appointmentstack').load("/Lead/AllAppointmentsforLead?" + leadstring[1] + " " + ".apptsheet", function () { initPagination1() })
+                                ).done(function () { disableEditAppointment1(), U('#fakesaveappointment').unbind('click') })
+                }
+            });
+        });
+    }
+
+    function enableCreateAppointment() {
+        disableAptTime();
+        displaysavenewappt();
+        U("#fakesaveappointment").bind('click', function () {
+            enableAptTime();
+            var ASFormContent = U("#ASForm").serialize();
+            var ACFLead = U("#LeadIDForm").serialize();
+            var leadstring = ACFLead.split(".");
+            U.ajax({
+                type: "POST",
+                url: "/Lead/CreateAppointment",
+                data: ASFormContent,
+                cache: false,
+                success: function (msg) {
+                    U.when(U('#appointmentstack').empty(),
+                                U('#appointmentstack').load("/Lead/AllAppointmentsforLead?" + leadstring[1] + " " + ".apptsheet", function () { initPagination1() })
+                                ).done(function () { disableEditAppointment1(), U('#fakesaveappointment').unbind('click') })
+                }
+            });
+        });
+    }
+
+    function enableCreateCard() {
+        displaysavecallnewcard();
+        isCardSaved = false;
+        U("#card_CardType").change(function () {
+            var option = U("#card_CardType option:selected").text();
+            switch (option) {
+                case "DNC":
+                    U('#appointmentstack').empty();
+                    document.getElementById('TalkedToOtherli').style.display = "block";
+                    document.getElementById('TalkedToOfficeManagerli').style.display = "block";
+                    document.getElementById('NoInterest').style.display = "none";
+                    document.getElementById('TalkedToAPersonli').style.display = "block";
+                    document.getElementById('AcquiredDMNameli').style.display = "none";
+                    document.getElementById('TalkedToDMli').style.display = "block";
+                    document.getElementById('LeftVMli').style.display = "none";
+                    document.getElementById('CallBackDateli').style.display = "none";
+                    break;
+                case "Call Back":
+                    U('#appointmentstack').empty();
+                    document.getElementById('AcquiredDMNameli').style.display = "block";
+                    document.getElementById('TalkedToDMli').style.display = "block";
+                    document.getElementById('NoInterest').style.display = "block";
+                    document.getElementById('TalkedToAPersonli').style.display = "none";
+                    document.getElementById('TalkedToOfficeManagerli').style.display = "none";
+                    document.getElementById('TalkedToOtherli').style.display = "none";
+                    document.getElementById('LeftVMli').style.display = "block";
+                    document.getElementById('CallBackDateli').style.display = "block";
+                    break;
+                case "Set Appointment":
+                    displaysavenewappt();
+                    var ACFLead = U("#LeadIDForm").serialize();
+                    var leadstring = ACFLead.split(".");
+                    U('#appointmentstack').load("/Lead/CreateAppointment?" + leadstring[1] + " " + ".apptsheet", function () { enableCreateAppointment() })
+
+                    U("#makenewappointment").trigger('click');
+                    document.getElementById('LeftVMli').style.display = "none";
+                    document.getElementById('AcquiredDMNameli').style.display = "none";
+                    document.getElementById('NoInterest').style.display = "none";
+                    document.getElementById('TalkedToAPersonli').style.display = "none";
+                    document.getElementById('TalkedToOtherli').style.display = "none";
+                    document.getElementById('TalkedToOfficeManagerli').style.display = "none";
+                    document.getElementById('TalkedToDMli').style.display = "none";
+                    document.getElementById('CallBackDateli').style.display = "none";
+                    //To be implemented
+
+                    break;
+                case "Reschedule Appointment":
+                    displaymakenewappt();
+                    var ACFLead = U("#LeadIDForm").serialize();
+                    var leadstring = ACFLead.split(".");
+                    U('#appointmentstack').load("/Lead/AllAppointmentsforLead?" + leadstring[1] + " " + ".apptsheet", function () { initPagination1(), enableEditAppointment1() })
+                    //To be implemented
+                    document.getElementById('LeftVMli').style.display = "none";
+                    document.getElementById('AcquiredDMNameli').style.display = "none";
+                    document.getElementById('NoInterest').style.display = "none";
+                    document.getElementById('TalkedToAPersonli').style.display = "none";
+                    document.getElementById('TalkedToOtherli').style.display = "none";
+                    document.getElementById('TalkedToOfficeManagerli').style.display = "none";
+                    document.getElementById('TalkedToDMli').style.display = "none";
+                    document.getElementById('CallBackDateli').style.display = "none";
+                    break;
+                default:
+                    document.getElementById('LeftVMli').style.display = "none";
+                    document.getElementById('AcquiredDMNameli').style.display = "none";
+                    document.getElementById('NoInterest').style.display = "none";
+                    document.getElementById('TalkedToAPersonli').style.display = "none";
+                    document.getElementById('TalkedToOtherli').style.display = "none";
+                    document.getElementById('TalkedToOfficeManagerli').style.display = "none";
+                    document.getElementById('TalkedToDMli').style.display = "none";
+                    document.getElementById('CallBackDateli').style.display = "none";
+                    break;
+            }
+            return false;
+        });
+        U("#card_CardType").change();
+
+        U('#card_CallBackDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function (input, instance) {
+                U(input).datepicker('setDate', new Date());
+            }
+        });
+
+        U("#fakesavecard").bind('click', function () {
+            var CSFormContent = U("#CSForm").serialize();
+            var ACFLead = U("#LeadIDForm").serialize();
+            var leadstring = ACFLead.split(".");
+            U.ajax({
+                type: "POST",
+                url: "/Lead/CreateCard",
+                data: CSFormContent,
+                cache: false,
+                success: function (msg) {
+                    U.when(U("#fakesaveappointment").trigger('click'), U('#cardstack').empty(),
+                            U('#cardstack').load("/Lead/AllCardsforLead?" + leadstring[1] + " " + ".cardstack", function () { initPagination() })
+                           ).done(function () {
+                               disablecardstack1(), U('#fakesavecard').unbind('click'), U('#appointmentstack').empty(),
+                            U('#appointmentstack').load("/Lead/AllAppointmentsforLead?" + leadstring[1] + " " + ".apptsheet", function () { initPagination1() })
+                           })
+                }
+            });
+            isCardSaved = true;
+        });
+    }
+
+    function disableAptTime() {
+        // This will disable the apptment date from and to so the user has to only use the calendar
+        U('#appointmentSheet_DayOfAppointment').attr("disabled", "disabled");
+        U('#appointmentSheet_AppointmentDateFrom').attr("disabled", "disabled");
+        U('#appointmentSheet_AppointmentDateTo').attr("disabled", "disabled");
+    }
+
+    function enableAptTime() {
+        // This will disable the apptment date from and to so the user has to only use the calendar
+        U('#appointmentSheet_DayOfAppointment').removeAttr("disabled");
+        U('#appointmentSheet_AppointmentDateFrom').removeAttr("disabled");
+        U('#appointmentSheet_AppointmentDateTo').removeAttr("disabled");
+    }
+
+    // creates upload file button and dropdown to view images
+    // Author: Brandon Pugh
+    function initFileUploader() {
+        var uploader = new qq.FileUploader({
+            // pass the dom node (ex. U(selector)[0] for jQuery users)
+            element: document.getElementById('uploader'),
+            multiple: false,
+            allowedExtensions: ['jpg', 'jpeg', 'png', 'gif', 'pdf'],
+            sizeLimit: 20000000,
+            // path to server-side upload script
+            action: '@Url.Action("Upload", "Upload")',
+            onComplete: function (id, fileName, responseJSON) {
+                if (responseJSON.success) {
+                    U('#lead_NewFilePath').val(responseJSON.message);
+                    U('#uploadMessage').empty();
+                    U('#uploadMessage').append(responseJSON.filename + " uploaded successfully!");
+                }
+                else {
+                    U('#uploadMessage').empty();
+                    U('#uploadMessage').append("Error uploading file.");
+                }
+            }
+        });
+
+        U('#fileList').change(function () {
+            if (U('#fileList').val() != "0") {
+                window.open(U('#fileList').val());
+            }
+            // prevent the default action, e.g., following a link
+            return false;
+        });
+
+    }
+
+    
+    // get the html for the statement files dropdown
+    // Author: Brandon Pugh
+    function reloadFileList() {
+        var leadId = U('#lead_LeadId').val();
+            U.ajax({
+                    type: "GET",
+                    url: "/Lead/GetStatementFiles?leadId=" + leadId,
+                    success: function (msg) {
+                        U('#uploadMessage').empty();
+                        U('#fileListDiv').empty();
+                        U('#fileListDiv').append(msg);
+                    }
+            });
+    }
+
+    //This is where the real stuff happens
+    U(document).ready(function () {
+
+        
+        //function that should be called from start
+        initFileUploader();
+        disablecardstack();
+        disableBIFields();
+        disableEditAppointment();
+        initPagination();
+        initPagination1();
+        U('#makenewcard').click(function () {
+            var ACFLead = U("#LeadIDForm").serialize();
+            var leadstring = ACFLead.split(".");
+            var phonenumber = U("#lead_PrimaryPhoneNumber").val();
+            U.ajax({
+                type: "POST",
+                url: "/CallCard/Calling",
+                data: "text=" + phonenumber,
+                success: function (msg) { /*alert(msg);*/ }
+            });
+            U('#cardstack').empty();
+            U('#cardstack').load("/lead/CreateCard?" + leadstring[1] + " " + ".cardstack", function () { enableCreateCard() });
+            isCardSaved = false;
+
+        });
+
+        U('#EditCardStackSubmit').click(function () {
+            var cid = U('#card_CardId').val();
+//            alert(cid);
+
+            var ACFLead = U("#LeadIDForm").serialize();
+            var leadstring = ACFLead.split(".");
+            var phonenumber = U("#lead_PrimaryPhoneNumber").val();
+
+            U('#cardstack').empty();
+            U('#cardstack').load("/lead/EditCard?" + leadstring[1] + " " + ".cardstack", function () { enableCreateCard() });
+            //isCardSaved = false;
+
+
+        });
+
+        U('#makenewappointment').click(function () {
+            var ACFLead = U("#LeadIDForm").serialize();
+            var leadstring = ACFLead.split(".");
+            U('#appointmentstack').empty();
+            U('#appointmentstack').load("/lead/CreateAppointment?" + leadstring[1] + " " + ".apptsheet", function () { enableCreateAppointment(), disableAptTime() });
+
+        });
+
+
+        function unloadPage() {
+            if (isCardSaved == false) {
+                return "Are you sure you want to leave this page without saving card?";
+            }
+        }
+
+        window.onbeforeunload = unloadPage;
+
+        // Disable the appointment date and time 
+        disableAptTime();
+
+        //        U('#card_CallBackDate').datepicker({
+        //            changeMonth: true,
+        //            changeYear: true,
+        //            beforeShow: function (input, instance) {
+        //               U(input).datepicker('setDate', new Date());
+        //            }
+        //        });
+
+        U("#EditBIBtn").click(function () {
+            enableBIFiels();
+            return false;
+        });
+        U("#SaveBIBtn").click(function () {
+
+            var validatefields = {}; // array to store the fields to be validated.
+            var flag = 0; // the flag is set whenever required field is empty.
+
+
+            validatefields[0] = U("#lead_CompanyName").val();
+            validatefields[1] = U("#lead_PrimaryPhoneNumber").val();
+            validatefields[2] = U("#lead_StreetAddress1").val();
+            validatefields[3] = U("#lead_City").val();
+            validatefields[4] = U("#lead_ZipCode").val();
+            validatefields[5] = U("#lead_ZoneNumber").val();
+
+            validatefields[6] = U("#lead_Contact1FirstName").val();
+            validatefields[7] = U("#lead_Contact1LastName").val();
+            validatefields[8] = U("#lead_Contact2FirstName").val();
+            validatefields[9] = U("#lead_Contact2LastName").val();
+
+            var alertmessage = "Please fill the required fields : \n";
+
+            if (validatefields[0] == "") {
+                alertmessage = alertmessage + "Company name \n";
+                flag = 1;
+            }
+
+            if (validatefields[1] == "") {
+                alertmessage = alertmessage + "Primary phone \n";
+                flag = 1;
+            }
+
+            if (validatefields[2] == "") {
+                alertmessage = alertmessage + "StreetAddress \n ";
+                flag = 1;
+            }
+
+            if ($('#lead_State option:selected').text() == "Select") {
+                alertmessage = alertmessage + "State \n";
+                flag = 1;
+            }
+
+            if (validatefields[3] == "") {
+                alertmessage = alertmessage + "City \n";
+                flag = 1;
+            }
+
+            if (validatefields[4] == "") {
+                alertmessage = alertmessage + "Zip Code \n";
+                flag = 1;
+            }
+
+            if (($('#lead_Contact1Title option:selected').text() == "Select") &&
+            ($('#lead_Contact2Title option:selected').text() == "Select")) {
+                alertmessage = alertmessage + "Enter atleast one contact name \n";
+                flag = 1;
+            }
+
+            if ($('#lead_Contact1Title option:selected').text() != "Select")
+                if ((validatefields[6] == "") || (validatefields[7] == "")) {
+                    alertmessage = alertmessage + "Enter the contact names if you have selected the type 1";
+                    flag = 1;
+                }
+
+            if ($('#lead_Contact2Title option:selected').text() != "Select")
+
+                if
+                ((validatefields[8] == "") || (validatefields[9] == "")) {
+                    alertmessage = alertmessage + "Enter the contact names if you have selected the type 2 ";
+                    flag = 1;
+                }
+
+            var BIFormContent = U("#BIForm").serialize();
+
+
+            if (flag == 0) {
+                U.ajax({
+                    type: "POST",
+                    url: "/Lead/BusinessInformation",
+                    data: BIFormContent,
+                    success: function (msg) {
+                        reloadFileList();
+                        alert(msg);
+                    }
+                });
+                disableBIFields();
+            }
+            else {
+                alert(alertmessage);
+            }
+            return false;
+        });
+
+        //('#appointmentSheet_HowManyLocations').hide();
+
+        //        U("#lead_PrimaryPhoneNumber").mask("(999) 999-9999", { placeholder: " " });
+        // U(".lead_AddtionalPhoneNumber").mask("(999) 999-9999", { placeholder: " " });
+        //U("#lead_FaxNumber").mask("(999) 999-9999", { placeholder: " " });
+        //function to upload the statement
+
+
+        //U('#card_CallBackDate').datePicker();
+
+
+
+        //if (('#appointmentSheet_SingleLocation').val() == false) {
+        //('#appointmentSheet_HowManyLocations').hide();
+        //}
+
+    });
+
+
+    U(document).ready(function () {
+        U('#AccountsTable').dataTable({
+            "sPaginationType": "full_numbers",
+            "bInfo": false,
+            "bLengthChange": false,
+            "iDisplayLength": 4
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    var j = jQuery.noConflict();
+    //Masking of Input Elements 
+    //Begin
+    j(document).ready(function () {
+        j("#lead_PrimaryPhoneNumber").mask("(999) 999-9999", { placeholder: " " });
+        j("#lead_AddtionalPhoneNumber").mask("(999) 999-9999", { placeholder: " " });
+        j("#lead_FaxNumber").mask("(999) 999-9999", { placeholder: " " });
+        j("#lead_ZipCode").mask("99999", { placeholder: " " });
+        j("#appointmentSheet_ZipCode").mask("99999", { placeholder: " " });
+
+        //Autopopulate AppointmentSheet Info from BI
+        //By: Mutaaf Aziz
+        //        $('#appointmentSheet_Street').val($('#lead_StreetAddress1').val());
+        //        $('#appointmentSheet_City').val($('#lead_City').val());
+        //        $('#appointmentSheet_ZipCode').val($('#lead_ZipCode').val());
+        //        $('#appointmentSheet_State').val($('#lead_State').val());
+
+        //        j(".Name").autotab_filter('alpha');
+    });
+
+</script>
+<div class="container">
+<div class="header" >
+<div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+             @if (Model.user.AssignedRoleId == 1)
+                 {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+                 }
+             @if (Model.user.AssignedRoleId == 2)
+             {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.user)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.user.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.user.UserId)">Leads Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("Index", "AppointmentQueue", Model.user.UserId)">Appt Queue</a></div>
+                <div class="dashb"><a href="@Url.Action("Index", "DashBoard")">Dashboard</a></div> 
+             }
+               @if (Model.user.AssignedRoleId == 3)
+               {
+                <div class="hometabsa"><a href="@Url.Action("Indexsa", "Home", Model.user)">Home</a></div>
+                   <div class="tickettab"><a href="/ticket/index">Tickets</a></div>
+                <div class="todotabsa"><a href="#">To Do List</a>
+                  <ul class="todolistsa" >  
+   				    <li><a href="/lead/coldleads">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+                    <li><a href="/lead/ScheduledAppointment">Appointments</a></li>
+   				  </ul></div>
+                <div class="futab"><a href="/lead/followup">Follow Up</a></div>
+               }
+               @if (Model.user.AssignedRoleId == 4)
+               {
+                   <div class="hometabaa"><a href="@Url.Action("Index", "Home")">Home</a></div>
+			        <div class="todotabaa"><a href="#">To Do List</a>
+                  <ul class="todolistaa" >
+   				    <li><a href="@Url.Action("ColdLeads", "Lead")">Cold Leads</a></li>  
+             		<li><a href="/lead/CallBack">Callback List</a></li>
+                    <li><a href="/lead/Reschedule">Reschedule List</a></li> 
+   				  </ul></div>
+               }
+            
+            <div class="logout"><a href="#">@(Model.user.FirstName) @(Model.user.LastName)</a>
+            <ul class="logoutlist" >
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.user.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+ </div>
+    <div class="content">
+       
+        <div id="cardstack">
+        @{
+            Html.RenderAction("AllCardsForLead");
+        }
+       
+        </div>
+        
+        @{ 
+            Html.RenderAction("BusinessInformation");
+        }
+        <div id="appointmentstack">
+             @{Html.RenderAction("AllAppointmentsForLead"); }
+        
+        @*@if (Model.NumberOfAppointments != 0)
+        {
+            { Html.RenderAction("AllAppointmentsForLead"); }
+        }
+         @if (Model.NumberOfAppointments == 0)
+        {
+            //Do nothing
+        }*@
+        <div class ="apptsheet" style = " display:none">
+        </div>
+        
+        </div>     
+        @if (Model.user.AssignedRoleId != 4)
+        {
+            { Html.RenderAction("AllAccountsForLead"); }
+        }
+    </div>
+
+    
+  
+    
+    <div class="sidemenu">
+        <div class="searbutton">
+            <input type="submit" class="editBI" id="EditBIBtn" value="Edit Information" />
+            <input type="submit" class="saveBI" id="SaveBIBtn" value="Save Information" />
+        </div>
+        <div class="callbutton">
+            <div id="makecallbutton"><input type="button" class="editCardStackSubmit1" id="makenewcard" value="Make Call" />@*@Ajax.ActionLink("Make Call", "CreateCard", "Lead", new { Model.lead.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "cardstack" }, new { @Id = "makenewcard" })*@</div>
+            @*<div id="savecallbutton" style="display:none;">@Ajax.ActionLink("Save Card", "AllCardsForLead", "Lead", new { Model.lead.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "cardstack" }, new { @Id = "SaveCardSubmit" })</div>*@
+            <div id="savecallbutton1"><input type="button" class="editCardStackSubmit1" id="fakesavecard" value="Save Record" /></div>
+            
+            <div style="position:relative;top:10px"><input type="button" class="editCardStackSubmit" id="EditCardStackSubmit" value="Edit Record" /></div>
+        </div>
+        @using (Html.BeginForm("Profile", "Lead", FormMethod.Post, new { id = "LeadIDForm" }))
+        {
+        @Html.HiddenFor(model => model.lead.LeadId)
+        }
+        <div class="calendarbutton">
+           
+
+ 
+        <div id="calendar" style="position:relative;top:0px"></div>
+            <div id="datepicker" style="top: -120px"></div>
+            <div style="position:relative;top: 70px">
+            <input type="button" class="calendarbutton1" id="button" value="Calendar" /></div>
+
+        <div id="appointbuttoncreate" style="position:relative; top:75px">
+        @if (Model.user.AssignedRoleId != 4)
+        {
+            <input type="button" class="editAppointmentSheetSubmit1" id="makenewappointment" value="Set Appointment" />@* @Ajax.ActionLink("Make Appointment", "CreateAppointment", "Lead", new { Model.lead.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "appointmentstack" }, new { @Id = "makenewappointment" })*@
+        }</div>
+         @*<div id="appointbutton">@Ajax.ActionLink("Save Appointment", "AllAppointmentsForLead", "Lead", new { Model.lead.LeadId }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "appointmentstack" }, new { @Id = "SaveAppointmentSheetSubmit" })</div>*@
+        
+        <div id="appointbutton1"style="position:relative; top:75px; z-index: 99"><input type="submit" class="editAppointmentSheetSubmit" id="fakesaveappointment" value="Save Appointment" /></div>
+        <div style="position:relative;top:87px"><input type="submit" class="editAppointmentSheetSubmit" id="EditAppointmentSheetSubmit" value="Edit Appointment" /></div>
+    </div>
+    </div>
+</div>

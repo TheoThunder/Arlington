@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/trinitycrminternal/!svn/ver/236/trunk/SQL/GeneralDataEntry
+END
+Insert roles_permissions.sql
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/repos/trinitycrminternal/!svn/ver/88/trunk/SQL/GeneralDataEntry/Insert%20roles_permissions.sql
+END
+InsertTestUsers.sql
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/repos/trinitycrminternal/!svn/ver/82/trunk/SQL/GeneralDataEntry/InsertTestUsers.sql
+END
+InsertRoles.sql
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/repos/trinitycrminternal/!svn/ver/82/trunk/SQL/GeneralDataEntry/InsertRoles.sql
+END
+InsertLead.sql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/repos/trinitycrminternal/!svn/ver/96/trunk/SQL/GeneralDataEntry/InsertLead.sql
+END
+InsertPermissions.sql
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/repos/trinitycrminternal/!svn/ver/88/trunk/SQL/GeneralDataEntry/InsertPermissions.sql
+END

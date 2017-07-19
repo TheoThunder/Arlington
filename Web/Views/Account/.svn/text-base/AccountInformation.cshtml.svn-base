@@ -1,0 +1,148 @@
+﻿@model Web.ViewModel.AccountInformationViewModel
+
+@{
+    ViewBag.Title = "AccountInformation";
+}
+
+@*<script type="text/javascript" language="javascript">
+
+   
+
+    $(document).ready(function () {
+        $('#SaveAIBtn, #CancelAIBtn').hide();
+        $("#EditAIBtn").click(function () {
+            $('#SaveAIBtn, #CancelAIBtn').show();
+            $('#EditAIBtn').hide();
+        });
+    });
+</script>
+*@
+@using (Html.BeginForm("AccountInformation", "Account", new { id = "ACFForm" }))
+{
+    <div class="container">
+        <div class="content">
+            <div class="acctcreateac">
+                <table class="title">
+                    <tr>
+                        <td>
+                            <br />
+                            &nbsp;Account Information
+                        </td>
+                    </tr>
+                </table>
+                <table class="profcontactmerchant">
+                    <tr>
+                        <td>
+                            Merchant ID
+                        </td>
+                        <td align="left" colspan="2">@Html.EditorFor(model => model.account.MerchantId, new { size = "20" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Account Name
+                        </td>
+                        <td colspan="2">
+                            @Html.TextBoxFor(model => model.account.AccountName, new { size = "18" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            AA Name
+                        </td>
+                        <td colspan="2">@Html.EditorFor(model => model.account.AACreator, new { size = "20" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Sales Rep. Name
+                        </td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.account.AssignedSalesRep, new { size = "15" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Sales Rep. #
+                        </td>
+                        <td colspan="2">
+                            @Html.TextBoxFor(model => model.account.SalesRepNumber, new { size = "15" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Office #
+                        </td>
+                        <td colspan="2">@Html.TextBoxFor(model => model.account.OfficeNumber, new { size = "20" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Account Status
+                        </td>
+                        <td colspan="2">@Html.DropDownListFor(model => model.account.Status, new SelectList(Model.statuslist), "select")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Account Approval Date
+                        </td>
+                        <td>@Html.TextBoxFor(model => model.account.AccountApprovalDate, new { size = "5" })
+                            <img src="/Content/images/CALENDAR-ICON.GIF" height="20" width="20" border="none"
+                                alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Annual Fee
+                        </td>
+                        <td>@Html.CheckBoxFor(model => model.account.AnnualFee)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Estimated Monthly Volume
+                        </td>
+                        <td>@Html.DropDownListFor(model => model.account.EstimatedMonthlyVolume, new SelectList(Model.estimatedmonthlyvolume), "select")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            HT &nbsp;&nbsp;&nbsp;@Html.TextBoxFor(model => model.account.HT, new { size = "5" })
+                        </td>
+                        <td>
+                            Platform
+                        </td>
+                        <td>@Html.DropDownListFor(model => model.account.Platform, new SelectList(Model.platform), "select")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            HMV @Html.TextBoxFor(model => model.account.HMV, new { size = "5" })
+                        </td>
+                        <td>
+                            Vendor
+                        </td>
+                        <td>@Html.DropDownListFor(model => model.account.Vendor, new SelectList(Model.vender), "select")
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="position: absolute; left: 1000px; margin-top: 750px;">
+            <table>
+                <tr>
+                    <td>
+                        <input type="submit" name="Editai" id="EditAIBtn" value="Editai" />
+                    </td>
+                    <td>
+                        <input type="submit" name="saveai" id="SaveAIBtn" value="Saveai" />
+                    </td>
+                    <td>
+                        <input type="submit" name="cancelai" id="CancelAIBtn" value="Cancelai" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+

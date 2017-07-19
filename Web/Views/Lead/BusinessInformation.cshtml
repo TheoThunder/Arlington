@@ -1,0 +1,199 @@
+﻿@model Web.ViewModel.BusinessInformationViewModel
+@{
+    ViewBag.Title = "BusinessInformation";
+    //Html.EnableClientValidation();
+}
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"           type="text/javascript"></script>
+<script src="http://ajax.microsoft.com/ajax/jQuery.Validate/1.7/jQuery.Validate.min.js" type="text/javascript"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+
+
+<div class="businfo">
+    @using (Html.BeginForm("BusinessInformation", "Lead", FormMethod.Post, new { id = "BIForm" }))
+    {
+        @Html.ValidationSummary(true);
+
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Business Information
+                </td>
+            </tr>
+        </table>
+        <div style="position: absolute; left: 12px; top: 22px;">
+            @Html.HiddenFor(row => row.lead.LeadId)
+            @Html.HiddenFor(row => row.lead.Status)
+            Company Name <br />
+            @Html.TextBoxFor(model => model.lead.CompanyName, new { size = "32"})
+            @Html.ValidationMessageFor(model => model.lead.CompanyName)
+        </div>
+        <table class="profcontact">
+            <tr>
+                <td align="right">
+                    Primary Phone
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.PrimaryPhoneNumber, new { size = "20", @class = "PhoneNumber" })
+                    @Html.ValidationMessageFor(model => model.lead.PrimaryPhoneNumber)
+                </td>
+                <td align="left">
+                    @*<input type="radio" name="primpho" value="1" checked="checked" />*@
+                    @Html.RadioButtonFor(model=> model.lead.PrimaryPhoneChecked, true)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Additional Phone
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.AddtionalPhoneNumber, new { size = "20", @class = "PhoneNumber" })
+                </td>
+                <td align="left">
+                    @*<input type="radio" name="primpho" value="2" />*@
+                    @Html.RadioButtonFor(model => model.lead.PrimaryPhoneChecked, false)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Fax Number
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.FaxNumber, new { size = "20", @class = "PhoneNumber" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Primary E-mail
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.PrimaryEmailAddress, new { size = "20" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Additional E-mail
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.AdditonalEmailAddress, new { size = "20" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    Website
+                    @Html.EditorFor(model => model.lead.WebsiteLink, new { size = "27" })
+                </td>
+            </tr>
+        </table>
+        <table class="profadd">
+            <tr>
+                <td align="right">
+                    Street
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.StreetAddress1, new { size = 37 })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    City
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.City, new { size = 37 })
+                    @Html.ValidationMessageFor(model => model.lead.City)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    State
+                </td>
+                <td align="left">
+                    @Html.DropDownListFor(model => model.lead.State, new SelectList(Model.states), "Select")
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Zip
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.ZipCode, new { size = "7", @class = "digits" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Zone
+                </td>
+                <td align="left">
+                @Html.TextBoxFor(model => model.lead.ZoneNumber, new { size = "7", @class = "digits" })
+                <div id="uploadMessage"></div>
+                    @*@if (Convert.ToInt32(Model.lead.ZipCode) == Model.zipc.ZipCode)
+                    {
+                        @Html.DisplayFor(model => model.zones.ZoneNumber)
+                    }*@
+                </td>
+            </tr>
+        </table>
+        <div style="position: absolute; left: 12px; top: 65px;">
+            Contact Name
+        </div>
+        <table class="cfolist">
+            <tr>
+                <td align="right">
+                    @Html.DropDownListFor(model => model.lead.Contact1Title, new SelectList(Model.decisionMakers), "Select")
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.Contact1FirstName, new { size = "7", @class = "Name" })
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.Contact1LastName, new { size = "8", @class = "Name" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    @Html.DropDownListFor(model => model.lead.Contact2Title, new SelectList(Model.decisionMakers), "Select")
+                </td>
+                <td align="left">@Html.TextBoxFor(model => model.lead.Contact2FirstName, new { size = "7", @class = "Name" })
+                </td>
+                <td align="left">@Html.TextBoxFor(model => model.lead.Contact2LastName, new { size = "8", @class = "Name" })
+                </td>
+            </tr>
+            </table>
+          <table class="cfolist1">
+            <tr>
+                <td align="right">
+                    Assigned AA
+                </td>
+                @if (Model.displayuser.AssignedRoleId == 1 || Model.displayuser.AssignedRoleId == 2)
+                {
+                <td align="left">@Html.DropDownListFor(model => model.lead.AssignedAAUserId, Model.AAUsersDropdown, "-Select-", new { style = "width:150px" })
+                </td>
+                }
+                @if (Model.displayuser.AssignedRoleId == 3 || Model.displayuser.AssignedRoleId == 4)
+                {
+                                @Html.HiddenFor(model => model.lead.AssignedAAUserId)
+                <td align="left">@Html.DisplayFor(model => model.lead.AssignedUser.UserName)
+                </td>
+                }
+            </tr>
+        </table>                         
+            @Html.HiddenFor(model => model.lead.NewFilePath)
+        
+    }
+        <div class="uploadstatement" style="left:810px; top:162px">
+            <div id="uploader">
+            
+            </div>
+        
+        </div>
+        <div id="fileListDiv" style="position:absolute;left: 665px; top: 161px;">
+            <select id="fileList" >
+                <option value="0">Select File to view</option>
+                @foreach (var file in Model.lead.StatementFiles)
+                {
+                    <option value="@Url.Content(file.FilePath)">@file.FileName</option>
+                }
+            </select>
+        </div>
+    </div>
+

@@ -1,0 +1,247 @@
+﻿@model Web.ViewModel.BusinessInformationViewModel
+@{
+    ViewBag.Title = "CreateProfile";
+}
+
+<script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type = "text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/MicrosoftAjax.js")" type = "text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/MicrosoftMvcAjax.js")" type = "text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#SaveBIBtn").click(function () {
+            var BIFormContent = $("#BIForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Lead/CreateProfile",
+                data: BIFormContent,
+                success: function (msg) {}
+            });
+            //document.getElementById("savecallbutton").style.display = "block"
+            return false;
+        });
+    });
+
+</script>
+
+
+
+<div class="container">
+    <div class="header">
+    <div class="logo"><img border="0" src="../../Content/images/banner.png" alt="alt"/></div>  
+             @if (Model.displayuser.AssignedRoleId == 1)
+                 {
+                <div class="hometab"><a href="@Url.Action("Indexad", "Home", Model.displayuser.UserId)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.displayuser.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.displayuser.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("AppointmentQueue", "Lead", Model.displayuser.UserId)">Appt Queue</a></div>
+                }
+             @if (Model.displayuser.AssignedRoleId == 2)
+               {
+                <div class="hometab"><a href="@Url.Action("Index", "Home", Model.displayuser)">Home</a></div>
+                <div class="implea"><a href="@Url.Action("Index", "ImportLead", Model.displayuser.UserId)">Import Leads</a></div>
+         	    <div class="leadque"><a href="@Url.Action("Index", "LeadQueue", Model.displayuser.UserId)">Lead Queue</a></div>
+                <div class="apptque"><a href="@Url.Action("AppointmentQueue", "Lead", Model.displayuser.UserId)">Appt Queue</a></div>
+                }
+            <div class="dashb"><a href="#">Dashboard</a></div>    
+            <div class="logout"><a href="#">@(Model.displayuser.FirstName) @(Model.displayuser.LastName)</a>
+            <ul class="logoutlist" >
+   				    <li>@Html.ActionLink("Personal Profile", "Edit", "User", new { id = Model.displayuser.UserId }, null)</li>  
+             		<li>@Html.ActionLink("Logout", "Logout", "Auth", null, null)</li> 
+   				  </ul>
+             </div>
+            
+ </div>
+    <div class="content">
+
+<div class="createbusinfo">
+    @using (Html.BeginForm("CreateProfile", "Lead", FormMethod.Post, new { id = "BIForm" }))
+    {
+        @Html.ValidationSummary(true)
+        <table class="title">
+            <tr>
+                <td>
+                    &nbsp;Business Information
+                </td>
+            </tr>
+        </table>
+        <div style="position: absolute; left: 12px; top: 62px;">
+            @Html.HiddenFor(row => row.lead.LeadId)
+            @Html.HiddenFor(row => row.lead.Status)
+            
+            Company Name
+            @Html.EditorFor(model => model.lead.CompanyName, new { size = "18" })
+            @Html.ValidationMessageFor(model => model.lead.CompanyName)
+        </div>
+        <table class="createprofcontact">
+            <tr>
+                <td align="right">
+                    Primary Phone
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.PrimaryPhoneNumber, new { size = "20" })
+                    @Html.ValidationMessageFor(model => model.lead.PrimaryPhoneNumber)
+                </td>
+                <td align="left">
+                    @*<input type="radio" name="primpho" value="1" checked="checked" />*@
+                    @Html.RadioButtonFor(model=> model.lead.PrimaryPhoneChecked, true)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Additional Phone
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.AddtionalPhoneNumber, new { size = "20" })
+                </td>
+                <td align="left">
+                    @*<input type="radio" name="primpho" value="2" />*@
+                    @Html.RadioButtonFor(model => model.lead.PrimaryPhoneChecked, false)
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Fax Number
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.FaxNumber, new { size = "20" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Primary E-mail
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.PrimaryEmailAddress, new { size = "20" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Additional E-mail
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.AdditonalEmailAddress, new { size = "20" })
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    Website
+                    @Html.EditorFor(model => model.lead.WebsiteLink, new { size = "27" })
+                </td>
+            </tr>
+        </table>
+        <table class="createprofadd">
+            <tr>
+                <td align="right">
+                    Street
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.StreetAddress1, new { size = 20 })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    City
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.City, new { size = 7 })
+                    @Html.ValidationMessageFor(model => model.lead.City)
+                    State
+                    @Html.DropDownListFor(model => model.lead.State, new SelectList(Model.states), "Select")
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    Zip
+                </td>
+                <td align="left">
+                    @Html.EditorFor(model => model.lead.ZipCode, new { size = "7" })
+                    Zone
+                </td>
+            </tr>
+        </table>
+        <div style="position: absolute; left: 12px; top: 105px;">
+            Contact Name
+        </div>
+        <table class="createcfolist">
+            <tr>
+                <td align="right">
+                    @Html.DropDownListFor(model => model.lead.Contact1Title, new SelectList(Model.decisionMakers), "Select")
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.Contact1FirstName, new { size = "7" })
+                </td>
+                <td align="left">
+                    @Html.TextBoxFor(model => model.lead.Contact1LastName, new { size = "8" })
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    @Html.DropDownListFor(model => model.lead.Contact2Title, new SelectList(Model.decisionMakers), "Select")
+                </td>
+                <td align="left">@Html.TextBoxFor(model => model.lead.Contact2FirstName, new { size = "7" })
+                </td>
+                <td align="left">@Html.TextBoxFor(model => model.lead.Contact2LastName, new { size = "8" })
+                </td>
+            </tr>
+            
+        </table>                         
+        <div style="position: absolute; left: 875px; top: 175px">
+            <input type="button" name="save" id="SaveBIBtn" value="Save" />
+        </div>
+       
+        <table class="createstatement">
+            <tr>
+                <td align="right">
+                    Statement
+                </td>
+                <td align="right">
+                    <input type="text" name="statement" id="statement" size="20">
+                    @Html.TextBoxFor(model => model.lead.NewFilePath, new { size = "7" })
+                </td>
+                <td align="bottom">
+                    <a href="#">
+                        <img src="../../Content/images/toolsBrowseIcon.gif" border="none" height="20" width="20"
+                            alt=""></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td align="center">
+                    <a href="#" class="viewprof">
+                        <img src="../../Content/images/profileviewattac.png" style="border: none" alt=""></a>
+                    <a href="#" class="viewprof">
+                        <img src="../../Content/images/profileviewbut.png" style="border: none" alt=""></a>
+                </td>
+            </tr>
+        </table>
+
+    }
+        <div class="createuploadstatement" style="left:40px">
+            <div id="uploader">
+            
+            </div>
+        
+        </div>
+        @*<div  style="left: 535px; top: 100px;"><select id="fileList" >
+            <option value="0">Select File to view</option>
+            @foreach (var file in Model.lead.StatementFiles)
+            {
+                <option value="@Url.Content(file.FilePath)">@file.FileName</option>
+            }
+        </select></div>*@
+      
+    </div>
+@*    <div class="sidemenu">
+        <div class="searbutton">
+            <div id="savecallbutton"><a href="@Url.Action("Profile", "Lead")">Make Call</a></div>
+        </div>
+    </div>*@
+
+    </div>
+</div>
+
+ 

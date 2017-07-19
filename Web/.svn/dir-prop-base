@@ -1,0 +1,17 @@
+K 10
+svn:ignore
+V 86
+*.suo
+*.user
+*Publish.xml
+Bin
+DEBUG
+Debug
+Release
+Web.Publish.xml
+bin
+build
+class
+obj
+
+END

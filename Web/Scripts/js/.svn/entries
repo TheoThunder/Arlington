@@ -1,0 +1,46 @@
+10
+
+dir
+727
+http://dev.ayokasystems.com/repos/trinitycrminternal/trunk/Web/Scripts/js
+http://dev.ayokasystems.com/repos/trinitycrminternal
+
+
+
+2011-07-08T14:13:22.066588Z
+627
+theophile.kadjo
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+4eb6d1d1-6685-47b4-8b3b-009e11868a0a
+
+colorpicker
+dir
+
+frontierCalendar
+dir
+
+jquery-core
+dir
+
+jquery-qtip-1.0.0-rc3140944
+dir
+
+jquery-ui
+dir
+
+lib
+dir
+
